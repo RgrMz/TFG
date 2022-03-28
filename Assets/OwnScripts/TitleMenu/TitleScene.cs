@@ -5,20 +5,31 @@ using UnityEngine.SceneManagement;
 
 public class TitleScene : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    // Scene names, need to be cons due to switch-case limitations
+    private const string firstScene = "TitleScene";
+    private const string secondScene = "CreateOrSelectUserProfile";
+    private const string thirdScene = "ChooseModeScene";
+    private const string gameScene = "Game";
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    private string nextScene;
 
-    public void LoadNewGame()
+    public void LoadNextScene()
     {
-        SceneManager.LoadScene(1);
+        Scene scene = SceneManager.GetActiveScene();
+        switch (scene.name)
+        {
+            case firstScene:
+                SceneManager.LoadScene(secondScene);
+                break;
+            case secondScene:
+                SceneManager.LoadScene(thirdScene);
+                break;
+            case thirdScene:
+                SceneManager.LoadScene(gameScene);
+                break;
+            default:
+                break;
+        }
+ 
     }
 }
