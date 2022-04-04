@@ -198,6 +198,42 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 53594840}
   m_CullTransparentMesh: 1
+--- !u!84 &98629536
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 3
+  m_Width: 256
+  m_Height: 512
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthFormat: 0
+  m_ColorFormat: 5
+  m_MipMap: 0
+  m_GenerateMips: 0
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
 --- !u!1 &120327964
 GameObject:
   m_ObjectHideFlags: 0
@@ -312,7 +348,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 18, y: -62}
+  m_AnchoredPosition: {x: 18, y: -94}
   m_SizeDelta: {x: 929.4, y: 74.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &126007159
@@ -336,7 +372,7 @@ MonoBehaviour:
     useOld: 0
     r_mainTexture: {fileID: 0}
     mainTexture: {fileID: 2800000, guid: 2478d8622cc535f4cbdb163ed4c9986d, type: 3}
-    r_combinedTexture: {fileID: 995824852}
+    r_combinedTexture: {fileID: 1271689130}
     outputUV:
     - X: 0
       Y: 0
@@ -1139,7 +1175,7 @@ MonoBehaviour:
     strOptions:
       use: 1
       useOld: 0
-      r_mainTexture: {fileID: 1889878371}
+      r_mainTexture: {fileID: 1954165646}
       size: 152
       sizeOld: 2
       pos: 0
@@ -1183,8 +1219,8 @@ MonoBehaviour:
     bevOptions:
       use: 1
       useOld: 0
-      r_mainTexture: {fileID: 976520155}
-      r_shadowTexture: {fileID: 619583586}
+      r_mainTexture: {fileID: 606223445}
+      r_shadowTexture: {fileID: 1989631986}
       size: 66
       sizeOld: 2
       depth: 381
@@ -1472,7 +1508,7 @@ MonoBehaviour:
   strokeOptions:
     use: 1
     useOld: 1
-    r_mainTexture: {fileID: 1889878371}
+    r_mainTexture: {fileID: 1954165646}
     size: 152
     sizeOld: 152
     pos: 0
@@ -1810,8 +1846,8 @@ MonoBehaviour:
   bevelOptions:
     use: 1
     useOld: 1
-    r_mainTexture: {fileID: 976520155}
-    r_shadowTexture: {fileID: 619583586}
+    r_mainTexture: {fileID: 606223445}
+    r_shadowTexture: {fileID: 1989631986}
     size: 66
     sizeOld: 66
     depth: 381
@@ -2673,42 +2709,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -20, y: -20}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!84 &192372858
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 3
-  m_Width: 256
-  m_Height: 512
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthFormat: 0
-  m_ColorFormat: 5
-  m_MipMap: 0
-  m_GenerateMips: 0
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
 --- !u!1 &225152780
 GameObject:
   m_ObjectHideFlags: 0
@@ -2782,7 +2782,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 65}
+  m_AnchoredPosition: {x: -144.3, y: 23}
   m_SizeDelta: {x: 602.7, y: 47.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &308264030
@@ -2888,6 +2888,42 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 308264028}
   m_CullTransparentMesh: 1
+--- !u!84 &365825332
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 3
+  m_Width: 256
+  m_Height: 512
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthFormat: 0
+  m_ColorFormat: 5
+  m_MipMap: 0
+  m_GenerateMips: 0
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
 --- !u!1 &426129601
 GameObject:
   m_ObjectHideFlags: 0
@@ -2975,7 +3011,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_IsOn: 1
---- !u!84 &462444696
+--- !u!84 &570475293
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3216,7 +3252,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 600524770}
   m_CullTransparentMesh: 1
---- !u!84 &619583586
+--- !u!84 &606223445
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3252,7 +3288,7 @@ RenderTexture:
     m_WrapW: 1
   m_Dimension: 2
   m_VolumeDepth: 1
---- !u!84 &640701439
+--- !u!84 &616417694
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3326,7 +3362,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -234, y: -134}
+  m_AnchoredPosition: {x: -229, y: -134}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &678459841
@@ -3461,7 +3497,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 168, y: 127}
+  m_AnchoredPosition: {x: -157, y: 65}
   m_SizeDelta: {x: 577, y: 74.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &679969769
@@ -3485,7 +3521,7 @@ MonoBehaviour:
     useOld: 0
     r_mainTexture: {fileID: 0}
     mainTexture: {fileID: 2800000, guid: 2478d8622cc535f4cbdb163ed4c9986d, type: 3}
-    r_combinedTexture: {fileID: 2011228235}
+    r_combinedTexture: {fileID: 1643907759}
     outputUV:
     - X: 0
       Y: 0
@@ -4288,7 +4324,7 @@ MonoBehaviour:
     strOptions:
       use: 1
       useOld: 0
-      r_mainTexture: {fileID: 1717340906}
+      r_mainTexture: {fileID: 98629536}
       size: 152
       sizeOld: 2
       pos: 0
@@ -4332,8 +4368,8 @@ MonoBehaviour:
     bevOptions:
       use: 1
       useOld: 0
-      r_mainTexture: {fileID: 462444696}
-      r_shadowTexture: {fileID: 640701439}
+      r_mainTexture: {fileID: 1035113237}
+      r_shadowTexture: {fileID: 570475293}
       size: 66
       sizeOld: 2
       depth: 381
@@ -4621,7 +4657,7 @@ MonoBehaviour:
   strokeOptions:
     use: 1
     useOld: 1
-    r_mainTexture: {fileID: 1717340906}
+    r_mainTexture: {fileID: 98629536}
     size: 152
     sizeOld: 152
     pos: 0
@@ -4959,8 +4995,8 @@ MonoBehaviour:
   bevelOptions:
     use: 1
     useOld: 1
-    r_mainTexture: {fileID: 462444696}
-    r_shadowTexture: {fileID: 640701439}
+    r_mainTexture: {fileID: 1035113237}
+    r_shadowTexture: {fileID: 570475293}
     size: 66
     sizeOld: 66
     depth: 381
@@ -5894,7 +5930,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 766188198}
   m_CullTransparentMesh: 1
---- !u!84 &814150669
+--- !u!84 &767516984
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5913,7 +5949,7 @@ RenderTexture:
   m_AntiAliasing: 1
   m_MipCount: -1
   m_DepthFormat: 0
-  m_ColorFormat: 5
+  m_ColorFormat: 8
   m_MipMap: 0
   m_GenerateMips: 0
   m_SRGB: 0
@@ -5966,7 +6002,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.6862745, g: 0.8666667, b: 0.627451, a: 0}
+  m_BackGroundColor: {r: 0.34901962, g: 0.6431373, b: 0.8980392, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -6180,42 +6216,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
---- !u!84 &976520155
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 3
-  m_Width: 256
-  m_Height: 512
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthFormat: 0
-  m_ColorFormat: 5
-  m_MipMap: 0
-  m_GenerateMips: 0
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
 --- !u!1 &989944630
 GameObject:
   m_ObjectHideFlags: 0
@@ -6295,7 +6295,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 989944630}
   m_CullTransparentMesh: 1
---- !u!84 &995824852
+--- !u!84 &1035113237
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -6314,7 +6314,7 @@ RenderTexture:
   m_AntiAliasing: 1
   m_MipCount: -1
   m_DepthFormat: 0
-  m_ColorFormat: 8
+  m_ColorFormat: 5
   m_MipMap: 0
   m_GenerateMips: 0
   m_SRGB: 0
@@ -6481,7 +6481,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1093882755}
   m_CullTransparentMesh: 1
---- !u!84 &1345320548
+--- !u!84 &1271689130
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -6764,8 +6764,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 229, y: -211}
-  m_SizeDelta: {x: 399, y: 107.6}
+  m_AnchoredPosition: {x: -16, y: -225}
+  m_SizeDelta: {x: 345.7, y: 80.27}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1507953788
 MonoBehaviour:
@@ -6861,6 +6861,42 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1507953786}
   m_CullTransparentMesh: 1
+--- !u!84 &1643907759
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 3
+  m_Width: 256
+  m_Height: 512
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthFormat: 0
+  m_ColorFormat: 8
+  m_MipMap: 0
+  m_GenerateMips: 0
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
 --- !u!1 &1714618489
 GameObject:
   m_ObjectHideFlags: 0
@@ -6940,7 +6976,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1714618489}
   m_CullTransparentMesh: 1
---- !u!84 &1717340906
+--- !u!84 &1780143732
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -7170,42 +7206,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1881695320}
   m_CullTransparentMesh: 1
---- !u!84 &1889878371
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  m_IsAlphaChannelOptional: 0
-  serializedVersion: 3
-  m_Width: 256
-  m_Height: 512
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthFormat: 0
-  m_ColorFormat: 5
-  m_MipMap: 0
-  m_GenerateMips: 0
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
 --- !u!1 &1921839276
 GameObject:
   m_ObjectHideFlags: 0
@@ -7241,7 +7241,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 23.2, y: -12}
+  m_AnchoredPosition: {x: 37, y: -18}
   m_SizeDelta: {x: 351.93, y: 74.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1921839278
@@ -7265,7 +7265,7 @@ MonoBehaviour:
     useOld: 0
     r_mainTexture: {fileID: 0}
     mainTexture: {fileID: 2800000, guid: 2478d8622cc535f4cbdb163ed4c9986d, type: 3}
-    r_combinedTexture: {fileID: 1345320548}
+    r_combinedTexture: {fileID: 767516984}
     outputUV:
     - X: 0
       Y: 0
@@ -8068,7 +8068,7 @@ MonoBehaviour:
     strOptions:
       use: 1
       useOld: 0
-      r_mainTexture: {fileID: 814150669}
+      r_mainTexture: {fileID: 1780143732}
       size: 152
       sizeOld: 2
       pos: 0
@@ -8112,8 +8112,8 @@ MonoBehaviour:
     bevOptions:
       use: 1
       useOld: 0
-      r_mainTexture: {fileID: 2084784826}
-      r_shadowTexture: {fileID: 192372858}
+      r_mainTexture: {fileID: 365825332}
+      r_shadowTexture: {fileID: 616417694}
       size: 66
       sizeOld: 2
       depth: 381
@@ -8401,7 +8401,7 @@ MonoBehaviour:
   strokeOptions:
     use: 1
     useOld: 1
-    r_mainTexture: {fileID: 814150669}
+    r_mainTexture: {fileID: 1780143732}
     size: 152
     sizeOld: 152
     pos: 0
@@ -8739,8 +8739,8 @@ MonoBehaviour:
   bevelOptions:
     use: 1
     useOld: 1
-    r_mainTexture: {fileID: 2084784826}
-    r_shadowTexture: {fileID: 192372858}
+    r_mainTexture: {fileID: 365825332}
+    r_shadowTexture: {fileID: 616417694}
     size: 66
     sizeOld: 66
     depth: 381
@@ -9546,10 +9546,10 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: ce5e0ea686be5d4418f85cae1d1f92e1, type: 2}
-    m_FontSize: 40
+    m_FontSize: 36
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 4
+    m_MinSize: 0
     m_MaxSize: 60
     m_Alignment: 0
     m_AlignByGeometry: 0
@@ -9566,7 +9566,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1921839276}
   m_CullTransparentMesh: 1
---- !u!84 &2011228235
+--- !u!84 &1954165646
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -9585,7 +9585,7 @@ RenderTexture:
   m_AntiAliasing: 1
   m_MipCount: -1
   m_DepthFormat: 0
-  m_ColorFormat: 8
+  m_ColorFormat: 5
   m_MipMap: 0
   m_GenerateMips: 0
   m_SRGB: 0
@@ -9602,7 +9602,7 @@ RenderTexture:
     m_WrapW: 1
   m_Dimension: 2
   m_VolumeDepth: 1
---- !u!84 &2084784826
+--- !u!84 &1989631986
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
