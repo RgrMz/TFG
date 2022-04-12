@@ -8,6 +8,7 @@ TagManager:
   - PlayerEyes
   - Interactable
   - PopUpUI
+  - ZoneTrigger
   layers:
   - Default
   - TransparentFX

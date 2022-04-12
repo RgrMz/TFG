@@ -28,7 +28,6 @@ public class InteractableItemBase : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
-        Debug.DrawRay(ray.origin, ray.direction * interactionDistance, Color.red);
         // Raycast for detecting the object.
         if (Physics.Raycast(ray, out hit, interactionDistance))
         { 
