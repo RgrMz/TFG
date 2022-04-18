@@ -15,11 +15,14 @@ public class InteractableItemBase : MonoBehaviour
 
     private float interactionDistance = 6f;
 
+    private Animator anim;
+
     void Start()
     {
         interactionPanel = GameObject.Find("InteractionTextPanel");
         player = GameObject.Find("PlayableCharacter");
         interactionText.enabled = false;
+        anim = player.GetComponent<Animator>();
     }
 
     void Update()
@@ -34,7 +37,7 @@ public class InteractableItemBase : MonoBehaviour
 
             if (hit.collider.tag == "Interactable")
             {
-                Debug.Log("Colisiojn");
+                Debug.Log("Colision");
                 Image panelImage = interactionPanel.gameObject.GetComponent<Image>();
                 var tempColor = panelImage.color;
                 tempColor.a = 130;
@@ -46,7 +49,7 @@ public class InteractableItemBase : MonoBehaviour
                 if (Input.GetKeyDown(KeyCode.E))
                 {
                     Debug.Log("Boton presionado");
-                    // Do something here, like...
+                    anim.SetBool("StartsInteraction", true);
 
                     // Eg. destroy the object.
                     //Destroy(hit.transform.gameObject);
