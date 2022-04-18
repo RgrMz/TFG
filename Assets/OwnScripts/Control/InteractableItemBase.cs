@@ -53,6 +53,9 @@ public class InteractableItemBase : MonoBehaviour
 
                     // Eg. destroy the object.
                     //Destroy(hit.transform.gameObject);
+                } else
+                {
+                    anim.SetBool("StartsInteraction", false);
                 }
 
             }
