@@ -13,8 +13,6 @@ public class InteractableItemBase : MonoBehaviour
 
     public TextMeshProUGUI interactionText;
 
-    private float interactionDistance = 6f;
-
     private Animator anim;
 
     void Start()
@@ -25,7 +23,18 @@ public class InteractableItemBase : MonoBehaviour
         anim = player.GetComponent<Animator>();
     }
 
-    void Update()
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            anim.SetBool("StartsInteraction", true);
+        }
+        else
+        {
+            anim.SetBool("StartsInteraction", false);
+        }
+    }
+    /*void Update()
     {
         // Coger la posicion del player
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -33,7 +42,7 @@ public class InteractableItemBase : MonoBehaviour
 
         // Raycast for detecting the object.
         if (Physics.Raycast(ray, out hit, interactionDistance))
-        { 
+        {
 
             if (hit.collider.tag == "Interactable")
             {
@@ -49,7 +58,8 @@ public class InteractableItemBase : MonoBehaviour
                 {
                     anim.SetBool("StartsInteraction", true);
 
-                } else
+                }
+                else
                 {
                     anim.SetBool("StartsInteraction", false);
                 }
@@ -65,6 +75,38 @@ public class InteractableItemBase : MonoBehaviour
                 tempColor.a = 0;
                 panelImage.color = tempColor;
             }
+        }
+    }*/
+
+    private void OnTriggerEnter(Collider other)
+    {
+
+        if (other.CompareTag("Player"))
+        {
+            interactionText.enabled = true;
+
+            interactionText.gameObject.SetActive(true);
+            Image panelImage = interactionPanel.gameObject.GetComponent<Image>();
+            var tempColor = panelImage.color;
+            tempColor.a = 0.8f;
+            panelImage.color = tempColor;
+            
+
+        }
+
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            // Turns the prompt back off when you're not looking at the object.
+            interactionText.enabled = false;
+            interactionText.gameObject.SetActive(false);
+            Image panelImage = interactionPanel.gameObject.GetComponent<Image>();
+            var tempColor = panelImage.color;
+            tempColor.a = 0;
+            panelImage.color = tempColor;
         }
     }
 
