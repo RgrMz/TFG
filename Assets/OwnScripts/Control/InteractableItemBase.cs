@@ -37,10 +37,9 @@ public class InteractableItemBase : MonoBehaviour
 
             if (hit.collider.tag == "Interactable")
             {
-                Debug.Log("Colision");
                 Image panelImage = interactionPanel.gameObject.GetComponent<Image>();
                 var tempColor = panelImage.color;
-                tempColor.a = 130;
+                tempColor.a = 0.8f;
                 panelImage.color = tempColor;
                 interactionText.enabled = true;
 
@@ -48,11 +47,8 @@ public class InteractableItemBase : MonoBehaviour
 
                 if (Input.GetKeyDown(KeyCode.E))
                 {
-                    Debug.Log("Boton presionado");
                     anim.SetBool("StartsInteraction", true);
 
-                    // Eg. destroy the object.
-                    //Destroy(hit.transform.gameObject);
                 } else
                 {
                     anim.SetBool("StartsInteraction", false);
@@ -71,20 +67,5 @@ public class InteractableItemBase : MonoBehaviour
             }
         }
     }
-
-    /*private void OnTriggerEnter(Collider player)
-    {
-        /*if (player.gameObject.tag == "Player")
-        {
-            Image panelImage = interactionPanel.gameObject.GetComponent<Image>();
-            var tempColor = panelImage.color;
-            tempColor.a = 130;
-            panelImage.color = tempColor;
-            interactionText.enabled = true;
-            if (Input.GetKeyDown(KeyCode.E))
-            {
-                Debug.Log("Presionaste E, hagamos las animaciones");
-            }
-        }*/
 
 }

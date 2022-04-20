@@ -17,10 +17,13 @@ public class ZoneNotificationTrigger : MonoBehaviour
 
     private GameObject zoneFrame = null;
 
+    private GameObject backgroundZoneText = null;
+
     private void Start()
     {
         zoneFrame = GameObject.Find("ZoneFrame");
         enterTriggers = GameObject.FindGameObjectsWithTag("ZoneTrigger");
+        backgroundZoneText = GameObject.Find("BackgroundTextZone"); 
     }
 
     private void OnTriggerExit(Collider other)
@@ -31,7 +34,7 @@ public class ZoneNotificationTrigger : MonoBehaviour
             {
                 // Fade in effect, wait a few seconds and then fade out
                 zoneText.text = zoneTrigger.name;
-                StartCoroutine(FadeText(2f, zoneText, zoneFrame));
+                StartCoroutine(FadeText(2f, zoneText));
 
             }
         }
@@ -45,23 +48,25 @@ public class ZoneNotificationTrigger : MonoBehaviour
                 // Fade in effect, wait a few seconds and then fade out
                 if(entryTrigger)
                     zoneText.text = zoneTrigger.name;
-                StartCoroutine(FadeText(2f, zoneText, zoneFrame));
+                StartCoroutine(FadeText(2f, zoneText));
 
             }
         }
     }
-
-    public IEnumerator FadeText(float t, TextMeshProUGUI text, GameObject frame)
+    public IEnumerator FadeText(float t, TextMeshProUGUI text)
     {
         text.color = new Color(text.color.r, text.color.g, text.color.b, 0);
         Image frameImage = zoneFrame.GetComponent<Image>();
+        Image backgroundImage = backgroundZoneText.GetComponent<Image>();
         frameImage.color = new Color(frameImage.color.r, frameImage.color.g, frameImage.color.b, 0);
-        if(entryTrigger)
+        backgroundImage.color = new Color(backgroundImage.color.r, backgroundImage.color.g, backgroundImage.color.b, 0);
+        if (entryTrigger)
         {
             while (text.color.a < 1.0f)
             {
                 text.color = new Color(text.color.r, text.color.g, text.color.b, text.color.a + (Time.deltaTime / t));
                 frameImage.color = new Color(frameImage.color.r, frameImage.color.g, frameImage.color.b, frameImage.color.a + (Time.deltaTime / t));
+                backgroundImage.color = new Color(backgroundImage.color.r, backgroundImage.color.g, backgroundImage.color.b, (text.color.a + (Time.deltaTime / t))/4);
                 yield return null;
             }
 
@@ -73,10 +78,12 @@ public class ZoneNotificationTrigger : MonoBehaviour
         {
             frameImage.color = new Color(frameImage.color.r, frameImage.color.g, frameImage.color.b, frameImage.color.a);
             text.color = new Color(text.color.r, text.color.g, text.color.b, text.color.a);
+            backgroundImage.color = new Color(backgroundImage.color.r, backgroundImage.color.g, backgroundImage.color.b, backgroundImage.color.a);
             while (text.color.a > 0.0f)
             {
                 text.color = new Color(text.color.r, text.color.g, text.color.b, text.color.a - (Time.deltaTime / t));
                 frameImage.color = new Color(frameImage.color.r, frameImage.color.g, frameImage.color.b, frameImage.color.a - (Time.deltaTime / t));
+                backgroundImage.color = new Color(backgroundImage.color.r, backgroundImage.color.g, backgroundImage.color.b, backgroundImage.color.a - (Time.deltaTime / t));
                 yield return null;
             }
 
