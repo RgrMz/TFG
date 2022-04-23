@@ -9,6 +9,5 @@ INSERT OR IGNORE INTO Project (Description, TYPE)
 			 has quality flaws and errors, so they want them to be solved. They also want it to be migrated from Java 2EE to Microsoft .NET", "Dev"),
 		   ("This project consists of operating the new code developed by the development team based on the legacy one of the Information System of the restaurant GoodSushi. 
 		     They know its Information System has quality flaws along with performance issues and mid-to-long downtimes. The software will be deployed to Amazon Web Service servers in the cloud, so it will
-			 be monitored and operated thorugh services of this platform such as Amazon CloudFormation or Amazon CloudWatch ", "Ops")
-);
+			 be monitored and operated thorugh services of this platform such as Amazon CloudFormation or Amazon CloudWatch ", "Ops");
 			 

@@ -27,8 +27,8 @@ CREATE TABLE IF NOT EXISTS Objective (
 	DESCRIPTION TEXT NOT NULL, 
 	NumberOfSteps INTEGER NOT NULL,
 	IsCompleted INTEGER NOT NULL DEFAULT 0,
-	CurentStep INTEGER NOR NULL,
 	TriggersPipeline INTEGER NOT NULL DEFAULT 0,
+	Type TEXT NOT NULL,
 	PRIMARY KEY (ObjectiveId AUTOINCREMENT)
 );
 
@@ -83,11 +83,10 @@ CREATE TABLE IF NOT EXISTS MeasuredAspect (
 -- Table for properties of the project in the game: speed of charging INTEGEReractions' bars, initial budget, ...
 CREATE TABLE IF NOT EXISTS Property (
 	PropertyId INTEGER,
-	ProjectId INTEGER NOT NULL,
+	Difficulty VARCHAR(15) NOT NULL,
 	Name NVARCHAR(60) NOT NULL,
 	Value REAL NOT NULL,
-	PRIMARY KEY (PropertyId AUTOINCREMENT),
-	FOREIGN KEY (ProjectId) REFERENCES Project (ProjectId)
+	PRIMARY KEY (PropertyId AUTOINCREMENT)
 );
 
 -- Table for each game played by players
@@ -120,9 +119,26 @@ CREATE TABLE IF NOT EXISTS Solution (
 CREATE TABLE IF NOT EXISTS ObjectivesPerProject (
 	ProjectId INTEGER,
 	ObjectiveId INTEGER,
-	PRIMARY KEY (ProjectId, ObjectiveId),
+	OrderInProject INTEGER,
+	PRIMARY KEY (ProjectId, ObjectiveId, OrderInProject),
 	FOREIGN KEY (ProjectId) REFERENCES Project (ProjectId),
 	FOREIGN KEY (ObjectiveId) REFERENCES Objective (ObjectiveId)
+);
+
+-- Table for thoseo objectives that have an impact in the CALMS indicators
+CREATE TABLE IF NOT EXISTS EffectPerObjective(
+	ObjectiveId INTEGER,
+	EffectId INTEGER,
+	PRIMARY KEY (SolutionId, EffectId),
+	FOREIGN KEY (EffectId) REFERENCES Effect (EffectId)
+);
+
+-- Table for the properties of each project
+CREATE TABLE IF NOT EXISTS PropertyPerProject (
+	PropertyId INTEGER,
+	ProjectId INTEGER,
+	PRIMARY KEY (PropertyId, ProjectId),
+	FOREIGN KEY (ProjectId) REFERENCES Project (ProjectId)
 );
 
 -- Table for the relationship between MeasuredAspect and Game
