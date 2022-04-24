@@ -1,0 +1,27 @@
+-- Values are based per second, except initial duration, initial budget
+-- and budget progress, -100 * (number devs + number ops)
+INSERT INTO Property (Difficulty, Name, Value) VALUES  
+	("Basic", "InitialDuration", 260),
+	("Basic", "InitialBudget", 1000000),
+	("Basic", "DurationProgress", -1),
+	("Basic", "BudgetProgress", -100),
+	("Basic", "CultureProgress", -0.01),
+	("Basic", "AutomationProgress", -0.01),
+	("Basic", "LeanProgress", -0.01),
+	("Basic", "MeasurementProgress", -0.01),
+	("Basic", "SharingProgress", -0.01),
+	("Basic", "DevsNPC", 4),
+	("Basic", "OpsNPC", 4),
+	("Basic", "BugProbability", 0.5),
+	("Advanced", "InitialDuration", 220),
+	("Advanced", "InitialBudget", 800000),
+	("Advanced", "DurationProgress", -1.5),
+	("Advanced", "BudgetProgress", -130),
+	("Advanced", "CultureProgress", -0.02),
+	("Advanced", "AutomationProgress", -0.01),
+	("Advanced", "SharingProgress", -0.01),
+	("Advanced", "LeanProgress", -0.02),
+	("Advanced", "MeasurementProgress", -0.02),
+	("Advanced", "DevsNPC", 5),
+	("Advanced", "OpsNPC", 5),
+	("Advanced", "BugProbability", 0.6);

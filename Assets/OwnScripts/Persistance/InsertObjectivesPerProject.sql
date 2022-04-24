@@ -10,7 +10,7 @@ INSERT INTO ObjectivesPerProject (ProjectId, OrderInProject, ObjectiveId) VALUES
 	(1, 3, 3),
 	(3, 3, 3),
 	(1, 4, 7),
-	(3, 4, 7),
+	(3, 4, 7), 
 	(1, 5, 12),
 	(3, 5, 12),
 	(1, 6, 13),
@@ -115,5 +115,3 @@ INSERT INTO ObjectivesPerProject (ProjectId, OrderInProject, ObjectiveId) VALUES
 	(4, 28, 38),
 	(2, 29, 40),
 	(4, 29, 40);
-	
-	
