@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 23168627272774118}
   - component: {fileID: 6097181604951290441}
   - component: {fileID: 208713647693951862}
-  - component: {fileID: 7430729867220235988}
+  - component: {fileID: 2825279106755256980}
   m_Layer: 0
   m_Name: Monitor_01_snaps001
   m_TagString: Interactable
@@ -115,7 +115,7 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0.008, y: 0.344, z: -0.03}
   m_TimeToStationary: 0.5
---- !u!114 &7430729867220235988
+--- !u!114 &2825279106755256980
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -127,4 +127,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 724bee0d9783ff844834126aee4bef9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactionText: {fileID: 4008407259050977794, guid: 9bcee20dab2b63c4c94782aa4f99d06f, type: 3}
+  interactionText: {fileID: 0}

@@ -9,6 +9,9 @@ TagManager:
   - Interactable
   - PopUpUI
   - ZoneTrigger
+  - NPC
+  - OpsNPC
+  - Pickable
   layers:
   - Default
   - TransparentFX
