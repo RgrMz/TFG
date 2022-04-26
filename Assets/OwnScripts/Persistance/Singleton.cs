@@ -32,30 +32,6 @@ public class Singleton
         return instance;
     }
 
-    /*private void GenerateDatabase()
-    {
-        if (!created)
-        {
-            string sqlQuery = File.ReadAllText(@".\Assets\Scripts\Persistence\CreateDB.sql");
-            //Debug.Log($"[Singleton - INFO] SQL QUERY = {sqlQuery}");
-
-            dbCommand = dbConnection.CreateCommand();
-            dbCommand.CommandText = sqlQuery;
-            dbCommand.ExecuteNonQuery();
-
-            sqlQuery = File.ReadAllText(@".\Assets\Scripts\Persistence\Prueba.sql");
-            //Debug.Log($"[Singleton - INFO] SQL QUERY = {sqlQuery}");
-
-            dbCommand = dbConnection.CreateCommand();
-            dbCommand.CommandText = sqlQuery;
-            dbCommand.ExecuteNonQuery();
-
-            created = true;
-
-            Debug.Log($"[Singleton - INFO] Database created into the path: {dbPath}");
-        }
-    }*/
-
     public IDataReader Read(string sqlQuery)
     {
         dbCommand = dbConnection.CreateCommand();

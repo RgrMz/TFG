@@ -1,6 +1,7 @@
 -- Tabler for players
 CREATE TABLE IF NOT EXISTS Player (
-	UserId INTEGEREGER,
+	UserId INTEGER,
+	UserName TEXT NOT NULL,
 	Age INTEGER NOT NULL,
 	PRIMARY KEY (UserId AUTOINCREMENT)
 );
