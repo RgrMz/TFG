@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class TitleScene : MonoBehaviour
+public class SceneSwitch : MonoBehaviour
 {
     // Scene names, need to be cons due to switch-case limitations
     private const string firstScene = "TitleScene";
