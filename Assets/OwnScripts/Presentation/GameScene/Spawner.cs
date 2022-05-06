@@ -38,18 +38,5 @@ public class Spawner : MonoBehaviour
                 break;
         }
     }
-    public void spawnFinishedInteraction()
-    {
-        AnimationClip[] clips = anim.runtimeAnimatorController.animationClips;
-        foreach (AnimationClip clip in clips)
-        {
-            if (clip.name.Equals("Typing"))
-            {
-                finishedInteractionText.text = "Work finished!";
-            }
-        }
-        //StartCoroutine(FadeText(2f, finishedInteractionText));
-        StartCoroutine(TextFadingInAndOut.FadeText(background, 2f, finishedInteractionText));
-    }
 
 }

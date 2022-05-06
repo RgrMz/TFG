@@ -5,24 +5,17 @@ public class ObjectiveHandler : MonoBehaviour
 {
     public GameObject target;
 
-    public void OnTriggerEnter (Collider other)
+    private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") || other.CompareTag("Pickable"))
         {
-            Debug.Log("Colison con player");
-            SendObjectiveProgressed();
-        } else if (other.CompareTag("Interactable")) {
+            Debug.Log("Colison con player o pickable");
             SendObjectiveProgressed();
         }
     }
 
-    public void ObjectiveCompletedWhenAnimationEnds()
+    public void SendObjectiveProgressed(GameObject pTarget = null)
     {
-        SendObjectiveProgressed();
-    }
-    
-    private void SendObjectiveProgressed()
-    {
-        ExecuteEvents.Execute<IObjectiveSwitchHandler>(target, null, (x, y) => x.ObjectiveProgressed());
+        ExecuteEvents.Execute<IObjectiveSwitchHandler>(pTarget == null ? target : pTarget, null, (x, y) => x.ObjectiveProgressed());
     }
 }

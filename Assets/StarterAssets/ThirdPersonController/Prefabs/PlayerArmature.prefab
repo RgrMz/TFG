@@ -1005,6 +1005,7 @@ GameObject:
   - component: {fileID: 4610046498986629026}
   - component: {fileID: 5885216827943657505}
   - component: {fileID: 135756642000475821}
+  - component: {fileID: 3590529773142648976}
   - component: {fileID: 4416926081852918493}
   m_Layer: 8
   m_Name: PlayerArmature
@@ -1110,8 +1111,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 232f26ae16f7d56409a933f98b0472d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  zoneName: 
-  objectiveText: {fileID: 0}
+  finishedInteractionText: {fileID: 0}
+  background: {fileID: 0}
 --- !u!114 &5885216827943657505
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1148,6 +1149,19 @@ MonoBehaviour:
   analogMovement: 0
   cursorLocked: 1
   cursorInputForLook: 1
+--- !u!114 &3590529773142648976
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4416926081852918481}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82aeb96c83bb8994aae350cc5a53fda6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
 --- !u!114 &4416926081852918493
 MonoBehaviour:
   m_ObjectHideFlags: 0

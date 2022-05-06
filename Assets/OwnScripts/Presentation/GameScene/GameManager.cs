@@ -69,8 +69,7 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
         {
             projectController.SelectedProject.CurrentObjective.IsCompleted = true;
             StartCoroutine(TextFadingInAndOut.FadeText(completedObjectiveTextBackground, 2f, completedObjectiveText));
-        }
-        else
+        } else
         {
             projectController.SelectedProject.CurrentObjective.CurrentStep++;
         }
@@ -94,9 +93,8 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
 
     private bool IsObjectiveCompleted()
     {
-        return (projectController.SelectedProject.CurrentObjective.NumberOfSteps > 1 &&
+        return !(projectController.SelectedProject.CurrentObjective.NumberOfSteps > 1 &&
             projectController.SelectedProject.CurrentObjective.CurrentStep < projectController.SelectedProject.CurrentObjective.NumberOfSteps);
-        
     }
 
 }
