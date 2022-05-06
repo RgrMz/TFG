@@ -43,9 +43,7 @@ public class ProjectController
         }*/ 
         selectedProject = possibleProjects[0];
         selectedProject.Objectives = objectiveDAO.GetAllObjectives(selectedProject.Id);
-        Debug.Log($"Properties es {selectedProject.Properties}, queue es {selectedProject.Objectives}");
         selectedProject.Properties = propertyDAO.GetAllProperties(selectedProject.Id, difficulty);
-        Debug.Log(selectedProject.Description);
 
         return selectedProject;
     }

@@ -73,7 +73,7 @@ public class InteractableItemBase : MonoBehaviour
 
     void Update()
     {
-        if (gameObject.tag.Equals("Pickable"))
+        if (gameObject.CompareTag("Pickable"))
         {
             if (Input.GetKeyDown(key))
             {
@@ -91,12 +91,13 @@ public class InteractableItemBase : MonoBehaviour
                 if (collided)
                 {
                     anim.SetTrigger("Throw");
+                    // coroutine() para darle pausa y que parezca que lanza la bola de verdad
                     gameObject.transform.parent = null;
                     gameObject.AddComponent<Rigidbody>();
                     Rigidbody rbody = gameObject.GetComponent<Rigidbody>();
                     rbody.mass = 0.05f;
                     gameObject.transform.position = player.transform.position + new Vector3(1.5f, 0.5f, 0);
-                    turnOffInteractionText();
+                    TurnOffInteractionText();
                 }
             }
         }
@@ -107,14 +108,17 @@ public class InteractableItemBase : MonoBehaviour
                 if (collided)
                 {
                     if (key == KeyCode.G)
-                        // That's the key for interacting with NPCs => display its animations also
+                        // That's the key for interacting with NPCs => display their animation also
                         animNPC.SetTrigger(animationParameter);
                     anim.SetBool(animationParameter, true);
                 }
             }
             else
             {
-                anim.SetBool(animationParameter, false);
+                if (animationParameter != "")
+                {
+                    anim.SetBool(animationParameter, false);
+                }
             }
         }
 
@@ -122,7 +126,7 @@ public class InteractableItemBase : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag.Equals("Player"))
+        if (other.CompareTag("Player"))
         {
             // Show the text that indicates which key to press
             collided = true;
@@ -145,11 +149,11 @@ public class InteractableItemBase : MonoBehaviour
         collided = false;
         if (other.CompareTag("Player"))
         {
-            turnOffInteractionText();
+            TurnOffInteractionText();
         }
     }
 
-    void turnOffInteractionText()
+    void TurnOffInteractionText()
     {
         // Turns the prompt back off when you're not looking at the object.
         interactionText.text = "";

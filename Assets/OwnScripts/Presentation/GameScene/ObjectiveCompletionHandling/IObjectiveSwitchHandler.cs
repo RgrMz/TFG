@@ -2,6 +2,6 @@ using UnityEngine.EventSystems;
 
 public interface IObjectiveSwitchHandler : IEventSystemHandler
 {
-    void ObjectiveCompleted();
+    void ObjectiveProgressed();
     void RoleSelected(string role);
 }

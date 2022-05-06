@@ -10,12 +10,14 @@ public class Objective
     public string Type { get; set; }
     public bool TriggersPipeline { get; set; }
     public int Order { get; set; }
+    public string Place { get; set; }
+    public int CurrentStep { get; set; }
     public List<Effect> Effects { get; set; }
     public Objective()
     {
-
+        IsCompleted = false;
     }
-    public Objective (int id, string desc, int numberOfSteps, bool isCompleted, string type, bool triggers, int order)
+    public Objective (int id, string desc, int numberOfSteps, bool isCompleted, string type, bool triggers, int order, string place)
     {
         ObjectiveId = id;
         Description = desc;
@@ -25,9 +27,11 @@ public class Objective
         IsCompleted = isCompleted;
         TriggersPipeline = triggers;
         Order = order;
+        Place = place;
+        CurrentStep = 1;
     }
 
-    public Objective(int id, string desc, int numberOfSteps, bool isCompleted, string type, bool triggers, int order, List<Effect> effects)
+    public Objective(int id, string desc, int numberOfSteps, bool isCompleted, string type, bool triggers, int order, string place, List<Effect> effects)
     {
         ObjectiveId = id;
         Description = desc;
@@ -37,6 +41,8 @@ public class Objective
         TriggersPipeline = triggers;
         Effects = effects;
         Order = order;
+        Place = place;
+        CurrentStep = 1;
     }
 
 }

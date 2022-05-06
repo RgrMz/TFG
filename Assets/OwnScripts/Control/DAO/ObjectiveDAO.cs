@@ -39,10 +39,9 @@ public class ObjectiveDAO
                     effects.Add(new Effect(Convert.ToInt32(result3["EffectId"]), Convert.ToDouble(result3["Value"]), result3["Indicator"].ToString(),
                         Convert.ToInt32(result3["Duration"])));
                 }
-                Debug.Log($"{result2["DESCRIPTION"].ToString()}");
                 objectives.Enqueue(new Objective(Convert.ToInt32(result2["ObjectiveId"]), result2["DESCRIPTION"].ToString(),
                     Convert.ToInt32(result2["NumberOfSteps"]), Convert.ToInt32(result2["IsCompleted"]) != 0, result2["Type"].ToString(),
-                    Convert.ToInt32(result2["TriggersPipeline"]) != 0, Convert.ToInt32(result["OrderInProject"]), effects));
+                    Convert.ToInt32(result2["TriggersPipeline"]) != 0, Convert.ToInt32(result["OrderInProject"]), result2["Place"].ToString(), effects));
             }
 
         }
