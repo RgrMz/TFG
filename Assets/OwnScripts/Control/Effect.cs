@@ -1,11 +1,11 @@
 public class Effect
 {
     public int EffectId {get; set;}
-    public double Value { get; set; }
+    public float Value { get; set; }
     public string Indicator { get; set; }
-    public double Duration { get; set; }
+    public float Duration { get; set; }
 
-    public Effect(int id, double value, string indicator, double duration)
+    public Effect(int id, float value, string indicator, float duration)
     {
         EffectId = id;
         Value = value;

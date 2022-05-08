@@ -16,9 +16,9 @@ public class PropertyDAO
         sqlQuery = null;
     }
 
-    public Dictionary<string, double> GetAllProperties(int projectId, string difficulty)
+    public Dictionary<string, float> GetAllProperties(int projectId, string difficulty)
     {
-        Dictionary<string, double> properties = new Dictionary<string, double>();
+        Dictionary<string, float> properties = new Dictionary<string, float>();
         string sqlQuery2;
         try
         {
@@ -31,8 +31,7 @@ public class PropertyDAO
                 result2 = db.Read(sqlQuery2);
                 if (result2.Read())
                 {
-                    Debug.Log($"{result2["Name"].ToString()}     {Convert.ToDouble(result2["Value"])}     ");
-                    properties.Add(result2["Name"].ToString(), Convert.ToDouble(result2["Value"]));
+                    properties.Add(result2["Name"].ToString(), (float) (result2["Value"]));
                 }
             }
 

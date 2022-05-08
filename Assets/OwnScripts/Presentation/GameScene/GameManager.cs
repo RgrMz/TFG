@@ -1,9 +1,13 @@
 using UnityEngine;
 using TMPro;
+using System.Collections.Generic;
+using UnityEngine.EventSystems;
 
 // Class in charge of loading the project and objectives based on player's decission
 public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
 {
+    public GameObject indicatorsManagerGO;
+
     public TextMeshProUGUI objectiveText;
 
     public TextMeshProUGUI problemsAndProjectText;
@@ -14,36 +18,60 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
 
     protected GameObject mostRecentArrow;
 
-    protected ProjectController projectController;
+    protected GameObject player;
+
+    public ProjectController projectController;
+    public int objectivesCompleted;
+    public bool projectSelected;
     protected static string role;
     // protected GameController gameController; => Save the current generated game in DB
     // This is for quick simulations of an started game:
     protected Project projectForQuickSimulation = new Project(1, "This project consists of operating the new code developed by the development team based on the legacy one of the Information System of the restaurant GoodSushi.They know its Information System has quality flaws along with performance issues and mid - to - long downtimes.The software will be deployed to Amazon Web Service servers in the cloud, so it will be monitored and operated thorugh services of this platform such as Amazon CloudFormation or Amazon CloudWatch", "Dev");
-    private string Difficulty { get; set; }
-    private void Start()
+    public string Difficulty { get; set; }
+    private void Awake()
     {
-        Difficulty = DifficultySelector.Difficulty;
+        indicatorsManagerGO = GameObject.Find("IndicatorsManager");
+        // For quick simulations
+        if (DifficultySelector.Difficulty == null)
+        {
+            Difficulty = "Basic";
+        }
+        else
+        {
+            Difficulty = DifficultySelector.Difficulty;
+        }
         projectController = new ProjectController();
         Cursor.visible = false;
+        objectivesCompleted = 0;
+        projectSelected = false;
+        player = GameObject.FindWithTag("Player");
     }
     private void Update()
     {
         if (projectController.SelectedProject != null)
         {
-            Debug.Log(projectController.SelectedProject.CurrentObjective.IsCompleted);
             if (projectController.SelectedProject.CurrentObjective.IsCompleted)
             {
+                if(projectController.SelectedProject.CurrentObjective.Effects != null)
+                {
+                    foreach(Effect effect in projectController.SelectedProject.CurrentObjective.Effects)
+                    {
+                        indicatorsManagerGO.GetComponent<IndicatorsManager>().ApplyEffect(effect);
+                    }
+                }
+                objectivesCompleted++;
+                indicatorsManagerGO.GetComponent<IndicatorsManager>().UpdateFunctionalityBar();
+
                 Destroy(mostRecentArrow);
+
                 projectController.SelectedProject.CurrentObjective = projectController.SelectedProject.Objectives.Dequeue();
                 objectiveText.text = projectController.SelectedProject.CurrentObjective.Description;
-                if (objectiveText.text.Contains("operations team") || objectiveText.text.Contains("development team"))
-                {
-                    // use the role parameter to know which floor to go
-                }
-                else
-                {
-                    mostRecentArrow = SpawnArrowForPlaceIndication(projectController.SelectedProject.CurrentObjective.Place);
-                }
+
+                mostRecentArrow = SpawnArrowForPlaceIndication(projectController.SelectedProject.CurrentObjective.Place);
+
+                // ExecuteEvents.Execute<ObjectiveHandlerAnimations>(objectiveHandler, null, (x, y) => x.UpdatePlayerPlace(gameObject.name));
+                ExecuteEvents.Execute<ObjectiveHandlerAnimations>(
+                    player, null, (x, y) => x.UpdateCurrentObjectivePlace(projectController.SelectedProject.CurrentObjective.Place));
             }
         }
     }
@@ -61,6 +89,12 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
         //}
         projectController.SelectedProject = projectController.SelectRandomProject(role, Difficulty);
         problemsAndProjectText.text = projectController.SelectedProject.Description;
+
+        // Initialize the indicators
+        indicatorsManagerGO.GetComponent<IndicatorsManager>().InitializeIndicators();
+
+        // Tell the indicators manager to start applying the progress to the bars
+        indicatorsManagerGO.GetComponent<IndicatorsManager>().StartMakingBarsProgress();
     }
 
     public void ObjectiveProgressed()
@@ -69,7 +103,8 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
         {
             projectController.SelectedProject.CurrentObjective.IsCompleted = true;
             StartCoroutine(TextFadingInAndOut.FadeText(completedObjectiveTextBackground, 2f, completedObjectiveText));
-        } else
+        }
+        else
         {
             projectController.SelectedProject.CurrentObjective.CurrentStep++;
         }
@@ -81,7 +116,7 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
         InitializeGame();
     }
 
-    private GameObject SpawnArrowForPlaceIndication(string place, string role = null)
+    private GameObject SpawnArrowForPlaceIndication(string place)
     {
         Debug.Log(place);
         GameObject ceilToSpawnArrow = GameObject.Find($"{place}ArrowReference");

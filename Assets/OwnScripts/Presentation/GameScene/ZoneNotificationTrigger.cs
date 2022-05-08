@@ -19,11 +19,14 @@ public class ZoneNotificationTrigger : MonoBehaviour
 
     private GameObject backgroundZoneText = null;
 
+    private GameObject player;
+
     private void Start()
     {
         zoneFrame = GameObject.Find("ZoneFrame");
         enterTriggers = GameObject.FindGameObjectsWithTag("ZoneTrigger");
-        backgroundZoneText = GameObject.Find("BackgroundTextZone"); 
+        backgroundZoneText = GameObject.Find("BackgroundTextZone");
+        player = GameObject.FindWithTag("Player");
     }
 
     private void OnTriggerExit(Collider other)
@@ -49,7 +52,6 @@ public class ZoneNotificationTrigger : MonoBehaviour
                 if(entryTrigger)
                     zoneText.text = zoneTrigger.name;
                 StartCoroutine(FadeText(2f, zoneText));
-
             }
         }
     }

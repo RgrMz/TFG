@@ -35,13 +35,8 @@ public class ProjectController
             }
         }
 
-        /*int selectedProjectIdRnd = -1;
-        while(selectedProjectIdRnd != 0 || selectedProjectIdRnd != 1)
-        {
-            selectedProjectIdRnd = new System.Random().Next(2);
-            Debug.Log(selectedProjectIdRnd);
-        }*/ 
-        selectedProject = possibleProjects[0];
+        int randomIndex = new System.Random().Next(possibleProjects.Count);
+        selectedProject = possibleProjects[randomIndex];
         selectedProject.Objectives = objectiveDAO.GetAllObjectives(selectedProject.Id);
         selectedProject.Properties = propertyDAO.GetAllProperties(selectedProject.Id, difficulty);
 

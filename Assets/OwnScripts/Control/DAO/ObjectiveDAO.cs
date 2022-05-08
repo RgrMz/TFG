@@ -36,7 +36,7 @@ public class ObjectiveDAO
                 result3 = db.Read(sqlQuery3);
                 while(result3.Read())
                 {
-                    effects.Add(new Effect(Convert.ToInt32(result3["EffectId"]), Convert.ToDouble(result3["Value"]), result3["Indicator"].ToString(),
+                    effects.Add(new Effect(Convert.ToInt32(result3["EffectId"]), (float) (result3["Value"]), result3["Indicator"].ToString(),
                         Convert.ToInt32(result3["Duration"])));
                 }
                 objectives.Enqueue(new Objective(Convert.ToInt32(result2["ObjectiveId"]), result2["DESCRIPTION"].ToString(),
