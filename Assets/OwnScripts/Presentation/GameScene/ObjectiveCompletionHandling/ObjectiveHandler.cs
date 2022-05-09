@@ -18,22 +18,26 @@ public class ObjectiveHandler : MonoBehaviour, IEventSystemHandler
     {
         if (other.CompareTag("Player") || other.CompareTag("Pickable"))
         {
-            if (Place.Equals("InitialZone"))
-                SendObjectiveProgressed();
-            if (Place.Equals(CurrentObjectivePlace))
-                SendObjectiveProgressed();
+            SendObjectiveProgressed();
         }
     }
 
     public void SendObjectiveProgressed(GameObject pTarget = null)
     {
-        ExecuteEvents.Execute<IObjectiveSwitchHandler>(pTarget == null ? target : pTarget, null, (x, y) => x.ObjectiveProgressed());
+        Debug.Log($"Place FOR CURENT COLLIDED ASSET IS {Place}");
+        Debug.Log($"{Place}.Equals({CurrentObjectivePlace}) : {Place.Equals(CurrentObjectivePlace)}");
+        if (Place.Equals(CurrentObjectivePlace) || Place.Equals("InitialZone"))
+        {
+            Debug.Log("Hagamos progresar al objetivo");
+            ExecuteEvents.Execute<IObjectiveSwitchHandler>(pTarget == null ? target : pTarget, null, (x, y) => x.ObjectiveProgressed());
+        }
+            
     }
 
     // Event sent from GameManager to know if a given interaction should make a progress in the current objective
     public void UpdateCurrentObjectivePlace(string currentObjectivePlace)
     {
         CurrentObjectivePlace = currentObjectivePlace;
-        Debug.Log($"New place is {currentObjectivePlace}");
+        Debug.Log($"New place FOR CURRENT OBJECTIVE IS {CurrentObjectivePlace}");
     }
 }

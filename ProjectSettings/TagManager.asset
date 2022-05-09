@@ -12,6 +12,7 @@ TagManager:
   - NPC
   - OpsNPC
   - Pickable
+  - ObjectiveHandler
   layers:
   - Default
   - TransparentFX

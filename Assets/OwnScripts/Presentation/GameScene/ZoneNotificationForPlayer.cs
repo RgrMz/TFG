@@ -13,11 +13,18 @@ public class ZoneNotificationForPlayer : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log($"Player in {gameObject.name}");
-        ExecuteEvents.Execute<ObjectiveHandlerAnimations>(player, null, (x, y) => x.UpdatePlayerPlace(gameObject.name));
+        if(other.CompareTag("Player"))
+        {
+            Debug.Log($"Player in {gameObject.name}");
+            ExecuteEvents.Execute<ObjectiveHandlerAnimations>(player, null, (x, y) => x.UpdatePlayerPlace(gameObject.name));
+        }
     }
     private void OnTriggerExit(Collider other)
     {
-        ExecuteEvents.Execute<ObjectiveHandlerAnimations>(player, null, (x, y) => x.UpdatePlayerPlace(""));
+        if (other.CompareTag("Player"))
+        {
+            Debug.Log($"Player exited");
+            ExecuteEvents.Execute<ObjectiveHandlerAnimations>(player, null, (x, y) => x.UpdatePlayerPlace(""));
+        }
     }
 }

@@ -20,6 +20,10 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
 
     protected GameObject player;
 
+    protected GameObject[] objectiveHandlerList;
+
+    public GameObject pipelineManager;
+
     public ProjectController projectController;
     public int objectivesCompleted;
     public bool projectSelected;
@@ -45,6 +49,7 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
         objectivesCompleted = 0;
         projectSelected = false;
         player = GameObject.FindWithTag("Player");
+        objectiveHandlerList = GameObject.FindGameObjectsWithTag("ObjectiveHandler");
     }
     private void Update()
     {
@@ -52,6 +57,11 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
         {
             if (projectController.SelectedProject.CurrentObjective.IsCompleted)
             {
+                if(projectController.SelectedProject.CurrentObjective.TriggersPipeline)
+                {
+                    pipelineManager.GetComponent<PipelineExecution>().StartExecution();
+                }
+
                 if(projectController.SelectedProject.CurrentObjective.Effects != null)
                 {
                     foreach(Effect effect in projectController.SelectedProject.CurrentObjective.Effects)
@@ -59,6 +69,7 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
                         indicatorsManagerGO.GetComponent<IndicatorsManager>().ApplyEffect(effect);
                     }
                 }
+
                 objectivesCompleted++;
                 indicatorsManagerGO.GetComponent<IndicatorsManager>().UpdateFunctionalityBar();
 
@@ -66,12 +77,20 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
 
                 projectController.SelectedProject.CurrentObjective = projectController.SelectedProject.Objectives.Dequeue();
                 objectiveText.text = projectController.SelectedProject.CurrentObjective.Description;
+                if (projectController.SelectedProject.CurrentObjective.TriggersPipeline)
+                {
+                    pipelineManager.GetComponent<PipelineExecution>().StartExecution();
+                }
 
                 mostRecentArrow = SpawnArrowForPlaceIndication(projectController.SelectedProject.CurrentObjective.Place);
 
-                // ExecuteEvents.Execute<ObjectiveHandlerAnimations>(objectiveHandler, null, (x, y) => x.UpdatePlayerPlace(gameObject.name));
+                foreach(GameObject objectiveHandlerGO in objectiveHandlerList)
+                {
+                    ExecuteEvents.Execute<ObjectiveHandler>(
+                        objectiveHandlerGO, null, (handler, y) => handler.UpdateCurrentObjectivePlace(projectController.SelectedProject.CurrentObjective.Place));
+                }
                 ExecuteEvents.Execute<ObjectiveHandlerAnimations>(
-                    player, null, (x, y) => x.UpdateCurrentObjectivePlace(projectController.SelectedProject.CurrentObjective.Place));
+                    player, null, (handler, y) => handler.UpdateCurrentObjectivePlace(projectController.SelectedProject.CurrentObjective.Place));
             }
         }
     }
@@ -118,7 +137,6 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
 
     private GameObject SpawnArrowForPlaceIndication(string place)
     {
-        Debug.Log(place);
         GameObject ceilToSpawnArrow = GameObject.Find($"{place}ArrowReference");
         Transform ceilTransform = ceilToSpawnArrow.transform;
         Vector3 positionToSpawn = new Vector3(ceilTransform.position.x, ceilTransform.position.y + 12, ceilTransform.position.z);

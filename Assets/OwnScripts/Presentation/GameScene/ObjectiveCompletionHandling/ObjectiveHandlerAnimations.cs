@@ -20,7 +20,7 @@ public class ObjectiveHandlerAnimations : MonoBehaviour, IEventSystemHandler
     // Event sent from GameManager to know if a given interaction should make a progress in the current objective¡
     public void UpdateCurrentObjectivePlace(string currentObjectivePlace)
     {
-        handler.CurrentObjectivePlace = currentObjectivePlace;
+        handler.UpdateCurrentObjectivePlace(currentObjectivePlace);
     }
 
     // Event sent from Zone Notification to know the place the player is

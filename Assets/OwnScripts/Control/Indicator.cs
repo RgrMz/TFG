@@ -17,7 +17,10 @@ public class Indicator : Subscriber
         {
             Value = initialValue;
         }
-        Value = (float)(random.NextDouble() * (maxValue - minValue) + minValue);
+        if (initialValue != 0)
+        {
+            Value = (float)(random.NextDouble() * (maxValue - minValue) + minValue);
+        }
     }
 
     public void update(Effect effect = null)

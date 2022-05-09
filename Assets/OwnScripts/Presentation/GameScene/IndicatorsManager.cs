@@ -89,9 +89,9 @@ public class IndicatorsManager : MonoBehaviour
                     indicator => indicator.Name.Equals("Functionality"));
         GameObject projectBar = ProjectBars.Find(bar => bar.name.Equals("Functionality"));
 
-        // Update a constant value based on the number of objectives of the project
-        // Substract for 2 objectives: the two initial ones and the last one
-        barIndicator.Value += 1 / (gameManager.projectController.SelectedProject.Objectives.Count - 3);
+        Debug.Log(1 / (gameManager.projectController.SelectedProject.Objectives.Count - 3));
+        barIndicator.Value += 1f / (gameManager.projectController.SelectedProject.Objectives.Count - 3);
         projectBar.GetComponent<Image>().fillAmount = barIndicator.Value;
+        Debug.Log($"Model : {barIndicator.Value}, y en la vista: {projectBar.GetComponent<Image>().fillAmount}");
     }
 }
