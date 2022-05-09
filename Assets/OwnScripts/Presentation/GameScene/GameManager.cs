@@ -77,6 +77,7 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
 
                 projectController.SelectedProject.CurrentObjective = projectController.SelectedProject.Objectives.Dequeue();
                 objectiveText.text = projectController.SelectedProject.CurrentObjective.Description;
+                Debug.Log($"The current objective triggers pipeline at start? : {projectController.SelectedProject.CurrentObjective.TriggersPipeline}");
                 if (projectController.SelectedProject.CurrentObjective.TriggersPipeline)
                 {
                     pipelineManager.GetComponent<PipelineExecution>().StartExecution();

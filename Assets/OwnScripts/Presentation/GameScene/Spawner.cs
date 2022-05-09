@@ -17,26 +17,23 @@ public class Spawner : MonoBehaviour
 
     private Vector3 positionToSpawn;
 
-    private Animator anim;
-
     public GameObject background;
+
+    private GameObject gameManagerGO;
 
     void Start()
     {
-        anim = GetComponent<Animator>();
+        gameManagerGO = GameObject.Find("GameManager");
     }
 
     public void spawnBall()
     {
-        // zoneName = event.text;
-        objectiveType = "Java";
+        objectiveType = gameManagerGO.GetComponent<GameManager>().projectController.SelectedProject.CurrentObjective.Type;
         positionToSpawn = new Vector3(transform.position.x - 2, transform.position.y, transform.position.z - 2);
-        switch (objectiveType)
-        {
-            case "Java":
-                ballToSpawn = Instantiate(Resources.Load("OwnPrefabs/JavaBall"), positionToSpawn, transform.rotation) as GameObject;
-                break;
-        }
+
+        ballToSpawn = Instantiate(Resources.Load($"OwnPrefabs/{objectiveType}Ball"), positionToSpawn, transform.rotation) as GameObject;
+
+        // Probably ballToSpawn shouyld be accessed or returned somehow to be able to destroy it and Instantiate the builSoftwareBall
     }
 
 }

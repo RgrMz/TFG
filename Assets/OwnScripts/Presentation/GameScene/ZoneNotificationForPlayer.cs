@@ -15,7 +15,7 @@ public class ZoneNotificationForPlayer : MonoBehaviour
     {
         if(other.CompareTag("Player"))
         {
-            Debug.Log($"Player in {gameObject.name}");
+            // Debug.Log($"Player in {gameObject.name}");
             ExecuteEvents.Execute<ObjectiveHandlerAnimations>(player, null, (x, y) => x.UpdatePlayerPlace(gameObject.name));
         }
     }
@@ -23,7 +23,7 @@ public class ZoneNotificationForPlayer : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log($"Player exited");
+            // Debug.Log($"Player exited");
             ExecuteEvents.Execute<ObjectiveHandlerAnimations>(player, null, (x, y) => x.UpdatePlayerPlace(""));
         }
     }

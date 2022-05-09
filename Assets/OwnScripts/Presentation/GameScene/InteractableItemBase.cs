@@ -25,9 +25,11 @@ public class InteractableItemBase : MonoBehaviour
 
     private bool collided;
 
+    private bool picked;
+
     private GameObject pickUpParent;
 
-    void Start()
+    private void Awake()
     {
         interactionPanel = GameObject.Find("InteractionTextPanel");
         player = GameObject.Find("PlayableCharacter");
@@ -38,6 +40,14 @@ public class InteractableItemBase : MonoBehaviour
             interactionText = interactionPanel.GetComponentInChildren<TextMeshProUGUI>();
         anim = player.GetComponent<Animator>();
         collided = false;
+        if (gameObject.CompareTag("Pickable"))
+        {
+            picked = false;
+        }
+    }
+
+    void Start()
+    {
         switch (gameObject.tag)
         {
             case "Interactable":
@@ -79,6 +89,7 @@ public class InteractableItemBase : MonoBehaviour
             {
                 if (collided)
                 {
+                    picked = true;
                     Destroy(GetComponent<Rigidbody>());
                     gameObject.transform.SetParent(pickUpParent.transform);
                     gameObject.transform.position = pickUpParent.transform.position;
@@ -90,8 +101,8 @@ public class InteractableItemBase : MonoBehaviour
             {
                 if (collided)
                 {
+                    picked = false;
                     anim.SetTrigger("Throw");
-                    // coroutine() para darle pausa y que parezca que lanza la bola de verdad
                     gameObject.transform.parent = null;
                     gameObject.AddComponent<Rigidbody>();
                     Rigidbody rbody = gameObject.GetComponent<Rigidbody>();
@@ -141,6 +152,14 @@ public class InteractableItemBase : MonoBehaviour
                 tempColor.a = 0.8f;
                 panelImage.color = tempColor;
             }
+        }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if(other.CompareTag("Player") && picked)
+        {
+            interactionText.text = "Press R to throw the work done";
         }
     }
 

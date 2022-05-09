@@ -38,6 +38,7 @@ public class IndicatorsManager : MonoBehaviour
             var indicator = from i in indicatorController.Indicators
                             where i.Name == bar.name.Substring(0, bar.name.IndexOf("B"))
                             select i;
+
             barImage.fillAmount = indicator.First<Indicator>().Value / 100;
         }
     }
@@ -89,7 +90,6 @@ public class IndicatorsManager : MonoBehaviour
                     indicator => indicator.Name.Equals("Functionality"));
         GameObject projectBar = ProjectBars.Find(bar => bar.name.Equals("Functionality"));
 
-        Debug.Log(1 / (gameManager.projectController.SelectedProject.Objectives.Count - 3));
         barIndicator.Value += 1f / (gameManager.projectController.SelectedProject.Objectives.Count - 3);
         projectBar.GetComponent<Image>().fillAmount = barIndicator.Value;
         Debug.Log($"Model : {barIndicator.Value}, y en la vista: {projectBar.GetComponent<Image>().fillAmount}");
