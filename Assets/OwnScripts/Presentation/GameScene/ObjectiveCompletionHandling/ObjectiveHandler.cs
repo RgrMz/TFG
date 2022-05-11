@@ -16,9 +16,12 @@ public class ObjectiveHandler : MonoBehaviour, IEventSystemHandler
     public string CurrentObjectivePlace { get; set; }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player") || other.CompareTag("Pickable"))
+        if (!gameObject.name.Contains("Solution"))
         {
-            SendObjectiveProgressed();
+            if (other.CompareTag("Player") || other.CompareTag("Pickable"))
+            {
+                SendObjectiveProgressed();
+            }
         }
     }
 
@@ -28,7 +31,6 @@ public class ObjectiveHandler : MonoBehaviour, IEventSystemHandler
         //Debug.Log($"{Place}.Equals({CurrentObjectivePlace}) : {Place.Equals(CurrentObjectivePlace)}");
         if (Place.Equals(CurrentObjectivePlace) || Place.Equals("InitialZone"))
         {
-            Debug.Log("Hagamos progresar al objetivo");
             ExecuteEvents.Execute<IObjectiveSwitchHandler>(pTarget == null ? target : pTarget, null, (x, y) => x.ObjectiveProgressed());
         }
             

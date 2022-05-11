@@ -32,12 +32,12 @@ public class IndicatorController
         {
             int i = 0;
             int nameSeparator = name.IndexOf("P");
-            if (name.Equals("Duration"))
+            if (name.Substring(0, nameSeparator).Equals("Duration"))
             {
                 Indicators.Add(new Indicator(name.Substring(0, nameSeparator),
                     projectProperties[indicatorProperties[i]], minValue, maxValue, projectProperties["InitialDuration"]));
             }
-            else if (name.Equals("Budget"))
+            else if (name.Substring(0, nameSeparator).Equals("Budget"))
             {
                 Indicators.Add(new Indicator(name.Substring(0, nameSeparator),
                     projectProperties[indicatorProperties[i]], minValue, maxValue, projectProperties["InitialBudget"]));

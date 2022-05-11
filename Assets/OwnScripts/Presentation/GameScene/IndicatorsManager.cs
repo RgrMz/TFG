@@ -23,11 +23,6 @@ public class IndicatorsManager : MonoBehaviour
         gameManager = gameManagerGO.GetComponent<GameManager>();
     }
 
-    void Update()
-    {
-
-    }
-
     public void InitializeIndicators()
     {
         indicatorController = new IndicatorController(gameManager.projectController.SelectedProject.Properties,
@@ -48,12 +43,13 @@ public class IndicatorsManager : MonoBehaviour
         indicatorController.NotifyIndicators(effect);
     }
 
-    public void StartMakingBarsProgress()
+    public Coroutine StartMakingBarsProgress(float initialBudget, float initialDuration)
     {
-        progressBarsCoroutine = StartCoroutine(ApplyProgressToBars());
+        progressBarsCoroutine = StartCoroutine(ApplyProgressToBars(initialBudget, initialDuration));
+        return progressBarsCoroutine;
     }
 
-    IEnumerator ApplyProgressToBars()
+    IEnumerator ApplyProgressToBars(float initialBudget, float initialDuration)
     {
         while (true)
         {
@@ -67,6 +63,7 @@ public class IndicatorsManager : MonoBehaviour
                 Indicator barIndicator = indicatorController.Indicators.Find(
                     indicator => indicator.Name.Equals(calmsBar.name.Substring(0, indexOfSeparator)));
                 calmsBar.GetComponent<Image>().fillAmount += (barIndicator.ProgressPerSecond) / 100;
+
             }
             foreach (GameObject projectBar in ProjectBars)
             {
@@ -76,12 +73,30 @@ public class IndicatorsManager : MonoBehaviour
                 // Show the changes in the HUD for each bar
                 Indicator barIndicator = indicatorController.Indicators.Find(
                     indicator => indicator.Name.Equals(projectBar.name));
-                projectBar.GetComponent<Image>().fillAmount += (barIndicator.ProgressPerSecond) / 100;
+                if(barIndicator.Name.Equals("Budget"))
+                {
+                    projectBar.GetComponent<Image>().fillAmount += (barIndicator.ProgressPerSecond) / initialBudget;
+                }
+                else if (barIndicator.Name.Equals("Duration"))
+                {
+                    projectBar.GetComponent<Image>().fillAmount += (barIndicator.ProgressPerSecond) / initialDuration;
+                }
+                
             }
 
-            // Apply the progress each 4 seconds
+            // Apply the progress each second
             yield return new WaitForSeconds(1f);
         }
+    }
+
+    public void ApplyCostAndProfit(float cost, float profit)
+    {
+        Indicator budgetIndicator = indicatorController.Indicators.Find(
+                   indicator => indicator.Name.Equals("Budget"));
+        budgetIndicator.Value -= cost;
+        budgetIndicator.Value += profit;
+        GameObject budgetBar = ProjectBars.Find(bar => bar.name.Equals("Budget"));
+        budgetBar.GetComponent<Image>().fillAmount = budgetIndicator.Value;
     }
 
     public void UpdateFunctionalityBar()
@@ -92,6 +107,5 @@ public class IndicatorsManager : MonoBehaviour
 
         barIndicator.Value += 1f / (gameManager.projectController.SelectedProject.Objectives.Count - 3);
         projectBar.GetComponent<Image>().fillAmount = barIndicator.Value;
-        Debug.Log($"Model : {barIndicator.Value}, y en la vista: {projectBar.GetComponent<Image>().fillAmount}");
     }
 }

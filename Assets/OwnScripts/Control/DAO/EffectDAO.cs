@@ -16,4 +16,20 @@ public class EffectDAO
         sqlQuery = null;
     }
 
+    public Effect getEffect (int effectId)
+    {
+        Effect resultEffect = null;
+        try
+        {
+            sqlQuery = "SELECT * FROM Effect WHERE EffectId = " + effectId + " ;";
+            IDataReader result = db.Read(sqlQuery);
+            resultEffect = new Effect(Convert.ToInt32(result["EffectId"]), (float)result["Value"], 
+                result["Indicator"].ToString());
+        } catch (SqliteException e)
+        {
+            Debug.LogError("[SQL - ERROR] Error while executing the following command: " + sqlQuery + "\n Reason: " + e.Message);
+        }
+        return resultEffect;
+    }
+
 }

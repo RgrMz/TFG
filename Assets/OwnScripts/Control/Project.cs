@@ -10,8 +10,7 @@ public class Project
     public Dictionary<string, float> Properties { get; set; }
     public Queue<Objective> Objectives { get; set; }
     public Objective CurrentObjective { get; set; }
-    // Public List<Problem> Problems {get; set;} -> Generados al azar de entre todos los posibles
-    
+    public List<Problem> Problems {get; set;}
     public Project(int id,  string desc, string type)
     {
         Id = id;
@@ -20,6 +19,7 @@ public class Project
         Properties = new Dictionary<string, float>();
         Objectives = new Queue<Objective>();
         CurrentObjective = new Objective();
+        Problems = new List<Problem>();
     }
 
     public Project()
@@ -27,5 +27,6 @@ public class Project
         Properties = new Dictionary<string, float>();
         Objectives = new Queue<Objective>();
         CurrentObjective = new Objective();
+        Problems = new List<Problem>();
     }
 }

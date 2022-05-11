@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,6 +13,8 @@ public class Spawner : MonoBehaviour
     private string objectiveType;
 
     public TextMeshProUGUI finishedInteractionText;
+
+    public List<string> typesAllowed;
 
     private GameObject ballToSpawn;
 
@@ -30,8 +33,11 @@ public class Spawner : MonoBehaviour
     {
         objectiveType = gameManagerGO.GetComponent<GameManager>().projectController.SelectedProject.CurrentObjective.Type;
         positionToSpawn = new Vector3(transform.position.x - 2, transform.position.y, transform.position.z - 2);
-
-        ballToSpawn = Instantiate(Resources.Load($"OwnPrefabs/{objectiveType}Ball"), positionToSpawn, transform.rotation) as GameObject;
+        Debug.Log($"ObjectiveType : {objectiveType}");
+        if (typesAllowed.Contains(objectiveType))
+        {
+            ballToSpawn = Instantiate(Resources.Load($"OwnPrefabs/{objectiveType}Ball"), positionToSpawn, transform.rotation) as GameObject;
+        }
 
         // Probably ballToSpawn shouyld be accessed or returned somehow to be able to destroy it and Instantiate the builSoftwareBall
     }

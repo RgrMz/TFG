@@ -36,8 +36,7 @@ public class ObjectiveDAO
                 result3 = db.Read(sqlQuery3);
                 while(result3.Read())
                 {
-                    effects.Add(new Effect(Convert.ToInt32(result3["EffectId"]), (float) (result3["Value"]), result3["Indicator"].ToString(),
-                        Convert.ToInt32(result3["Duration"])));
+                    effects.Add(new Effect(Convert.ToInt32(result3["EffectId"]), (float) (result3["Value"]), result3["Indicator"].ToString()));
                 }
                 objectives.Enqueue(new Objective(Convert.ToInt32(result2["ObjectiveId"]), result2["DESCRIPTION"].ToString(),
                     Convert.ToInt32(result2["NumberOfSteps"]), Convert.ToInt32(result2["IsCompleted"]) != 0, result2["Type"].ToString(),
@@ -51,5 +50,28 @@ public class ObjectiveDAO
         }
 
         return objectives;
+    }
+
+    public Objective getGenericProblemObjective()
+    {
+        Objective objectiveResult = null;
+        try
+        {
+            sqlQuery = "SELECT * FROM Objective WHERE ObjectiveId = 4";
+            IDataReader result = db.Read(sqlQuery);
+            while (result.Read())
+            {
+                objectiveResult = new Objective(Convert.ToInt32(result["ObjectiveId"]), result["DESCRIPTION"].ToString(),
+                    Convert.ToInt32(result["NumberOfSteps"]), Convert.ToInt32(result["IsCompleted"]) != 0, result["Type"].ToString(),
+                    Convert.ToInt32(result["TriggersPipeline"]) != 0, 0, result["Place"].ToString());
+            }
+
+        }
+        catch (SqliteException e)
+        {
+            Debug.LogError("[SQL - ERROR] Error while executing the following command: " + sqlQuery + "\n Reason: " + e.Message);
+        }
+
+        return objectiveResult;
     }
 }

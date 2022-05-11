@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
+using System;
 
 // Class in charge of loading the project and objectives based on player's decission
 public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
@@ -22,13 +23,21 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
 
     protected GameObject[] objectiveHandlerList;
 
+    public TextMeshProUGUI[] solutionBoardsText;
+
     public GameObject pipelineManager;
 
+    public GameObject projectAndProblemShowingBoard;
+
     public ProjectController projectController;
+    public GameController gameController;
+    public Problem CurrentProblem { get; set; }
     public int objectivesCompleted;
     public bool projectSelected;
+    private bool problemGenerated;
+    private bool problemSolved;
     protected static string role;
-    // protected GameController gameController; => Save the current generated game in DB
+    private const int GENERIC_PROBLEM_OBJECTIVE_ID = 4;
     // This is for quick simulations of an started game:
     protected Project projectForQuickSimulation = new Project(1, "This project consists of operating the new code developed by the development team based on the legacy one of the Information System of the restaurant GoodSushi.They know its Information System has quality flaws along with performance issues and mid - to - long downtimes.The software will be deployed to Amazon Web Service servers in the cloud, so it will be monitored and operated thorugh services of this platform such as Amazon CloudFormation or Amazon CloudWatch", "Dev");
     public string Difficulty { get; set; }
@@ -47,7 +56,7 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
         projectController = new ProjectController();
         Cursor.visible = false;
         objectivesCompleted = 0;
-        projectSelected = false;
+        projectSelected = problemGenerated = problemSolved = false;
         player = GameObject.FindWithTag("Player");
         objectiveHandlerList = GameObject.FindGameObjectsWithTag("ObjectiveHandler");
     }
@@ -55,66 +64,106 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
     {
         if (projectController.SelectedProject != null)
         {
+            if (projectController.objectivesToGenerateProblems.Contains
+                (projectController.SelectedProject.CurrentObjective.Order) && !problemGenerated)
+            {
+                // Problem is used for displaying its data in the game's world
+                int i = projectController.SelectedProject.CurrentObjective.Order;
+                Debug.Log("Problema generado;");
+                CurrentProblem = gameController.selectProblem();
+                ApplyProblem();
+                gameController.saveCurrentObjective();
+                ManageObjectiveChange();
+                problemGenerated = true;
+                projectController.objectivesToGenerateProblems.Remove(i);
+                foreach (int a in projectController.objectivesToGenerateProblems)
+                {
+                    Debug.Log(a);
+                }
+                Debug.Log($"Vamos a dejar de generar problemas porque problemGenerated : {problemGenerated}");
+            }
+
             if (projectController.SelectedProject.CurrentObjective.IsCompleted)
             {
-                if(projectController.SelectedProject.CurrentObjective.TriggersPipeline)
+
+                if (projectController.SelectedProject.CurrentObjective.TriggersPipeline)
                 {
                     pipelineManager.GetComponent<PipelineExecution>().StartExecution();
                 }
 
-                if(projectController.SelectedProject.CurrentObjective.Effects != null)
+                if (projectController.SelectedProject.CurrentObjective.Effects != null) // modificar condicion => check empty
                 {
-                    foreach(Effect effect in projectController.SelectedProject.CurrentObjective.Effects)
+                    foreach (Effect effect in projectController.SelectedProject.CurrentObjective.Effects)
                     {
                         indicatorsManagerGO.GetComponent<IndicatorsManager>().ApplyEffect(effect);
                     }
                 }
 
                 objectivesCompleted++;
-                indicatorsManagerGO.GetComponent<IndicatorsManager>().UpdateFunctionalityBar();
-
-                Destroy(mostRecentArrow);
-
-                projectController.SelectedProject.CurrentObjective = projectController.SelectedProject.Objectives.Dequeue();
-                objectiveText.text = projectController.SelectedProject.CurrentObjective.Description;
-                Debug.Log($"The current objective triggers pipeline at start? : {projectController.SelectedProject.CurrentObjective.TriggersPipeline}");
-                if (projectController.SelectedProject.CurrentObjective.TriggersPipeline)
+                if (projectController.SelectedProject.CurrentObjective.ObjectiveId != GENERIC_PROBLEM_OBJECTIVE_ID)
                 {
-                    pipelineManager.GetComponent<PipelineExecution>().StartExecution();
+                    indicatorsManagerGO.GetComponent<IndicatorsManager>().UpdateFunctionalityBar();
+
+                    projectController.SelectedProject.CurrentObjective = projectController.SelectedProject.Objectives.Dequeue();
+
+                    ManageObjectiveChange();
+
+                    if (projectController.SelectedProject.CurrentObjective.TriggersPipeline)
+                    {
+                        pipelineManager.GetComponent<PipelineExecution>().StartExecution();
+                    }
                 }
-
-                mostRecentArrow = SpawnArrowForPlaceIndication(projectController.SelectedProject.CurrentObjective.Place);
-
-                foreach(GameObject objectiveHandlerGO in objectiveHandlerList)
+                else
                 {
-                    ExecuteEvents.Execute<ObjectiveHandler>(
-                        objectiveHandlerGO, null, (handler, y) => handler.UpdateCurrentObjectivePlace(projectController.SelectedProject.CurrentObjective.Place));
+                    // Restore the current objective, also today check how to apply effects correctly so that original values are restored
+                    gameController.PlayedGame.restoreReplacedObjective(gameController.History.Pop());
+                    ManageObjectiveChange();
+                    problemGenerated = false;
                 }
-                ExecuteEvents.Execute<ObjectiveHandlerAnimations>(
-                    player, null, (handler, y) => handler.UpdateCurrentObjectivePlace(projectController.SelectedProject.CurrentObjective.Place));
             }
+
         }
     }
+
+    private void ApplyProblem()
+    {
+        problemsAndProjectText.text = CurrentProblem.Description;
+        for (int i = 0; i < CurrentProblem.Solutions.Count; i++)
+        {
+            solutionBoardsText[i].text = CurrentProblem.Solutions[i].Description;
+        }
+
+        // Avoid the completion of the problem objective by interacting with the main board
+        projectAndProblemShowingBoard.GetComponent<BoxCollider>().enabled = false;
+    }
+
+    private void ManageObjectiveChange()
+    {
+        Destroy(mostRecentArrow);
+        objectiveText.text = projectController.SelectedProject.CurrentObjective.Description;
+        mostRecentArrow = SpawnArrowForPlaceIndication(projectController.SelectedProject.CurrentObjective.Place);
+
+        foreach (GameObject objectiveHandlerGO in objectiveHandlerList)
+        {
+            ExecuteEvents.Execute<ObjectiveHandler>(
+                objectiveHandlerGO, null, (handler, y) => handler.UpdateCurrentObjectivePlace(projectController.SelectedProject.CurrentObjective.Place));
+        }
+        ExecuteEvents.Execute<ObjectiveHandlerAnimations>(
+            player, null, (handler, y) => handler.UpdateCurrentObjectivePlace(projectController.SelectedProject.CurrentObjective.Place));
+    }
+
     private void InitializeGame()
     {
-        // if statement used for quick simulation 
-        //if (projectForQuickSimulation != null)
-        //{
-        //    problemsAndProjectText.text = projectForQuickSimulation.Description;
-        //}
-        //else
-        //{
-        //    projectController.SelectedProject = projectController.SelectRandomProject(role, Difficulty);
-        //    problemsAndProjectText.text = projectController.SelectedProject.Description;
-        //}
         projectController.SelectedProject = projectController.SelectRandomProject(role, Difficulty);
         problemsAndProjectText.text = projectController.SelectedProject.Description;
+        gameController = new GameController(new Game(projectController.SelectedProject));
 
         // Initialize the indicators
         indicatorsManagerGO.GetComponent<IndicatorsManager>().InitializeIndicators();
 
         // Tell the indicators manager to start applying the progress to the bars
-        indicatorsManagerGO.GetComponent<IndicatorsManager>().StartMakingBarsProgress();
+        indicatorsManagerGO.GetComponent<IndicatorsManager>().
+            StartMakingBarsProgress(projectController.SelectedProject.Properties["InitialBudget"], projectController.SelectedProject.Properties["InitialDuration"]);
     }
 
     public void ObjectiveProgressed()
@@ -151,4 +200,18 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
             projectController.SelectedProject.CurrentObjective.CurrentStep < projectController.SelectedProject.CurrentObjective.NumberOfSteps);
     }
 
+    public void SolutionChoosed(string boardName)
+    {
+        int solutionNumber = boardName[boardName.Length - 1] - '0';
+        Debug.Log(solutionNumber);
+        // Apply the effects of the solution to the generic current objective for problems
+        Solution solution = CurrentProblem.Solutions[solutionNumber - 1];
+        if (solution.Cost != 0 || solution.Profit != 0)
+        {
+            indicatorsManagerGO.GetComponent<IndicatorsManager>().ApplyCostAndProfit(solution.Cost, solution.Profit);
+        }
+
+        projectController.SelectedProject.CurrentObjective.IsCompleted = true;
+        projectController.SelectedProject.CurrentObjective.Effects = solution.Effects;
+    }
 }

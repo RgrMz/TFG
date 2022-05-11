@@ -1,9 +1,11 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using TMPro;
+using System.Collections.Generic;
+using UnityEngine.EventSystems;
 
+/* AQUI CUANDO ENTRE PARA COGER UNA SOLUCION PARPADEAR DE COLOR VERDE LAS BARRAS CON EFECTOS POSITIVOS Y ROJO LOS NEGATIVOS */
 public class InteractableItemBase : MonoBehaviour
 {
     private GameObject interactionPanel;
@@ -77,12 +79,31 @@ public class InteractableItemBase : MonoBehaviour
                 textToShow = "Press T to grab the work done";
                 key = KeyCode.T;
                 break;
+            case "ObjectiveHandler":
+                textToShow = "Press F to choose this solution";
+                animationParameter = "";
+                key = KeyCode.F;
+                break;
         }
 
     }
 
     void Update()
     {
+        /*if (gameObject.CompareTag("ObjectiveHandler"))
+        {
+            Debug.Log($"/{gameObject.name}/SolutionCanvas/SolutionText");
+            TextMeshProUGUI solutionText = GameObject.Find($"/{gameObject.name}/SolutionCanvas/SolutionText").GetComponent<TextMeshProUGUI>();
+            if (solutionText.text.Equals(""))
+            {
+                gameObject.GetComponent<BoxCollider>().enabled = false;
+            }
+            else
+            {
+                gameObject.GetComponent<BoxCollider>().enabled = true;
+            }
+        } */
+
         if (gameObject.CompareTag("Pickable"))
         {
             if (Input.GetKeyDown(key))
@@ -116,12 +137,19 @@ public class InteractableItemBase : MonoBehaviour
         {
             if (Input.GetKeyDown(key))
             {
+                Debug.Log($"Key {key} pushed and {gameObject.CompareTag("ObjectiveHandler")}");
                 if (collided)
                 {
                     if (key == KeyCode.G)
                         // That's the key for interacting with NPCs => display their animation also
                         animNPC.SetTrigger(animationParameter);
                     anim.SetBool(animationParameter, true);
+                    if (gameObject.CompareTag("ObjectiveHandler"))
+                    {
+                        GameObject gameManager = GameObject.Find("GameManager");
+                        ExecuteEvents.Execute<IObjectiveSwitchHandler>(gameManager, null, 
+                            (manager, y) => manager.SolutionChoosed(gameObject.name));
+                    }
                 }
             }
             else

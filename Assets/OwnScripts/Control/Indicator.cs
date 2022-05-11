@@ -5,22 +5,26 @@ public class Indicator : Subscriber
     public float Value { get; set; }
     public string Name { get; set; }
     public float ProgressPerSecond { get; set; }
+    private float originalProgressPerSecond;
     public float[] MinMaxValueInitialization { get; set; }
     private static readonly Random random = new Random();
 
-    public Indicator(string name, float progressPerSec, float minValue, float maxValue, float initialValue = 0)
+    public Indicator(string name, float progressPerSec, float minValue, float maxValue, float initialValue)
     {
         Name = name;
         ProgressPerSecond = progressPerSec;
+        originalProgressPerSecond = progressPerSec;
         MinMaxValueInitialization = new float[] { minValue, maxValue };
-        if (name.Equals("Duration") || name.Equals("Budget"))
-        {
-            Value = initialValue;
-        }
-        else
-        {
-            Value = (float)(random.NextDouble() * (maxValue - minValue) + minValue);
-        }
+        Value = initialValue;
+    }
+
+    public Indicator(string name, float progressPerSec, float minValue, float maxValue)
+    {
+        Name = name;
+        ProgressPerSecond = progressPerSec;
+        originalProgressPerSecond = progressPerSec;
+        MinMaxValueInitialization = new float[] { minValue, maxValue };
+        Value = (float)(random.NextDouble() * (maxValue - minValue) + minValue);
     }
 
     public void update(Effect effect = null)
@@ -31,7 +35,7 @@ public class Indicator : Subscriber
             {
                 if (effect.Indicator.Equals(Name))
                 {
-                    ProgressPerSecond = effect.Value;
+                    Value += effect.Value;
                 }
             }
             else
@@ -42,4 +46,8 @@ public class Indicator : Subscriber
         }
     }
 
+    public void restoreOriginalProgressAfterEffect()
+    {
+        ProgressPerSecond = originalProgressPerSecond;
+    }
 }
