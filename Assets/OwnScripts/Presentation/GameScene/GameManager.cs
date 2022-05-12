@@ -65,22 +65,16 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
         if (projectController.SelectedProject != null)
         {
             if (projectController.objectivesToGenerateProblems.Contains
-                (projectController.SelectedProject.CurrentObjective.Order) && !problemGenerated)
+                (projectController.SelectedProject.CurrentObjective.ObjectiveId) && !problemGenerated)
             {
                 // Problem is used for displaying its data in the game's world
-                int i = projectController.SelectedProject.CurrentObjective.Order;
-                Debug.Log("Problema generado;");
+                int i = projectController.SelectedProject.CurrentObjective.ObjectiveId;
                 CurrentProblem = gameController.selectProblem();
                 ApplyProblem();
                 gameController.saveCurrentObjective();
                 ManageObjectiveChange();
                 problemGenerated = true;
                 projectController.objectivesToGenerateProblems.Remove(i);
-                foreach (int a in projectController.objectivesToGenerateProblems)
-                {
-                    Debug.Log(a);
-                }
-                Debug.Log($"Vamos a dejar de generar problemas porque problemGenerated : {problemGenerated}");
             }
 
             if (projectController.SelectedProject.CurrentObjective.IsCompleted)
@@ -211,7 +205,7 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
             indicatorsManagerGO.GetComponent<IndicatorsManager>().ApplyCostAndProfit(solution.Cost, solution.Profit);
         }
 
-        projectController.SelectedProject.CurrentObjective.IsCompleted = true;
         projectController.SelectedProject.CurrentObjective.Effects = solution.Effects;
+        ObjectiveProgressed();
     }
 }

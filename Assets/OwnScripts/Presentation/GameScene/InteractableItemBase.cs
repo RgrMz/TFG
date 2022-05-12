@@ -90,11 +90,10 @@ public class InteractableItemBase : MonoBehaviour
 
     void Update()
     {
-        /*if (gameObject.CompareTag("ObjectiveHandler"))
+        if (gameObject.CompareTag("ObjectiveHandler"))
         {
-            Debug.Log($"/{gameObject.name}/SolutionCanvas/SolutionText");
-            TextMeshProUGUI solutionText = GameObject.Find($"/{gameObject.name}/SolutionCanvas/SolutionText").GetComponent<TextMeshProUGUI>();
-            if (solutionText.text.Equals(""))
+            GameObject solutionText = gameObject.transform.Find("SolutionCanvas").Find("SolutionText").gameObject;
+            if (solutionText.GetComponent<TextMeshProUGUI>().text.Equals(""))
             {
                 gameObject.GetComponent<BoxCollider>().enabled = false;
             }
@@ -102,9 +101,9 @@ public class InteractableItemBase : MonoBehaviour
             {
                 gameObject.GetComponent<BoxCollider>().enabled = true;
             }
-        } */
+        }
 
-        if (gameObject.CompareTag("Pickable"))
+            if (gameObject.CompareTag("Pickable"))
         {
             if (Input.GetKeyDown(key))
             {
@@ -137,7 +136,6 @@ public class InteractableItemBase : MonoBehaviour
         {
             if (Input.GetKeyDown(key))
             {
-                Debug.Log($"Key {key} pushed and {gameObject.CompareTag("ObjectiveHandler")}");
                 if (collided)
                 {
                     if (key == KeyCode.G)
@@ -146,9 +144,13 @@ public class InteractableItemBase : MonoBehaviour
                     anim.SetBool(animationParameter, true);
                     if (gameObject.CompareTag("ObjectiveHandler"))
                     {
-                        GameObject gameManager = GameObject.Find("GameManager");
-                        ExecuteEvents.Execute<IObjectiveSwitchHandler>(gameManager, null, 
-                            (manager, y) => manager.SolutionChoosed(gameObject.name));
+                        Transform t = gameObject.transform.Find("SolutionCanvas").Find("SolutionText");
+                        if (t.gameObject.GetComponent<TextMeshProUGUI>().text.Equals(""))
+                        {
+                            Debug.Log("NullText");
+                        }
+                        ExecuteEvents.Execute<ObjectiveHandler>(gameObject, null,
+                            (manager, y) => manager.SendSolutionChoose());
                     }
                 }
             }
@@ -185,7 +187,7 @@ public class InteractableItemBase : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if(other.CompareTag("Player") && picked)
+        if (other.CompareTag("Player") && picked)
         {
             interactionText.text = "Press R to throw the work done";
         }

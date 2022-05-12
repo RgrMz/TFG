@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 public class Indicator : Subscriber
 {
@@ -7,7 +8,7 @@ public class Indicator : Subscriber
     public float ProgressPerSecond { get; set; }
     private float originalProgressPerSecond;
     public float[] MinMaxValueInitialization { get; set; }
-    private static readonly Random random = new Random();
+    private static readonly System.Random random = new System.Random();
 
     public Indicator(string name, float progressPerSec, float minValue, float maxValue, float initialValue)
     {
@@ -35,6 +36,7 @@ public class Indicator : Subscriber
             {
                 if (effect.Indicator.Equals(Name))
                 {
+
                     Value += effect.Value;
                 }
             }

@@ -16,7 +16,10 @@ public class ProjectController
     public List<int> objectivesToGenerateProblems;
     private int problemsCouldAppearAfter;
     private int problemsCouldAppearBefore;
-
+    private const int OBJECTIVE_WATCH_PIPELINE = 13;
+    private const int PUSH_CHANGES_DEV = 12;
+    private const int PUSH_CHANGES_OPS = 26;
+    
     public ProjectController()
     {
         projectDao = new ProjectDAO();
@@ -24,8 +27,8 @@ public class ProjectController
         propertyDAO = new PropertyDAO();
         problemDAO = new ProblemDAO();
         Projects = LoadProjects();
-        // After the first 3 objectives, the problems might start to appear
-        problemsCouldAppearAfter = 4;
+        // After the first objective, the problems might start to appear
+        problemsCouldAppearAfter = 1;
         problemsCouldAppearBefore = 2;
     }
 
@@ -52,9 +55,16 @@ public class ProjectController
         selectedProject.Objectives = objectiveDAO.GetAllObjectives(selectedProject.Id);
         selectedProject.Properties = propertyDAO.GetAllProperties(selectedProject.Id, difficulty);
 
-        Problem randomProblem = null;
         List<Problem> allProblems = problemDAO.getAllOProblems();
 
+        initializeProblems(selectedProject, allProblems);
+
+        return selectedProject;
+    }
+
+    private void initializeProblems(Project selectedProject, List<Problem> allProblems)
+    {
+        Problem randomProblem = null;
         while (selectedProject.Problems.Count < NUMBER_OF_EVENTS)
         {
             do
@@ -67,21 +77,32 @@ public class ProjectController
         // Randomly generates the objectiveIDs after which completion a problem will be generated
         objectivesToGenerateProblems = new List<int>();
         int lastSelected = -10; // Make it sure the first random objective number is picked
-        /*while (objectivesToGenerateProblems.Count < NUMBER_OF_EVENTS)
-        {
-            int randomObjectiveNumber = random.Next(selectedProject.Objectives.Count - problemsCouldAppearAfter, selectedProject.Objectives.Count - problemsCouldAppearBefore);
-            if (objectivesToGenerateProblems.Contains(randomObjectiveNumber) || Math.Abs(randomObjectiveNumber - lastSelected) < 2)
-            {
-                continue;
-            }
+
+        // Get all objectives Id of the selected project
+        List<int> projectObjectivesId = new List<int>();
+        //foreach (Objective o in selectedProject.Objectives)
+        //{
+        //    projectObjectivesId.Add(o.ObjectiveId);
+        //}
+
+        //while (objectivesToGenerateProblems.Count < NUMBER_OF_EVENTS)
+        //{
+        //    int index = random.Next(problemsCouldAppearAfter, projectObjectivesId.Count - problemsCouldAppearBefore);
+        //    int randomObjectiveId = projectObjectivesId[index];
+        //    bool isAForbiddenObjectiveId = (randomObjectiveId == OBJECTIVE_WATCH_PIPELINE || randomObjectiveId == PUSH_CHANGES_DEV 
+        //        || randomObjectiveId == PUSH_CHANGES_OPS);
+        //    if (objectivesToGenerateProblems.Contains(randomObjectiveId) || Math.Abs(randomObjectiveId - lastSelected) < 2 || isAForbiddenObjectiveId)
+        //    {
+        //        continue;
+        //    }
             
-            lastSelected = randomObjectiveNumber;
-            objectivesToGenerateProblems.Add(randomObjectiveNumber);
-        }*/
+        //    lastSelected = randomObjectiveId;
+        //    Debug.Log(randomObjectiveId);
+        //    objectivesToGenerateProblems.Add(randomObjectiveId);
+        //}
 
         // For quick simulation
-        objectivesToGenerateProblems = new List<int>() { 4, 6, 9, 10 };
-        return selectedProject;
+        /* controlar que ninguno de esos IDs sea el de watch the pipeline execution ! */
+        objectivesToGenerateProblems = new List<int>() { 7, 20, 9, 10 };
     }
-
 }

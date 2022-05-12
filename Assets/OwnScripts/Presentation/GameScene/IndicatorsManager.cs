@@ -53,35 +53,31 @@ public class IndicatorsManager : MonoBehaviour
     {
         while (true)
         {
+            // Change the values in the model
+            indicatorController.NotifyIndicators();
+
             foreach (GameObject calmsBar in CALMSBars)
             {
-                // Change the values in the model
-                indicatorController.NotifyIndicators();
-
                 // Show the changes in the HUD for each bar
                 int indexOfSeparator = calmsBar.name.IndexOf("B");
                 Indicator barIndicator = indicatorController.Indicators.Find(
                     indicator => indicator.Name.Equals(calmsBar.name.Substring(0, indexOfSeparator)));
-                calmsBar.GetComponent<Image>().fillAmount += (barIndicator.ProgressPerSecond) / 100;
-
+                calmsBar.GetComponent<Image>().fillAmount = (barIndicator.Value) / 100;
             }
+
             foreach (GameObject projectBar in ProjectBars)
             {
-                // Change the values in the model
-                indicatorController.NotifyIndicators();
-
                 // Show the changes in the HUD for each bar
                 Indicator barIndicator = indicatorController.Indicators.Find(
                     indicator => indicator.Name.Equals(projectBar.name));
                 if(barIndicator.Name.Equals("Budget"))
                 {
-                    projectBar.GetComponent<Image>().fillAmount += (barIndicator.ProgressPerSecond) / initialBudget;
+                    projectBar.GetComponent<Image>().fillAmount = (barIndicator.Value) / initialBudget;
                 }
                 else if (barIndicator.Name.Equals("Duration"))
                 {
-                    projectBar.GetComponent<Image>().fillAmount += (barIndicator.ProgressPerSecond) / initialDuration;
+                    projectBar.GetComponent<Image>().fillAmount = (barIndicator.Value) / initialDuration;
                 }
-                
             }
 
             // Apply the progress each second
@@ -105,7 +101,8 @@ public class IndicatorsManager : MonoBehaviour
                     indicator => indicator.Name.Equals("Functionality"));
         GameObject projectBar = ProjectBars.Find(bar => bar.name.Equals("Functionality"));
 
-        barIndicator.Value += 1f / (gameManager.projectController.SelectedProject.Objectives.Count - 3);
-        projectBar.GetComponent<Image>().fillAmount = barIndicator.Value;
+        barIndicator.Value++;
+
+        projectBar.GetComponent<Image>().fillAmount = barIndicator.Value / (gameManager.projectController.SelectedProject.Objectives.Count - 3);
     }
 }

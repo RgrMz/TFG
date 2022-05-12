@@ -42,4 +42,13 @@ public class ObjectiveHandler : MonoBehaviour, IEventSystemHandler
         CurrentObjectivePlace = currentObjectivePlace;
         // Debug.Log($"New place FOR CURRENT OBJECTIVE IS {CurrentObjectivePlace}");
     }
+
+    public void SendSolutionChoose()
+    {
+        if (Place.Equals(CurrentObjectivePlace) || Place.Equals("InitialZone"))
+        {
+            ExecuteEvents.Execute<IObjectiveSwitchHandler>(target, null,
+                            (manager, y) => manager.SolutionChoosed(gameObject.name));
+        }
+    }
 }

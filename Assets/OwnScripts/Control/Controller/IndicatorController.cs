@@ -30,25 +30,24 @@ public class IndicatorController
         }
         foreach (string name in indicatorProperties)
         {
-            int i = 0;
+            int index = indicatorProperties.IndexOf(name);
             int nameSeparator = name.IndexOf("P");
             if (name.Substring(0, nameSeparator).Equals("Duration"))
             {
                 Indicators.Add(new Indicator(name.Substring(0, nameSeparator),
-                    projectProperties[indicatorProperties[i]], minValue, maxValue, projectProperties["InitialDuration"]));
+                    projectProperties[indicatorProperties[index]], minValue, maxValue, projectProperties["InitialDuration"]));
+            
             }
             else if (name.Substring(0, nameSeparator).Equals("Budget"))
             {
                 Indicators.Add(new Indicator(name.Substring(0, nameSeparator),
-                    projectProperties[indicatorProperties[i]], minValue, maxValue, projectProperties["InitialBudget"]));
+                    projectProperties[indicatorProperties[index]], minValue, maxValue, projectProperties["InitialBudget"]));
             }
             else
             {
                 Indicators.Add(new Indicator(name.Substring(0, nameSeparator),
-                projectProperties[indicatorProperties[i]], minValue, maxValue));
+                projectProperties[indicatorProperties[index]], minValue, maxValue));
             }
-            i++;
-            
         }
         // Initialize the functionality bar independently
         Indicators.Add(new Indicator("Functionality", 0, 0, 0, 1));
