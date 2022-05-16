@@ -35,9 +35,9 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
     public int objectivesCompleted;
     public bool projectSelected;
     private bool problemGenerated;
-    private bool problemSolved;
     protected static string role;
     private const int GENERIC_PROBLEM_OBJECTIVE_ID = 4;
+    private const int PUSH_TO_REPO_OBJECTIVE_ID = 13;
     // This is for quick simulations of an started game:
     protected Project projectForQuickSimulation = new Project(1, "This project consists of operating the new code developed by the development team based on the legacy one of the Information System of the restaurant GoodSushi.They know its Information System has quality flaws along with performance issues and mid - to - long downtimes.The software will be deployed to Amazon Web Service servers in the cloud, so it will be monitored and operated thorugh services of this platform such as Amazon CloudFormation or Amazon CloudWatch", "Dev");
     public string Difficulty { get; set; }
@@ -56,14 +56,17 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
         projectController = new ProjectController();
         Cursor.visible = false;
         objectivesCompleted = 0;
-        projectSelected = problemGenerated = problemSolved = false;
+        projectSelected = problemGenerated = false;
         player = GameObject.FindWithTag("Player");
         objectiveHandlerList = GameObject.FindGameObjectsWithTag("ObjectiveHandler");
     }
+
     private void Update()
     {
         if (projectController.SelectedProject != null)
         {
+            
+
             if (projectController.objectivesToGenerateProblems.Contains
                 (projectController.SelectedProject.CurrentObjective.ObjectiveId) && !problemGenerated)
             {
@@ -106,6 +109,11 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
                     {
                         pipelineManager.GetComponent<PipelineExecution>().StartExecution();
                     }
+
+                    if (projectController.SelectedProject.CurrentObjective.ObjectiveId == PUSH_TO_REPO_OBJECTIVE_ID)
+                    {
+                        pipelineManager.GetComponent<PipelineExecution>().NotifyBallsNeeded(projectController.SelectedProject.CurrentObjective.NumberOfSteps);
+                    }
                 }
                 else
                 {
@@ -134,7 +142,16 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
     private void ManageObjectiveChange()
     {
         Destroy(mostRecentArrow);
-        objectiveText.text = projectController.SelectedProject.CurrentObjective.Description;
+        if (projectController.SelectedProject.CurrentObjective.ObjectiveId == GENERIC_PROBLEM_OBJECTIVE_ID)
+        {
+            gameObject.GetComponent<ProblemNotificationHandler>().SpawnOrDespawn(projectController.SelectedProject.CurrentObjective.Description, 1);
+            objectiveText.text = "";
+        }
+        else
+        {
+            objectiveText.text = projectController.SelectedProject.CurrentObjective.Description;
+        }
+
         mostRecentArrow = SpawnArrowForPlaceIndication(projectController.SelectedProject.CurrentObjective.Place);
 
         foreach (GameObject objectiveHandlerGO in objectiveHandlerList)
@@ -204,6 +221,8 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
         {
             indicatorsManagerGO.GetComponent<IndicatorsManager>().ApplyCostAndProfit(solution.Cost, solution.Profit);
         }
+
+        gameObject.GetComponent<ProblemNotificationHandler>().SpawnOrDespawn("", 0);
 
         projectController.SelectedProject.CurrentObjective.Effects = solution.Effects;
         ObjectiveProgressed();
