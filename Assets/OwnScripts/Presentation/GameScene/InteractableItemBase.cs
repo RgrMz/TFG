@@ -103,7 +103,7 @@ public class InteractableItemBase : MonoBehaviour
             }
         }
 
-            if (gameObject.CompareTag("Pickable"))
+        if (gameObject.CompareTag("Pickable"))
         {
             if (Input.GetKeyDown(key))
             {

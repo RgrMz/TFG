@@ -29,9 +29,12 @@ public class ObjectiveHandler : MonoBehaviour, IEventSystemHandler
     {
         //Debug.Log($"Place FOR CURENT COLLIDED ASSET IS {Place}");
         //Debug.Log($"{Place}.Equals({CurrentObjectivePlace}) : {Place.Equals(CurrentObjectivePlace)}");
-        if (Place.Equals(CurrentObjectivePlace) || Place.Equals("InitialZone"))
+        if (Place != null)
         {
-            ExecuteEvents.Execute<IObjectiveSwitchHandler>(pTarget == null ? target : pTarget, null, (x, y) => x.ObjectiveProgressed());
+            if (Place.Equals(CurrentObjectivePlace) || Place.Equals("InitialZone"))
+            {
+                ExecuteEvents.Execute<IObjectiveSwitchHandler>(pTarget == null ? target : pTarget, null, (x, y) => x.ObjectiveProgressed());
+            }
         }
             
     }

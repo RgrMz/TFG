@@ -7,15 +7,21 @@ public class BuildPhase : MonoBehaviour
     private int numberOfBallsArrived;
     public int BallsNeeded { get; set; }
     private static Vector3 buildPosition;
+    private bool buildDone;
     private void Awake()
     {
         // Position taken from the Unity Editor
         buildPosition = new Vector3(123.050003f, 1.67999995f, 24.5f);
         numberOfBallsArrived = 0;
+        BallsNeeded = 1;
+        buildDone = false;
     }
     private void Update()
     {
-        
+        if (numberOfBallsArrived == BallsNeeded && !buildDone)
+        {
+            GenerateBuild();
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -23,6 +29,7 @@ public class BuildPhase : MonoBehaviour
         if (other.CompareTag("Pickable"))
         {
             numberOfBallsArrived++;
+            buildDone = false;
         }
     }
 
@@ -36,9 +43,8 @@ public class BuildPhase : MonoBehaviour
 
     public void GenerateBuild()
     {
-        if (numberOfBallsArrived == BallsNeeded)
-        {
-            GameObject build = Instantiate(Resources.Load($"OwnPrefabs/SoftwareBuildToBeDeployed"), buildPosition, transform.rotation) as GameObject;
-        }
+        GameObject build = Instantiate(Resources.Load($"OwnPrefabs/SoftwareBuildToBeDeployed"), buildPosition, transform.rotation) as GameObject;
+        numberOfBallsArrived = 0;
+        buildDone = true;
     }
 }
