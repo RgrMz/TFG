@@ -23,6 +23,8 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
 
     protected GameObject[] objectiveHandlerList;
 
+    public List<GameObject> devopsWall;
+
     public TextMeshProUGUI[] solutionBoardsText;
 
     public GameObject pipelineManager;
@@ -65,7 +67,6 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
     {
         if (projectController.SelectedProject != null)
         {
-            
 
             if (projectController.objectivesToGenerateProblems.Contains
                 (projectController.SelectedProject.CurrentObjective.ObjectiveId) && !problemGenerated)
@@ -97,6 +98,10 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
                 }
 
                 objectivesCompleted++;
+                if (objectivesCompleted % 4 == 0)
+                {
+
+                }
                 if (projectController.SelectedProject.CurrentObjective.ObjectiveId != GENERIC_PROBLEM_OBJECTIVE_ID)
                 {
                     indicatorsManagerGO.GetComponent<IndicatorsManager>().UpdateFunctionalityBar();
@@ -226,5 +231,12 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
 
         projectController.SelectedProject.CurrentObjective.Effects = solution.Effects;
         ObjectiveProgressed();
+    }
+
+    private void DeletePieceOfWall()
+    {
+        GameObject pieceOfWall = devopsWall[0];
+        Destroy(pieceOfWall);
+        devopsWall.RemoveAt(0);
     }
 }
