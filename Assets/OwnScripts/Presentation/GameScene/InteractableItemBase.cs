@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 using TMPro;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
+using System.Collections;
 
 /* AQUI CUANDO ENTRE PARA COGER UNA SOLUCION PARPADEAR DE COLOR VERDE LAS BARRAS CON EFECTOS POSITIVOS Y ROJO LOS NEGATIVOS */
 public class InteractableItemBase : MonoBehaviour
@@ -110,10 +111,8 @@ public class InteractableItemBase : MonoBehaviour
                 if (collided)
                 {
                     picked = true;
-                    Destroy(GetComponent<Rigidbody>());
-                    gameObject.transform.SetParent(pickUpParent.transform);
-                    gameObject.transform.position = pickUpParent.transform.position;
                     anim.SetTrigger(animationParameter);
+                    StartCoroutine(AttachBall());
                 }
             }
 
@@ -123,12 +122,7 @@ public class InteractableItemBase : MonoBehaviour
                 {
                     picked = false;
                     anim.SetTrigger("Throw");
-                    gameObject.transform.parent = null;
-                    gameObject.AddComponent<Rigidbody>();
-                    Rigidbody rbody = gameObject.GetComponent<Rigidbody>();
-                    rbody.mass = 0.05f;
-                    gameObject.transform.position = player.transform.position + new Vector3(1.5f, 0.5f, 0);
-                    TurnOffInteractionText();
+                    StartCoroutine(DetachBall());
                 }
             }
         }
@@ -156,10 +150,8 @@ public class InteractableItemBase : MonoBehaviour
             }
             else
             {
-                if (animationParameter != "")
-                {
-                    anim.SetBool(animationParameter, false);
-                }
+                anim.SetBool(animationParameter, false);
+
             }
         }
 
@@ -214,4 +206,23 @@ public class InteractableItemBase : MonoBehaviour
         panelImage.color = tempColor;
     }
 
+    IEnumerator DetachBall()
+    {
+        yield return new WaitForSeconds(0.5f);
+        gameObject.transform.parent = null;
+        gameObject.AddComponent<Rigidbody>();
+        Rigidbody rbody = gameObject.GetComponent<Rigidbody>();
+        rbody.mass = 0.05f;
+        gameObject.transform.position = player.transform.position + new Vector3(1.5f, 0.5f, 0);
+        TurnOffInteractionText();
+    }
+
+    IEnumerator AttachBall()
+    {
+        yield return new WaitForSeconds(0.5f);
+        Destroy(GetComponent<Rigidbody>());
+        gameObject.transform.SetParent(pickUpParent.transform);
+        gameObject.transform.position = pickUpParent.transform.position;
+        yield break;
+    }
 }
