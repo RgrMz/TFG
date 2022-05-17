@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 public class PauseMenu : MonoBehaviour
 {
     [SerializeField] private GameObject pauseMenu;
+    [SerializeField] private GameObject quickHelpMenu;
     [SerializeField] private GameObject resumeButton;
 
     private void Update()
@@ -13,7 +14,7 @@ public class PauseMenu : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.F1))
         {
             PauseGame();
-        }    
+        }
     }
 
     public void QuitGame()
@@ -35,5 +36,17 @@ public class PauseMenu : MonoBehaviour
         InputSystem.settings.updateMode = InputSettings.UpdateMode.ProcessEventsInFixedUpdate;
         pauseMenu.SetActive(false);
         Cursor.visible = false;
+    }
+
+    public void QuickHelpMenu()
+    {
+        pauseMenu.SetActive(false);
+        quickHelpMenu.SetActive(true);
+    }
+
+    public void BackToPauseMenu()
+    {
+        pauseMenu.SetActive(true);
+        quickHelpMenu.SetActive(false);
     }
 }

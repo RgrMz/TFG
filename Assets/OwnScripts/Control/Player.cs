@@ -3,19 +3,17 @@ using System.Collections.Generic;
 
 public class Player
 {
-    private string UserName { get; set; }
-    private string Role { get; set; }
+    public int UserId { get; set; }
+    public string UserName { get; set; }
+    public int Age { get; set; }
+    public List<Badge> WonBadges { get; set; }
 
-    public Player(string userName, string role)
+    public Player(int userId, string userName, int age)
     {
+        UserId = userId;
         UserName = userName;
-        Role = role;
+        Age = age;
+        WonBadges = new List<Badge>();
     }
-
-    public void addBadge()
-    {
-
-    }
-
 
 }
