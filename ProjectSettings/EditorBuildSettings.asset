@@ -17,5 +17,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/OwnScenes/Game.unity
     guid: 567086ff02cc60549958d7b4cd8e4ef5
+  - enabled: 1
+    path: Assets/OwnScenes/BadgesMenu.unity
+    guid: 1c935bc313bd54d4d80de05ebf72c8a6
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 9e7be553448fa2546aea5752021cbcf7, type: 2}

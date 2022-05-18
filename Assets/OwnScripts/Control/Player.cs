@@ -15,5 +15,12 @@ public class Player
         Age = age;
         WonBadges = new List<Badge>();
     }
+    public Player(string userName, int age)
+    {
+        UserName = userName;
+        Age = age;
+        WonBadges = new List<Badge>();
+    }
+
 
 }

@@ -38,6 +38,26 @@ public class PlayerDAO
         return badges;
     }
 
+    public Player getPlayer (string username)
+    {
+        Player player = null;
+        try
+        {
+            sqlQuery = $"SELECT * FROM Player WHERE UserName='{username}';";
+            IDataReader result = db.Read(sqlQuery);
+            while (result.Read())
+            {
+                player = new Player(Convert.ToInt32(result["UserId"]), result["UserName"].ToString(), Convert.ToInt32(result["Age"]));
+                player.WonBadges = getAllBadgesFrom(player.UserId);
+            }
+        }
+        catch (SqliteException e)
+        {
+            Debug.LogError("[SQL - ERROR] Error while executing the following command: " + sqlQuery + "\n Reason: " + e.Message);
+        }
+        return player;
+    }
+
     public List<Player> getAllPlayers()
     {
         List<Player> players = new List<Player>();

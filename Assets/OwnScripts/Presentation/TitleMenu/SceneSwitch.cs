@@ -10,6 +10,7 @@ public class SceneSwitch : MonoBehaviour
     private const string secondScene = "CreateOrSelectUserProfile";
     private const string thirdScene = "ChooseModeScene";
     private const string gameScene = "Game";
+    private const string badgesScene = "BadgesMenu";
 
     private string nextScene;
 
@@ -29,7 +30,17 @@ public class SceneSwitch : MonoBehaviour
                 break;
             default:
                 break;
+
         }
- 
+    }
+
+    public void LoadMenuBadges()
+    {
+        SceneManager.LoadScene(badgesScene);
+    }
+
+    public void BackToProfileScene()
+    {
+        SceneManager.LoadScene(secondScene);
     }
 }

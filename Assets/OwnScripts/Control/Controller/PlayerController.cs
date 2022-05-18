@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerController
 {
     private PlayerDAO playerDao;
+    public Player PlayerOfTheGame {get; set;}
 
     public PlayerController()
     {
@@ -13,6 +14,7 @@ public class PlayerController
 
     public int savePlayer(Player p)
     {
+        PlayerOfTheGame = p;
         return playerDao.savePlayer(p);
     }
 
@@ -27,4 +29,14 @@ public class PlayerController
 
         return usernames;
     }
+    public void loadPlayer(string username)
+    {
+        PlayerOfTheGame = playerDao.getPlayer(username);
+    }
+
+    public List<Badge> getBadgesOfPlayer()
+    {
+        return PlayerOfTheGame.WonBadges;
+    }
+
 }
