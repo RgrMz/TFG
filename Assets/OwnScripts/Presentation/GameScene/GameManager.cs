@@ -37,7 +37,7 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
     public int objectivesCompleted;
     public bool projectSelected;
     private bool problemGenerated;
-    protected static string role;
+    public static string role;
     private const int GENERIC_PROBLEM_OBJECTIVE_ID = 4;
     private const int PUSH_TO_REPO_OBJECTIVE_ID = 13;
     // This is for quick simulations of an started game:
@@ -100,7 +100,7 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
                 objectivesCompleted++;
                 if (objectivesCompleted % 4 == 0)
                 {
-
+                    DeletePieceOfWall();
                 }
                 if (projectController.SelectedProject.CurrentObjective.ObjectiveId != GENERIC_PROBLEM_OBJECTIVE_ID)
                 {
@@ -230,6 +230,7 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
         gameObject.GetComponent<ProblemNotificationHandler>().SpawnOrDespawn("", 0);
 
         projectController.SelectedProject.CurrentObjective.Effects = solution.Effects;
+        CurrentProblem = null;
         ObjectiveProgressed();
     }
 

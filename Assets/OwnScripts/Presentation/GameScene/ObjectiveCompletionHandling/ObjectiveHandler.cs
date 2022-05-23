@@ -27,8 +27,8 @@ public class ObjectiveHandler : MonoBehaviour, IEventSystemHandler
 
     public void SendObjectiveProgressed(GameObject pTarget = null)
     {
-        //Debug.Log($"Place FOR CURENT COLLIDED ASSET IS {Place}");
-        //Debug.Log($"{Place}.Equals({CurrentObjectivePlace}) : {Place.Equals(CurrentObjectivePlace)}");
+        Debug.Log($"Place FOR CURENT COLLIDED ASSET IS {Place}");
+        Debug.Log($"{Place}.Equals({CurrentObjectivePlace}) : {Place.Equals(CurrentObjectivePlace)}");
         if (Place != null)
         {
             if (Place.Equals(CurrentObjectivePlace) || Place.Equals("InitialZone"))

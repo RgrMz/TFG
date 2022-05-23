@@ -12,15 +12,11 @@ public class Spawner : MonoBehaviour
     // Gather the objective in which the player is to be able to know which ball to spawn
     private string objectiveType;
 
-    public TextMeshProUGUI finishedInteractionText;
-
     public List<string> typesAllowed;
 
     private GameObject ballToSpawn;
 
     private Vector3 positionToSpawn;
-
-    public GameObject background;
 
     private GameObject gameManagerGO;
 

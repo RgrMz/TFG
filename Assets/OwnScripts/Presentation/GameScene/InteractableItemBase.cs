@@ -21,6 +21,10 @@ public class InteractableItemBase : MonoBehaviour
 
     private Animator anim;
 
+    private GameObject indicatorsManagerGO;
+
+    private Coroutine blinkingCoroutine;
+
     // Based on player role, take the animator of the given opposite role
     private Animator animNPC;
 
@@ -43,10 +47,11 @@ public class InteractableItemBase : MonoBehaviour
             interactionText = interactionPanel.GetComponentInChildren<TextMeshProUGUI>();
         anim = player.GetComponent<Animator>();
         collided = false;
-        if (gameObject.CompareTag("Pickable"))
-        {
+        //if (gameObject.CompareTag("Pickable"))
+        //{
             picked = false;
-        }
+        //}
+        indicatorsManagerGO = GameObject.Find("IndicatorsManager");
     }
 
     void Start()
@@ -69,6 +74,13 @@ public class InteractableItemBase : MonoBehaviour
                 animationParameter = "StartsTalking1";
                 // Cuando tengamos una clase player con un atributo role => Unificar este case y el de NPC para customizar el texto en base al rol con un condicional
                 textToShow = "Press G to talk with dev team members";
+                key = KeyCode.G;
+                animNPC = GetComponent<Animator>();
+                break;
+            case "Customer":
+                animationParameter = "StartsTalking1";
+                // Cuando tengamos una clase player con un atributo role => Unificar este case y el de NPC para customizar el texto en base al rol con un condicional
+                textToShow = "Press G to talk with the customer";
                 key = KeyCode.G;
                 animNPC = GetComponent<Animator>();
                 break;
@@ -113,16 +125,21 @@ public class InteractableItemBase : MonoBehaviour
                     picked = true;
                     anim.SetTrigger(animationParameter);
                     StartCoroutine(AttachBall());
+                    player.tag = "PickingObject";
                 }
             }
 
             if (Input.GetKeyDown(KeyCode.R))
             {
+                Debug.Log("Hola?????");
+                Debug.Log($"Collided ; {collided}");
                 if (collided)
                 {
+                    Debug.Log("Idk");
                     picked = false;
                     anim.SetTrigger("Throw");
                     StartCoroutine(DetachBall());
+                    player.tag = "Player";
                 }
             }
         }
@@ -159,10 +176,16 @@ public class InteractableItemBase : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && !picked)
         {
             // Show the text that indicates which key to press
             collided = true;
+
+            if (gameObject.CompareTag("ObjectiveHandler"))
+            {
+                indicatorsManagerGO.GetComponent<IndicatorsManager>()
+                    .BlinkIndicatorsAffected(gameObject.name[gameObject.name.Length - 1] - '0');
+            }
 
             if (other.CompareTag("Player"))
             {
@@ -179,8 +202,9 @@ public class InteractableItemBase : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.CompareTag("Player") && picked)
+        if (other.CompareTag("PickingObject") && picked)
         {
+            collided = true;
             interactionText.text = "Press R to throw the work done";
         }
     }

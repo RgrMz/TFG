@@ -25,14 +25,9 @@ public class Deploy : MonoBehaviour
     {
         if (descendPlatform)
         {
-            Debug.Log($"Bajandooooo descendPlatform{descendPlatform}");
             if (!reachedInitialPosition)
             {
-                Debug.Log("No se alcanzo position init");
                 reachedInitialPosition = Mathf.Abs(gameObject.transform.position.y - initialPosition.y) <= 0.01;
-                Debug.Log(gameObject.transform.position.y);
-                Debug.Log(initialPosition.y);
-                Debug.Log(reachedInitialPosition);
                 Color randomColor = new Color(
                     Random.Range(0f, 1f),
                     Random.Range(0f, 1f),
@@ -42,7 +37,7 @@ public class Deploy : MonoBehaviour
                 {
                     cloud.GetComponent<MeshRenderer>().material.color = randomColor;
                 }
-                gameObject.transform.position += Vector3.down * Time.deltaTime * 2;
+                gameObject.transform.position += Vector3.down * Time.deltaTime * 1.5f;
 
                 if (reachedInitialPosition)
                 {
@@ -59,12 +54,11 @@ public class Deploy : MonoBehaviour
     private void OnTriggerStay(Collider other)
     {
         bool reachedFinalPosition = (int) gameObject.transform.position.y == (int) stopPosition.y;
-        Debug.Log((int)gameObject.transform.position.y);
         if (other.CompareTag("Pickable"))
         {
             if (!reachedFinalPosition)
             {
-                gameObject.transform.position += gameObject.transform.up * Time.deltaTime * 2;
+                gameObject.transform.position += gameObject.transform.up * Time.deltaTime * 1.5f;
             }
             else
             {

@@ -25,14 +25,18 @@ public class PlayersManagement : MonoBehaviour
         {
             PlayerController.loadPlayer(dropdownUsernames.GetComponent<Dropdown>()
                 .options[dropdownUsernames.GetComponent<Dropdown>().value].text);
-        }
-        else
+        }       
+    }
+
+    public void ShouldPlayerBeSaved()
+    {
+        if (username.text.Length > 0 && age.text.Length > 0)
         {
             // A new player is created
             Player p = new Player(username.text, int.Parse(age.text));
             PlayerController.savePlayer(p);
+            Debug.Log("Saved");
         }
-        
     }
 
     public void EnableSelectDifficulty()
@@ -58,6 +62,11 @@ public class PlayersManagement : MonoBehaviour
         {
             selectDifficulty.GetComponent<Button>().interactable = false;
             seeBadges.GetComponent<Button>().interactable = false;
+            dropdownUsernames.GetComponent<Dropdown>().interactable = false;
+        }
+
+        if (username.text.Length == 0 && age.text.Length == 0)
+        {
             dropdownUsernames.GetComponent<Dropdown>().interactable = true;
         }
 

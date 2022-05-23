@@ -8,32 +8,45 @@ public class BuildPhase : MonoBehaviour
     public int BallsNeeded { get; set; }
     private static Vector3 buildPosition;
     private bool buildDone;
+    private bool isColliding;
     private void Awake()
     {
         // Position taken from the Unity Editor
-        buildPosition = new Vector3(123.050003f, 1.67999995f, 24.5f);
+        buildPosition = new Vector3(124.050003f, 1.67999995f, 24.5f);
         numberOfBallsArrived = 0;
         BallsNeeded = 1;
         buildDone = false;
     }
     private void Update()
     {
-        if (numberOfBallsArrived == BallsNeeded && !buildDone)
+        Debug.Log("Balls arrived in update: " + numberOfBallsArrived);
+        isColliding = false;
+        if (!buildDone)
         {
-            GenerateBuild();
+            if (numberOfBallsArrived == BallsNeeded)
+            {
+                Debug.Log("Llamando a generateBuid()");
+                buildDone = true;
+                GenerateBuild();
+            }
         }
+        
     }
 
     private void OnTriggerEnter(Collider other)
     {
+        if (isColliding) return;
+        isColliding = true;
         if (other.CompareTag("Pickable"))
         {
+            Debug.Log("Colision");
             numberOfBallsArrived++;
+            Debug.Log("Balls arrived : " + numberOfBallsArrived);
             buildDone = false;
         }
     }
 
-    private void OnTriggerExit(Collider other)
+    private void OnTriggerStay(Collider other)
     {
         if (other.CompareTag("Pickable"))
         {
@@ -45,6 +58,6 @@ public class BuildPhase : MonoBehaviour
     {
         GameObject build = Instantiate(Resources.Load($"OwnPrefabs/SoftwareBuildToBeDeployed"), buildPosition, transform.rotation) as GameObject;
         numberOfBallsArrived = 0;
-        buildDone = true;
+        Debug.Log("Build generada");
     }
 }
