@@ -161,6 +161,7 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
 
         foreach (GameObject objectiveHandlerGO in objectiveHandlerList)
         {
+            Debug.Log($"{projectController.SelectedProject.CurrentObjective.Place}");
             ExecuteEvents.Execute<ObjectiveHandler>(
                 objectiveHandlerGO, null, (handler, y) => handler.UpdateCurrentObjectivePlace(projectController.SelectedProject.CurrentObjective.Place));
         }

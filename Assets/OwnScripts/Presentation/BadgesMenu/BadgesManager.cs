@@ -50,7 +50,6 @@ public class BadgesManager : MonoBehaviour
                         if (badge != null)
                         {
                             Texture2D image = Resources.Load($"Badges/{badge.ImagePath}") as Texture2D;
-                            Debug.Log(image.ToString());
                             Sprite spriteFromImage = Sprite.Create(image, new Rect(0, 0, image.width, image.height), new Vector2(0.5f, 0.5f));
                             panelElement.gameObject.GetComponent<Image>().sprite = spriteFromImage;
                         }

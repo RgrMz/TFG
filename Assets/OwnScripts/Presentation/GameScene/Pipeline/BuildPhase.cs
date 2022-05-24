@@ -19,13 +19,11 @@ public class BuildPhase : MonoBehaviour
     }
     private void Update()
     {
-        Debug.Log("Balls arrived in update: " + numberOfBallsArrived);
         isColliding = false;
         if (!buildDone)
         {
             if (numberOfBallsArrived == BallsNeeded)
             {
-                Debug.Log("Llamando a generateBuid()");
                 buildDone = true;
                 GenerateBuild();
             }
@@ -39,9 +37,7 @@ public class BuildPhase : MonoBehaviour
         isColliding = true;
         if (other.CompareTag("Pickable"))
         {
-            Debug.Log("Colision");
             numberOfBallsArrived++;
-            Debug.Log("Balls arrived : " + numberOfBallsArrived);
             buildDone = false;
         }
     }
@@ -58,6 +54,5 @@ public class BuildPhase : MonoBehaviour
     {
         GameObject build = Instantiate(Resources.Load($"OwnPrefabs/SoftwareBuildToBeDeployed"), buildPosition, transform.rotation) as GameObject;
         numberOfBallsArrived = 0;
-        Debug.Log("Build generada");
     }
 }

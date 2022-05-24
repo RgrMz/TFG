@@ -5,12 +5,15 @@ using UnityEngine.SceneManagement;
 
 public class SceneSwitch : MonoBehaviour
 {
+    [SerializeField] private GameObject wantTutotiralPopUp;
+
     // Scene names, need to be cons due to switch-case limitations
     private const string firstScene = "TitleScene";
     private const string secondScene = "CreateOrSelectUserProfile";
     private const string thirdScene = "ChooseModeScene";
     private const string gameScene = "Game";
     private const string badgesScene = "BadgesMenu";
+    private const string tutorialScene = "Tutorial";
 
     private string nextScene;
 
@@ -26,7 +29,7 @@ public class SceneSwitch : MonoBehaviour
                 SceneManager.LoadScene(thirdScene);
                 break;
             case thirdScene:
-                SceneManager.LoadScene(gameScene);
+                wantTutotiralPopUp.SetActive(true);
                 break;
             default:
                 break;
@@ -42,5 +45,15 @@ public class SceneSwitch : MonoBehaviour
     public void BackToProfileScene()
     {
         SceneManager.LoadScene(secondScene);
+    }
+
+    public void LoadTutorial()
+    {
+        SceneManager.LoadScene(tutorialScene);
+    }
+
+    public void CancelTutorial()
+    {
+        SceneManager.LoadScene(gameScene);
     }
 }
