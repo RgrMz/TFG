@@ -23,7 +23,7 @@ public class InteractableItemBase : MonoBehaviour
 
     private GameObject indicatorsManagerGO;
 
-    private Coroutine blinkingCoroutine;
+    private GameObject gameManagerGO;
 
     // Based on player role, take the animator of the given opposite role
     private Animator animNPC;
@@ -52,6 +52,7 @@ public class InteractableItemBase : MonoBehaviour
             picked = false;
         //}
         indicatorsManagerGO = GameObject.Find("IndicatorsManager");
+        gameManagerGO = GameObject.Find("GameManager");
     }
 
     void Start()
@@ -131,11 +132,8 @@ public class InteractableItemBase : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.R))
             {
-                Debug.Log("Hola?????");
-                Debug.Log($"Collided ; {collided}");
                 if (collided)
                 {
-                    Debug.Log("Idk");
                     picked = false;
                     anim.SetTrigger("Throw");
                     StartCoroutine(DetachBall());
@@ -150,8 +148,12 @@ public class InteractableItemBase : MonoBehaviour
                 if (collided)
                 {
                     if (key == KeyCode.G)
+                    {
                         // That's the key for interacting with NPCs => display their animation also
                         animNPC.SetTrigger(animationParameter);
+                        StartCoroutine(SpawnBubbleCHat());
+                    }
+                        
                     anim.SetBool(animationParameter, true);
                     if (gameObject.CompareTag("ObjectiveHandler"))
                     {
@@ -247,6 +249,22 @@ public class InteractableItemBase : MonoBehaviour
         Destroy(GetComponent<Rigidbody>());
         gameObject.transform.SetParent(pickUpParent.transform);
         gameObject.transform.position = pickUpParent.transform.position;
+        yield break;
+    }
+
+    IEnumerator SpawnBubbleCHat()
+    {
+        Vector3 positionToSpawnBubbleChat = new Vector3(transform.position.x, transform.position.y + 2.5f, transform.position.z);
+        GameObject bubbleChat = 
+            Instantiate(Resources.Load($"OwnPrefabs/BubbleChat"), positionToSpawnBubbleChat, transform.rotation) as GameObject;
+        string dialogue = gameManagerGO.GetComponent<GameManager>().projectController.SelectedProject.CurrentObjective.pickRandomDialogue();
+        foreach(char letter in dialogue.ToCharArray())
+        {
+            bubbleChat.transform.Find("Text").gameObject.GetComponent<TextMeshProUGUI>().text += letter;
+            yield return new WaitForSeconds(0.09f);
+        }
+        yield return new WaitForSeconds(20f);
+        Destroy(bubbleChat);
         yield break;
     }
 }

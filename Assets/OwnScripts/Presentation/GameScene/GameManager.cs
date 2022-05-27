@@ -185,6 +185,7 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
 
     public void ObjectiveProgressed()
     {
+        Debug.Log("Me ha llegado");
         if (IsObjectiveCompleted())
         {
             projectController.SelectedProject.CurrentObjective.IsCompleted = true;
@@ -213,6 +214,8 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
 
     private bool IsObjectiveCompleted()
     {
+        Debug.Log($"Con el objective actual: projectController.SelectedProject.CurrentObjective.NumberOfSteps > 1 = {projectController.SelectedProject.CurrentObjective.NumberOfSteps > 1} y " +
+            $"projectController.SelectedProject.CurrentObjective.CurrentStep < projectController.SelectedProject.CurrentObjective.NumberOfSteps: {projectController.SelectedProject.CurrentObjective.CurrentStep < projectController.SelectedProject.CurrentObjective.NumberOfSteps}");
         return !(projectController.SelectedProject.CurrentObjective.NumberOfSteps > 1 &&
             projectController.SelectedProject.CurrentObjective.CurrentStep < projectController.SelectedProject.CurrentObjective.NumberOfSteps);
     }

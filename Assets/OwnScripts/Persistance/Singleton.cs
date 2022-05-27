@@ -8,7 +8,7 @@ namespace Assets.Scripts.Persistance
     {
         private static Singleton instance = null;
         private readonly string dbConnectionString = "URI=file:" + Application.dataPath + "/Database/" + "JTTCDevOps.db";
-        private string dbPath = Application.dataPath + "/Database/" + "Global-ManagerDB.db";
+        private string dbPath = Application.dataPath + "/Database/" + "JTTCDevOps.db";
         private static IDbConnection dbConnection;
         private IDbCommand dbCommand;
         private static bool created = false;

@@ -161,3 +161,9 @@ CREATE TABLE IF NOT EXISTS BadgesWon (
 	FOREIGN KEY (UserId) REFERENCES User (UserId),
 	FOREIGN KEY (BadgeId) REFERENCES Badge (BadgeId)
 );
+
+CREATE TABLE NPCDialogues (
+	ObjectiveId INTEGER NOT NULL,
+	Dialogue TEXT NOT NULL,
+	FOREIGN KEY (ObjectiveId) REFERENCES Objective (ObjectiveId),
+	PRIMARY KEY (ObjectiveId, Dialogue));

@@ -1,5 +1,6 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class Objective
 {
@@ -13,6 +14,9 @@ public class Objective
     public string Place { get; set; }
     public int CurrentStep { get; set; }
     public List<Effect> Effects { get; set; }
+    public List<string> NPCDialogues { get; set; }
+
+    private static readonly System.Random random = new System.Random();
     public Objective()
     {
         IsCompleted = false;
@@ -43,6 +47,14 @@ public class Objective
         Order = order;
         Place = place;
         CurrentStep = 1;
+    }
+
+    public string pickRandomDialogue()
+    {
+        if (NPCDialogues.Count > 0)
+            return NPCDialogues[random.Next(NPCDialogues.Count)];
+        else
+            return "Focus on your current objective!";
     }
 
 }
