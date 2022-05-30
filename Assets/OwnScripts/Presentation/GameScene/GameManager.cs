@@ -15,6 +15,14 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
 
     public TextMeshProUGUI completedObjectiveText;
 
+    public Canvas playerHUD;
+
+    public GameObject winPanel;
+
+    public GameObject lostPanel;
+
+    public GameObject winConfetti;
+
     public GameObject completedObjectiveTextBackground;
 
     protected GameObject mostRecentArrow;
@@ -40,8 +48,6 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
     public static string role;
     private const int GENERIC_PROBLEM_OBJECTIVE_ID = 4;
     private const int PUSH_TO_REPO_OBJECTIVE_ID = 13;
-    // This is for quick simulations of an started game:
-    protected Project projectForQuickSimulation = new Project(1, "This project consists of operating the new code developed by the development team based on the legacy one of the Information System of the restaurant GoodSushi.They know its Information System has quality flaws along with performance issues and mid - to - long downtimes.The software will be deployed to Amazon Web Service servers in the cloud, so it will be monitored and operated thorugh services of this platform such as Amazon CloudFormation or Amazon CloudWatch", "Dev");
     public string Difficulty { get; set; }
     private void Awake()
     {
@@ -128,7 +134,6 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
                     problemGenerated = false;
                 }
             }
-
         }
     }
 
@@ -185,7 +190,6 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
 
     public void ObjectiveProgressed()
     {
-        Debug.Log("Me ha llegado");
         if (IsObjectiveCompleted())
         {
             projectController.SelectedProject.CurrentObjective.IsCompleted = true;
@@ -214,8 +218,6 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
 
     private bool IsObjectiveCompleted()
     {
-        Debug.Log($"Con el objective actual: projectController.SelectedProject.CurrentObjective.NumberOfSteps > 1 = {projectController.SelectedProject.CurrentObjective.NumberOfSteps > 1} y " +
-            $"projectController.SelectedProject.CurrentObjective.CurrentStep < projectController.SelectedProject.CurrentObjective.NumberOfSteps: {projectController.SelectedProject.CurrentObjective.CurrentStep < projectController.SelectedProject.CurrentObjective.NumberOfSteps}");
         return !(projectController.SelectedProject.CurrentObjective.NumberOfSteps > 1 &&
             projectController.SelectedProject.CurrentObjective.CurrentStep < projectController.SelectedProject.CurrentObjective.NumberOfSteps);
     }
@@ -243,5 +245,31 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
         GameObject pieceOfWall = devopsWall[0];
         Destroy(pieceOfWall);
         devopsWall.RemoveAt(0);
+    }
+
+    public void GameEnded(bool win)
+    {
+        // Stop the time
+        Time.timeScale = 0f;
+        if (win)
+        {
+            TurnOffPlayerHUD();
+            winPanel.SetActive(true);
+            GameObject confetti = Instantiate(winConfetti);
+            Destroy(confetti, 2.5f);
+        }
+        else
+        {
+            TurnOffPlayerHUD();
+            lostPanel.SetActive(false);
+        }
+    }
+
+    internal void TurnOffPlayerHUD()
+    {
+        foreach(Transform child in transform)
+        {
+            child.gameObject.SetActive(false);
+        }
     }
 }

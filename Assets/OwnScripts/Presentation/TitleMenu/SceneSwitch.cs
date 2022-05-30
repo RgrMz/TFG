@@ -14,6 +14,8 @@ public class SceneSwitch : MonoBehaviour
     private const string gameScene = "Game";
     private const string badgesScene = "BadgesMenu";
     private const string tutorialScene = "Tutorial";
+    private const string winScene = "WinScene";
+    private const string lostScene = "LostScene";
 
     private string nextScene;
 
@@ -55,5 +57,17 @@ public class SceneSwitch : MonoBehaviour
     public void CancelTutorial()
     {
         SceneManager.LoadScene(gameScene);
+    }
+
+    public void LoadLastScene(bool win)
+    {
+        if(win)
+        {
+            SceneManager.LoadScene(winScene);
+        }
+        else
+        {
+            SceneManager.LoadScene(lostScene);
+        }
     }
 }

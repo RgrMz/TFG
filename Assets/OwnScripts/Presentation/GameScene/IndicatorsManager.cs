@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class IndicatorsManager : MonoBehaviour
@@ -85,6 +86,19 @@ public class IndicatorsManager : MonoBehaviour
                 }
             }
 
+            if (IsGameLost())
+            {
+                ExecuteEvents.Execute<IObjectiveSwitchHandler>(gameManagerGO, null, (gameManager, y) => gameManager.GameEnded(false));
+            }
+            else
+            {
+                if (IsGameWon())
+                {
+                    ExecuteEvents.Execute<IObjectiveSwitchHandler>(gameManagerGO, null, (gameManager, y) => gameManager.GameEnded(true));
+                }
+            }
+
+
             // Apply the progress each second
             yield return new WaitForSeconds(1f);
         }
@@ -108,7 +122,7 @@ public class IndicatorsManager : MonoBehaviour
 
         barIndicator.Value++;
 
-        projectBar.GetComponent<Image>().fillAmount = barIndicator.Value / (gameManager.projectController.SelectedProject.Objectives.Count - 3);
+        projectBar.GetComponent<Image>().fillAmount = barIndicator.Value / (gameManager.projectController.SelectedProject.Objectives.Count);
     }
 
     public List<Coroutine> BlinkIndicatorsAffected(int solutionNumber)
@@ -140,12 +154,47 @@ public class IndicatorsManager : MonoBehaviour
         return blinkCoroutines;
     }
 
+    private bool IsGameLost()
+    {
+        bool result = false;
+        foreach (GameObject projectBar in ProjectBars)
+        {
+            if (projectBar.name.Equals("Budget") || projectBar.name.Equals("Duration"))
+            {
+                if (projectBar.GetComponent<Image>().fillAmount == 0)
+                {
+                    result = true;
+                    break;
+                }
+            }
+        }
+        return result;
+    }
+
+    private bool IsGameWon()
+    {
+        bool result = false;
+        foreach (GameObject projectBar in ProjectBars)
+        {
+            if (projectBar.name.Equals("Functionality"))
+            {
+                if (projectBar.GetComponent<Image>().fillAmount == 1)
+                {
+                    result = true;
+                    break;
+                }
+            }
+        }
+
+        return true;
+    }
+
     IEnumerator BlinkNegative(string indicatorName)
     {
         Image barImage = null;
         if (!indicatorName.Equals("Budget"))
         {
-            foreach(GameObject bar in CALMSBars)
+            foreach (GameObject bar in CALMSBars)
             {
                 if (bar.name.Contains(indicatorName))
                 {
@@ -157,7 +206,7 @@ public class IndicatorsManager : MonoBehaviour
         {
             barImage = ProjectBars[0].GetComponent<Image>();
         }
-        
+
         Color negativeEffectColor = Color.red;
         for (int times = 0; times < 10; times++)
         {

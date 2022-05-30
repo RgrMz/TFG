@@ -56,11 +56,6 @@ public class ObjectiveHandler : MonoBehaviour, IEventSystemHandler
         {
             if (Place.Equals(CurrentObjectivePlace) || Place.Equals("InitialZone"))
             {
-                Debug.Log("Enviamos el mensaje");
-                // Ejecución previa dio true
-                Debug.Log($"ptarget es null? {pTarget == null}");
-                if (pTarget != null)
-                    Debug.Log($"{pTarget.gameObject.name}");
                 ExecuteEvents.Execute<IObjectiveSwitchHandler>(pTarget, null, (gameManager, y) => gameManager.ObjectiveProgressed());
             }
         }
@@ -71,7 +66,7 @@ public class ObjectiveHandler : MonoBehaviour, IEventSystemHandler
     public void UpdateCurrentObjectivePlace(string currentObjectivePlace)
     {
         CurrentObjectivePlace = currentObjectivePlace;
-        Debug.Log($"New place FOR CURRENT OBJECTIVE IS {CurrentObjectivePlace}");
+        //Debug.Log($"New place FOR CURRENT OBJECTIVE IS {CurrentObjectivePlace}");
     }
 
     public void SendSolutionChoose()
