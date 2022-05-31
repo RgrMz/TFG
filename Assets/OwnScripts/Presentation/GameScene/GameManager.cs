@@ -251,6 +251,8 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
     {
         // Stop the time
         Time.timeScale = 0f;
+        PersistDataForLastScene();
+        Cursor.visible = true;
         if (win)
         {
             TurnOffPlayerHUD();
@@ -260,8 +262,9 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
         }
         else
         {
+            GameObject confetti = Instantiate(winConfetti);
             TurnOffPlayerHUD();
-            lostPanel.SetActive(false);
+            lostPanel.SetActive(true);
         }
     }
 
@@ -270,6 +273,17 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
         foreach(Transform child in transform)
         {
             child.gameObject.SetActive(false);
+        }
+    }
+    
+    private void PersistDataForLastScene()
+    {
+        PlayerPrefs.SetString("difficulty", Difficulty);
+        PlayerPrefs.SetString("rolePlayed", role);
+        PlayerPrefs.SetFloat("gameTime", Time.realtimeSinceStartup);
+        foreach (Indicator indicator in indicatorsManagerGO.GetComponent<IndicatorsManager>().indicatorController.Indicators)
+        {
+            DataSaver.saveData(indicator, indicator.Name);
         }
     }
 }

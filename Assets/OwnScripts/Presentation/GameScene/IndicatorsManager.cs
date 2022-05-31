@@ -18,7 +18,7 @@ public class IndicatorsManager : MonoBehaviour
     public Color originalCALMSIndicatorColor;
     public Color originalBudgetIndicatorColor;
 
-    protected IndicatorController indicatorController;
+    public IndicatorController indicatorController;
     protected Problem currentProblem;
     protected bool indicatorsInitialized;
     protected const int GENERIC_PROBLEM_OBJECTIVE_ID = 4;
@@ -186,7 +186,7 @@ public class IndicatorsManager : MonoBehaviour
             }
         }
 
-        return true;
+        return result;
     }
 
     IEnumerator BlinkNegative(string indicatorName)
