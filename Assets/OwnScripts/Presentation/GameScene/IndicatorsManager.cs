@@ -124,9 +124,8 @@ public class IndicatorsManager : MonoBehaviour
 
         barIndicator.Value++;
 
-        Debug.Log($"Número de objetivos: {numberOfObjectives} \n Funcionalidad indicador: {barIndicator.Value} ");
-
         projectBar.GetComponent<Image>().fillAmount = barIndicator.Value / (numberOfObjectives);
+        
     }
 
     public List<Coroutine> BlinkIndicatorsAffected(int solutionNumber)

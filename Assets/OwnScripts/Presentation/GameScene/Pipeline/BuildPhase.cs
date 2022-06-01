@@ -9,6 +9,7 @@ public class BuildPhase : MonoBehaviour
     private static Vector3 buildPosition;
     private bool buildDone;
     private bool isColliding;
+
     private void Awake()
     {
         // Position taken from the Unity Editor
@@ -19,6 +20,7 @@ public class BuildPhase : MonoBehaviour
     }
     private void Update()
     {
+        Debug.Log("BallsNeeded : " + BallsNeeded);
         isColliding = false;
         if (!buildDone)
         {

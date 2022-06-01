@@ -21,8 +21,6 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
 
     public GameObject lostPanel;
 
-    public GameObject winConfetti;
-
     public GameObject completedObjectiveTextBackground;
 
     protected GameObject mostRecentArrow;
@@ -167,7 +165,10 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
                     $"{projectController.SelectedProject.CurrentObjective.Description} " +
                     $"({projectController.SelectedProject.CurrentObjective.CurrentStep}/{projectController.SelectedProject.CurrentObjective.NumberOfSteps})";
             }
-            objectiveText.text = projectController.SelectedProject.CurrentObjective.Description;
+            else
+            {
+                objectiveText.text = projectController.SelectedProject.CurrentObjective.Description;
+            }
         }
 
         mostRecentArrow = SpawnArrowForPlaceIndication(projectController.SelectedProject.CurrentObjective.Place);
@@ -206,6 +207,9 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
         else
         {
             projectController.SelectedProject.CurrentObjective.CurrentStep++;
+            objectiveText.text =
+                    $"{projectController.SelectedProject.CurrentObjective.Description} " +
+                    $"({projectController.SelectedProject.CurrentObjective.CurrentStep}/{projectController.SelectedProject.CurrentObjective.NumberOfSteps})";
         }
     }
 
@@ -229,8 +233,13 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
         Debug.Log($"projectController.SelectedProject.CurrentObjective.NumberOfSteps > 1 : {projectController.SelectedProject.CurrentObjective.NumberOfSteps > 1}");
         Debug.Log($"projectController.SelectedProject.CurrentObjective.CurrentStep < projectController.SelectedProject.CurrentObjective.NumberOfSteps : " +
             $"{projectController.SelectedProject.CurrentObjective.CurrentStep < projectController.SelectedProject.CurrentObjective.NumberOfSteps}");
-        return !(projectController.SelectedProject.CurrentObjective.NumberOfSteps > 1 &&
-            projectController.SelectedProject.CurrentObjective.CurrentStep < projectController.SelectedProject.CurrentObjective.NumberOfSteps);
+        bool objectiveHasMultipleSteps = projectController.SelectedProject.CurrentObjective.NumberOfSteps > 1;
+        bool allObjectiveStepsCompleted = 
+            projectController.SelectedProject.CurrentObjective.CurrentStep < projectController.SelectedProject.CurrentObjective.NumberOfSteps;
+        
+        bool objectiveCompleted = !(objectiveHasMultipleSteps && allObjectiveStepsCompleted);
+
+        return objectiveCompleted;
     }
 
     public void SolutionChoosed(string boardName)
@@ -268,12 +277,9 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
         {
             TurnOffPlayerHUD();
             winPanel.SetActive(true);
-            GameObject confetti = Instantiate(winConfetti);
-            Destroy(confetti, 2.5f);
         }
         else
         {
-            GameObject confetti = Instantiate(winConfetti);
             TurnOffPlayerHUD();
             lostPanel.SetActive(true);
         }

@@ -63,7 +63,9 @@ public class LastSceneManager : MonoBehaviour
         {
             if (finalScore >= scores[i] && finalScore < scores[++i])
             {
-                index = i;
+                index = i - 1;
+                break;
+
             }
         }
 
