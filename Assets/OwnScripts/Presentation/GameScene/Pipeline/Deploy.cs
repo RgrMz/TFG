@@ -46,6 +46,7 @@ public class Deploy : MonoBehaviour
                     {
                         cloud.GetComponent<MeshRenderer>().material.color = initialCloudColor;
                     }
+                    reachedInitialPosition = false;
                 }
             }           
         }        

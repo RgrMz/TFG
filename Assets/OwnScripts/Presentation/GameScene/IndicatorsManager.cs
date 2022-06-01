@@ -22,6 +22,7 @@ public class IndicatorsManager : MonoBehaviour
     protected Problem currentProblem;
     protected bool indicatorsInitialized;
     protected const int GENERIC_PROBLEM_OBJECTIVE_ID = 4;
+    protected int numberOfObjectives;
     protected Coroutine progressBarsCoroutine;
     void Start()
     {
@@ -33,6 +34,7 @@ public class IndicatorsManager : MonoBehaviour
     {
         indicatorController = new IndicatorController(gameManager.projectController.SelectedProject.Properties,
             gameManager.Difficulty);
+        numberOfObjectives = gameManager.projectController.SelectedProject.Objectives.Count;
         foreach (GameObject bar in CALMSBars)
         {
             Image barImage = bar.GetComponent<Image>();
@@ -122,7 +124,9 @@ public class IndicatorsManager : MonoBehaviour
 
         barIndicator.Value++;
 
-        projectBar.GetComponent<Image>().fillAmount = barIndicator.Value / (gameManager.projectController.SelectedProject.Objectives.Count);
+        Debug.Log($"Número de objetivos: {numberOfObjectives} \n Funcionalidad indicador: {barIndicator.Value} ");
+
+        projectBar.GetComponent<Image>().fillAmount = barIndicator.Value / (numberOfObjectives);
     }
 
     public List<Coroutine> BlinkIndicatorsAffected(int solutionNumber)

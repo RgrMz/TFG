@@ -90,29 +90,32 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
             if (projectController.SelectedProject.CurrentObjective.IsCompleted)
             {
 
-                if (projectController.SelectedProject.CurrentObjective.TriggersPipeline)
+                if (projectController.SelectedProject.CurrentObjective.Effects != null )
                 {
-                    pipelineManager.GetComponent<PipelineExecution>().StartExecution();
-                }
-
-                if (projectController.SelectedProject.CurrentObjective.Effects != null) // modificar condicion => check empty
-                {
-                    foreach (Effect effect in projectController.SelectedProject.CurrentObjective.Effects)
+                    if (projectController.SelectedProject.CurrentObjective.Effects.Count > 0)
                     {
-                        indicatorsManagerGO.GetComponent<IndicatorsManager>().ApplyEffect(effect);
+                        foreach (Effect effect in projectController.SelectedProject.CurrentObjective.Effects)
+                        {
+                            indicatorsManagerGO.GetComponent<IndicatorsManager>().ApplyEffect(effect);
+                        }
                     }
                 }
 
                 objectivesCompleted++;
+                
                 if (objectivesCompleted % 4 == 0)
                 {
                     DeletePieceOfWall();
                 }
+
                 if (projectController.SelectedProject.CurrentObjective.ObjectiveId != GENERIC_PROBLEM_OBJECTIVE_ID)
                 {
                     indicatorsManagerGO.GetComponent<IndicatorsManager>().UpdateFunctionalityBar();
 
                     projectController.SelectedProject.CurrentObjective = projectController.SelectedProject.Objectives.Dequeue();
+
+                    Debug.Log($"Description: { projectController.SelectedProject.CurrentObjective.Description} " +
+                        $"Number of stepts: { projectController.SelectedProject.CurrentObjective.NumberOfSteps}");
 
                     ManageObjectiveChange();
 
@@ -128,7 +131,6 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
                 }
                 else
                 {
-                    // Restore the current objective, also today check how to apply effects correctly so that original values are restored
                     gameController.PlayedGame.restoreReplacedObjective(gameController.History.Pop());
                     ManageObjectiveChange();
                     problemGenerated = false;
@@ -159,6 +161,12 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
         }
         else
         {
+            if (projectController.SelectedProject.CurrentObjective.NumberOfSteps > 1)
+            {
+                objectiveText.text =
+                    $"{projectController.SelectedProject.CurrentObjective.Description} " +
+                    $"({projectController.SelectedProject.CurrentObjective.CurrentStep}/{projectController.SelectedProject.CurrentObjective.NumberOfSteps})";
+            }
             objectiveText.text = projectController.SelectedProject.CurrentObjective.Description;
         }
 
@@ -166,7 +174,7 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
 
         foreach (GameObject objectiveHandlerGO in objectiveHandlerList)
         {
-            Debug.Log($"{projectController.SelectedProject.CurrentObjective.Place}");
+            // Debug.Log($"{projectController.SelectedProject.CurrentObjective.Place}");
             ExecuteEvents.Execute<ObjectiveHandler>(
                 objectiveHandlerGO, null, (handler, y) => handler.UpdateCurrentObjectivePlace(projectController.SelectedProject.CurrentObjective.Place));
         }
@@ -218,6 +226,9 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
 
     private bool IsObjectiveCompleted()
     {
+        Debug.Log($"projectController.SelectedProject.CurrentObjective.NumberOfSteps > 1 : {projectController.SelectedProject.CurrentObjective.NumberOfSteps > 1}");
+        Debug.Log($"projectController.SelectedProject.CurrentObjective.CurrentStep < projectController.SelectedProject.CurrentObjective.NumberOfSteps : " +
+            $"{projectController.SelectedProject.CurrentObjective.CurrentStep < projectController.SelectedProject.CurrentObjective.NumberOfSteps}");
         return !(projectController.SelectedProject.CurrentObjective.NumberOfSteps > 1 &&
             projectController.SelectedProject.CurrentObjective.CurrentStep < projectController.SelectedProject.CurrentObjective.NumberOfSteps);
     }

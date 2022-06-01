@@ -50,14 +50,6 @@ public class LastSceneManager : MonoBehaviour
         if (SceneManager.GetActiveScene().name.Equals("WinScene"))
         {
             string calification = ShowCalification(finalScore);
-            if (!calification.Equals("A") || !calification.Equals("S"))
-            {
-                GameObject.Find("Tips").SetActive(true);
-            }
-        }
-        else
-        {
-            GameObject.Find("Tips").SetActive(true);
         }
 
     }
@@ -102,7 +94,8 @@ public class LastSceneManager : MonoBehaviour
         {
             if (indicatorValue >= valueMilestones[i] && indicatorValue < valueMilestones[++i])
             {
-                index = i;
+                index = i - 1;
+                break;
             }
         }
 

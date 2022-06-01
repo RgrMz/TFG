@@ -51,7 +51,7 @@ public class IndicatorController
             }
         }
         // Initialize the functionality bar independently
-        Indicators.Add(new Indicator("Functionality", 0, 0, 0, 1));
+        Indicators.Add(new Indicator("Functionality", 0, 0, 0, 0));
     }
 
     public void NotifyIndicators()
