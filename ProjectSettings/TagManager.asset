@@ -15,6 +15,7 @@ TagManager:
   - ObjectiveHandler
   - PickingObject
   - Customer
+  - NPCCheckpoint
   layers:
   - Default
   - TransparentFX
