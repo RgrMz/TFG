@@ -1,11 +1,21 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
+using UnityEngine;
 
+[Serializable]
 public class Player
 {
-    public int UserId { get; set; }
-    public string UserName { get; set; }
-    public int Age { get; set; }
+    [SerializeField]
+    public int _userId;
+    public int UserId { get { return _userId; } set { _userId = value; } }
+
+    [SerializeField]
+    public string _userName;
+    public string UserName { get { return _userName; } set { _userName = value; } }
+
+    [SerializeField]
+    public int _age;
+    public int Age { get { return _age; } set { _age = value; } }
     public List<Badge> WonBadges { get; set; }
 
     public Player(int userId, string userName, int age)

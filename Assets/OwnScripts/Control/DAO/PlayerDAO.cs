@@ -85,7 +85,7 @@ public class PlayerDAO
 
         try
         {
-            string sqlQuery = $"INSERT INTO Player(Age, UserName) VALUES({player.Age}, {player.UserName});";
+            string sqlQuery = $"INSERT INTO Player(Age, UserName) VALUES({player.Age}, '{player.UserName}');";
 
             result = db.Insert(sqlQuery);
         }
@@ -95,6 +95,44 @@ public class PlayerDAO
         }
 
         return result;
+    }
+
+    public int getUserId(string username, int age)
+    {
+        int userId = 0;
+        try
+        {
+            sqlQuery = $"SELECT UserId FROM Player WHERE UserName='{username}' AND Age = {age};";
+            IDataReader result = db.Read(sqlQuery);
+            while (result.Read())
+            {
+                userId = Convert.ToInt32(result["UserId"]);
+            }
+        }
+        catch (SqliteException e)
+        {
+            Debug.LogError("[SQL - ERROR] Error while executing the following command: " + sqlQuery + "\n Reason: " + e.Message);
+        }
+        return userId;
+    }
+
+    public bool playerAlreadyExists(string username)
+    {
+        bool playerExists = false;
+        try
+        {
+            sqlQuery = $"SELECT COUNT(UserName) FROM Player WHERE UserName='{username}';";
+            IDataReader result = db.Read(sqlQuery);
+            while (result.Read())
+            {
+                playerExists = true;
+            }
+        }
+        catch (SqliteException e)
+        {
+            Debug.LogError("[SQL - ERROR] Error while executing the following command: " + sqlQuery + "\n Reason: " + e.Message);
+        }
+        return playerExists;
     }
 
 }

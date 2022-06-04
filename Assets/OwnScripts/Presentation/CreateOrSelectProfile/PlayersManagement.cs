@@ -11,11 +11,11 @@ public class PlayersManagement : MonoBehaviour
     [SerializeField] private GameObject seeBadges;
     [SerializeField] private InputField username;
     [SerializeField] private InputField age;
+    [SerializeField] private GameObject warningPlayerExists;
     void Start()
     {
         PlayerController = new PlayerController();
         List<string> options = PlayerController.getUsernames();
-        Debug.Log(options[0]);
         dropdownUsernames.GetComponent<Dropdown>().AddOptions(options);
     }
 
@@ -23,19 +23,32 @@ public class PlayersManagement : MonoBehaviour
     {
         if (dropdownUsernames.GetComponent<Dropdown>().interactable)
         {
-            PlayerController.loadPlayer(dropdownUsernames.GetComponent<Dropdown>()
+            Player p = PlayerController.loadPlayer(dropdownUsernames.GetComponent<Dropdown>()
                 .options[dropdownUsernames.GetComponent<Dropdown>().value].text);
-        }       
+            DataSaver.saveData(p, "player");
+        }
+    }
+
+    public void HideWarning()
+    {
+        warningPlayerExists.SetActive(false);
     }
 
     public void ShouldPlayerBeSaved()
     {
-        if (username.text.Length > 0 && age.text.Length > 0)
+        if (username.text.Length > 0 && age.text.Length > 1)
         {
             // A new player is created
             Player p = new Player(username.text, int.Parse(age.text));
-            PlayerController.savePlayer(p);
-            Debug.Log("Saved");
+            if (PlayerController.doPlayerExists(username.text))
+            {
+                PlayerController.savePlayer(p);
+                DataSaver.saveData(p, "player");
+            }
+            else
+            {
+                warningPlayerExists.SetActive(true);
+            }
         }
     }
 

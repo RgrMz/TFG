@@ -29,14 +29,20 @@ public class PlayerController
 
         return usernames;
     }
-    public void loadPlayer(string username)
+    public Player loadPlayer(string username)
     {
         PlayerOfTheGame = playerDao.getPlayer(username);
+        return PlayerOfTheGame;
     }
 
     public List<Badge> getBadgesOfPlayer()
     {
         return PlayerOfTheGame.WonBadges;
+    }
+
+    public bool doPlayerExists(string username)
+    {
+        return playerDao.playerAlreadyExists(username);
     }
 
 }

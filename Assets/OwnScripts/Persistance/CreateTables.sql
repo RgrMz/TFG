@@ -91,16 +91,14 @@ CREATE TABLE IF NOT EXISTS Property (
 	PRIMARY KEY (PropertyId AUTOINCREMENT)
 );
 
--- Table for each game played by players
-CREATE TABLE IF NOT EXISTS Game (
-	GameId INTEGER,
+CREATE TABLE PlayedGame (
+	GameId INTEGER NOT NULL,
 	UserId INTEGER NOT NULL,
-	ProjectId INTEGER NOT NULL,
-	-- Rank based on CALMS indicators + W or L
-	Result NVARCHAR(60) DEFAULT NULL,
-	Difficulty NVARCHAR(15) NOT NULL,
-	PRIMARY KEY (GameId AUTOINCREMENT),
-	FOREIGN KEY (ProjectId) REFERENCES Project (ProjectId),
+	Result CHAR(4) NOT NULL,
+	Calification CHAR(1),
+	Role CHAR(3) NOT NULL,
+	Difficulty TEXT NOT NULL,
+	PRIMARY KEY (GameId, UserId),
 	FOREIGN KEY (UserId) REFERENCES User (UserId)
 );
 

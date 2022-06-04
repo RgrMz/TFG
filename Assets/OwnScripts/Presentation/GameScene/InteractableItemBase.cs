@@ -1,12 +1,9 @@
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.InputSystem;
 using TMPro;
-using System.Collections.Generic;
 using UnityEngine.EventSystems;
 using System.Collections;
 
-/* AQUI CUANDO ENTRE PARA COGER UNA SOLUCION PARPADEAR DE COLOR VERDE LAS BARRAS CON EFECTOS POSITIVOS Y ROJO LOS NEGATIVOS */
 public class InteractableItemBase : MonoBehaviour
 {
     private GameObject interactionPanel;
@@ -47,10 +44,8 @@ public class InteractableItemBase : MonoBehaviour
             interactionText = interactionPanel.GetComponentInChildren<TextMeshProUGUI>();
         anim = player.GetComponent<Animator>();
         collided = false;
-        //if (gameObject.CompareTag("Pickable"))
-        //{
-            picked = false;
-        //}
+        picked = false;
+
         indicatorsManagerGO = GameObject.Find("IndicatorsManager");
         gameManagerGO = GameObject.Find("GameManager");
     }
@@ -61,7 +56,7 @@ public class InteractableItemBase : MonoBehaviour
         {
             case "Interactable":
                 animationParameter = "StartsInteraction";
-                textToShow = "Press E to interact";
+                textToShow = "Press E to work";
                 key = KeyCode.E;
                 break;
             case "OpsNPC":
@@ -79,8 +74,7 @@ public class InteractableItemBase : MonoBehaviour
                 animNPC = GetComponent<Animator>();
                 break;
             case "Customer":
-                animationParameter = "StartsTalking1";
-                // Cuando tengamos una clase player con un atributo role => Unificar este case y el de NPC para customizar el texto en base al rol con un condicional
+                animationParameter = "StartsTalking1";               
                 textToShow = "Press G to talk with the customer";
                 key = KeyCode.G;
                 animNPC = GetComponent<Animator>();
@@ -130,7 +124,7 @@ public class InteractableItemBase : MonoBehaviour
                 }
             }
 
-            if (Input.GetKeyDown(KeyCode.R))
+            if (Input.GetKeyDown(KeyCode.C))
             {
                 if (collided)
                 {
@@ -207,7 +201,7 @@ public class InteractableItemBase : MonoBehaviour
         if (other.CompareTag("PickingObject") && picked)
         {
             collided = true;
-            interactionText.text = "Press R to throw the work done";
+            interactionText.text = "Press C to throw the work done";
         }
     }
 

@@ -100,7 +100,6 @@ public class IndicatorsManager : MonoBehaviour
                 }
             }
 
-
             // Apply the progress each second
             yield return new WaitForSeconds(1f);
         }
@@ -125,7 +124,7 @@ public class IndicatorsManager : MonoBehaviour
         barIndicator.Value++;
 
         projectBar.GetComponent<Image>().fillAmount = barIndicator.Value / (numberOfObjectives);
-        
+        // projectBar.GetComponent<Image>().fillAmount = 1;
     }
 
     public List<Coroutine> BlinkIndicatorsAffected(int solutionNumber)

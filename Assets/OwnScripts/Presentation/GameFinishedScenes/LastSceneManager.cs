@@ -11,6 +11,7 @@ public class LastSceneManager : MonoBehaviour
     protected int minutes;
     protected int seconds;
     private List<Indicator> indicators;
+    private GameController gameController;
 
     public GameObject indicatorsList;
     public List<TextMeshProUGUI> indicatorValues;
@@ -18,11 +19,15 @@ public class LastSceneManager : MonoBehaviour
     public TextMeshProUGUI difficultyText;
     public TextMeshProUGUI timeText;
     public TextMeshProUGUI calification;
+    public TextMeshProUGUI numberOfGamesPlayed;
+    public TextMeshProUGUI previousResult;
+    public TextMeshProUGUI previousCalification;
 
     // Start is called before the first frame update
     void Start()
     {
         indicators = new List<Indicator>();
+        gameController = new GameController();
         LoadData();
     }
 
@@ -31,6 +36,7 @@ public class LastSceneManager : MonoBehaviour
         roleText.text = PlayerPrefs.GetString("rolePlayed");
         difficultyText.text = PlayerPrefs.GetString("difficulty");
         float secondsPlayed = PlayerPrefs.GetFloat("gameTime");
+        string calification = "";
 
         minutes = (int)secondsPlayed / 60;
         seconds = (int)secondsPlayed % 60;
@@ -49,14 +55,36 @@ public class LastSceneManager : MonoBehaviour
 
         if (SceneManager.GetActiveScene().name.Equals("WinScene"))
         {
-            string calification = ShowCalification(finalScore);
+            calification = ShowCalification(finalScore);
         }
 
+        Game gamePlayed = DataSaver.loadData<Game>("game");
+        gamePlayed.Calification = calification;
+
+        Game lastGame = gameController.getLastGame(gamePlayed.GamePlayer);
+        gameController.saveGame(gamePlayed);
+        
+        if (lastGame != null)
+        {
+            previousResult.text = lastGame.Result;
+            ++lastGame.GameNumber;
+            numberOfGamesPlayed.text = lastGame.GameNumber.ToString();
+            if (!lastGame.Calification.Equals(""))
+            {
+                previousCalification.text = lastGame.Calification;
+            }
+        }
+        else
+        {
+            previousResult.text = "No previous game";
+            numberOfGamesPlayed.text = "1";
+            previousCalification.text = "No";
+        }
     }
 
     private string ShowCalification(float finalScore)
     {
-        int index = 0;
+        int index = -1;
         List<float> scores = new List<float>() { 0, 1, 2, 3, 4, 5 };
         List<string> califications = new List<string>() { "D", "C", "B", "A", "S" };
         for (int i = 0; i < scores.Count - 1;)
@@ -65,16 +93,18 @@ public class LastSceneManager : MonoBehaviour
             {
                 index = i - 1;
                 break;
-
             }
         }
 
-        if (calification != null)
+        if (index != -1)
         {
             calification.text = califications[index];
+            return califications[index];
         }
-
-        return califications[index]; 
+        else
+        {
+            return null;
+        }
     }
 
     public void CloseGame()

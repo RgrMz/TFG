@@ -271,18 +271,20 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
     {
         // Stop the time
         Time.timeScale = 0f;
-        PersistDataForLastScene();
         Cursor.visible = true;
         if (win)
         {
+            gameController.updateGameState("Win", role, Difficulty);
             TurnOffPlayerHUD();
             winPanel.SetActive(true);
         }
         else
         {
+            gameController.updateGameState("Lose", role, Difficulty);
             TurnOffPlayerHUD();
             lostPanel.SetActive(true);
         }
+        PersistDataForLastScene();
     }
 
     internal void TurnOffPlayerHUD()
@@ -302,5 +304,7 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
         {
             DataSaver.saveData(indicator, indicator.Name);
         }
+
+        DataSaver.saveData(gameController.PlayedGame, "game");
     }
 }
