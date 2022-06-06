@@ -33,6 +33,12 @@ public class InteractableItemBase : MonoBehaviour
 
     private GameObject pickUpParent;
 
+    public bool isWalkingNpc;
+
+    public int maximumNumberOfInteractions;
+
+    private int numberOfInteractions;
+
     private void Awake()
     {
         interactionPanel = GameObject.Find("InteractionTextPanel");
@@ -45,6 +51,7 @@ public class InteractableItemBase : MonoBehaviour
         anim = player.GetComponent<Animator>();
         collided = false;
         picked = false;
+        numberOfInteractions = 0;
 
         indicatorsManagerGO = GameObject.Find("IndicatorsManager");
         gameManagerGO = GameObject.Find("GameManager");
@@ -119,7 +126,7 @@ public class InteractableItemBase : MonoBehaviour
                 {
                     picked = true;
                     anim.SetTrigger(animationParameter);
-                    StartCoroutine(AttachBall());
+                    StartCoroutine(AttachBall(pickUpParent));
                     player.tag = "PickingObject";
                 }
             }
@@ -130,7 +137,7 @@ public class InteractableItemBase : MonoBehaviour
                 {
                     picked = false;
                     anim.SetTrigger("Throw");
-                    StartCoroutine(DetachBall());
+                    StartCoroutine(DetachBall(player));
                     player.tag = "Player";
                 }
             }
@@ -146,6 +153,11 @@ public class InteractableItemBase : MonoBehaviour
                         // That's the key for interacting with NPCs => display their animation also
                         animNPC.SetTrigger(animationParameter);
                         StartCoroutine(SpawnBubbleCHat());
+                        numberOfInteractions++;
+                        if (isWalkingNpc && numberOfInteractions <= maximumNumberOfInteractions)
+                        {
+                            indicatorsManagerGO.GetComponent<IndicatorsManager>().IncrementCALMSIndicators(2);
+                        }
                     }
                         
                     anim.SetBool(animationParameter, true);
@@ -226,23 +238,23 @@ public class InteractableItemBase : MonoBehaviour
         panelImage.color = tempColor;
     }
 
-    IEnumerator DetachBall()
+    public IEnumerator DetachBall(GameObject character)
     {
         yield return new WaitForSeconds(0.5f);
         gameObject.transform.parent = null;
         gameObject.AddComponent<Rigidbody>();
         Rigidbody rbody = gameObject.GetComponent<Rigidbody>();
         rbody.mass = 0.05f;
-        gameObject.transform.position = player.transform.position + new Vector3(1.5f, 0.5f, 0);
+        gameObject.transform.position = character.transform.position + new Vector3(1.5f, 0.5f, 0);
         TurnOffInteractionText();
     }
 
-    IEnumerator AttachBall()
+    public IEnumerator AttachBall(GameObject pickUpparent)
     {
         yield return new WaitForSeconds(0.5f);
         Destroy(GetComponent<Rigidbody>());
-        gameObject.transform.SetParent(pickUpParent.transform);
-        gameObject.transform.position = pickUpParent.transform.position;
+        gameObject.transform.SetParent(pickUpparent.transform);
+        gameObject.transform.position = pickUpparent.transform.position;
         yield break;
     }
 
@@ -251,7 +263,7 @@ public class InteractableItemBase : MonoBehaviour
         Vector3 positionToSpawnBubbleChat = new Vector3(transform.position.x, transform.position.y + 2.5f, transform.position.z);
         GameObject bubbleChat = 
             Instantiate(Resources.Load($"OwnPrefabs/BubbleChat"), positionToSpawnBubbleChat, transform.rotation) as GameObject;
-        string dialogue = gameManagerGO.GetComponent<GameManager>().projectController.SelectedProject.CurrentObjective.pickRandomDialogue();
+        string dialogue = gameManagerGO.GetComponent<GameManager>().projectController.SelectedProject.CurrentObjective.pickRandomDialogue(isWalkingNpc);
         foreach(char letter in dialogue.ToCharArray())
         {
             bubbleChat.transform.Find("Text").gameObject.GetComponent<TextMeshProUGUI>().text += letter;

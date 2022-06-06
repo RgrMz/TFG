@@ -20,7 +20,6 @@ public class BuildPhase : MonoBehaviour
     }
     private void Update()
     {
-        Debug.Log("BallsNeeded : " + BallsNeeded);
         isColliding = false;
         if (!buildDone)
         {

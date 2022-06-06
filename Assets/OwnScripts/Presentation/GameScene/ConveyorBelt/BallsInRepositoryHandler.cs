@@ -14,7 +14,6 @@ public class BallsInRepositoryHandler : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log("Ballin : " + BallsIn);
     }
 
     private void OnCollisionEnter(Collision collision)

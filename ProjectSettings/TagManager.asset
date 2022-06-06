@@ -16,6 +16,7 @@ TagManager:
   - PickingObject
   - Customer
   - NPCCheckpoint
+  - WalkingNPC
   layers:
   - Default
   - TransparentFX

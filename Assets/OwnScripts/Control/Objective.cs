@@ -21,7 +21,7 @@ public class Objective
     {
         IsCompleted = false;
     }
-    public Objective (int id, string desc, int numberOfSteps, bool isCompleted, string type, bool triggers, int order, string place)
+    public Objective(int id, string desc, int numberOfSteps, bool isCompleted, string type, bool triggers, int order, string place)
     {
         ObjectiveId = id;
         Description = desc;
@@ -49,12 +49,16 @@ public class Objective
         CurrentStep = 1;
     }
 
-    public string pickRandomDialogue()
+    public string pickRandomDialogue(bool isWalkingNpc)
     {
-        if (NPCDialogues.Count > 0)
-            return NPCDialogues[random.Next(NPCDialogues.Count)];
+        if (isWalkingNpc)
+            return "Thanks for telling me how your work is going!";
         else
-            return "Focus on your current objective!";
+        {
+            if (NPCDialogues.Count > 0)
+                return NPCDialogues[random.Next(NPCDialogues.Count)];
+            else
+                return "Focus on your current objective!";
+        }
     }
-
 }

@@ -8,23 +8,40 @@ public class NPCAINavigation : MonoBehaviour
     // Lo mejor es tener un conjunto de Vector3 en el lado Dev y Ops y seleccioanr
     // randoms al inicio y para la vuelta igual
     // Y uno para coger bolas de la oficina y otro para cerca del repo y del ascensor
-    public GameObject destination;
-    public Vector3 originalPosition;
+    public GameObject[] npcCheckpoints;
+
     NavMeshAgent npcAgent;
     private Animator npcAnim;
+    private GameObject currentDestination;
+
+    private static readonly System.Random random = new System.Random();
+    private int randomCheckpoint;
 
     private void Start()
     {
         npcAnim = GetComponent<Animator>();
         npcAgent = GetComponent<NavMeshAgent>();
-        npcAgent.SetDestination(destination.transform.position);
         npcAnim.SetBool("Walk", true);
+        randomCheckpoint = random.Next(npcCheckpoints.Length - 1);
+        currentDestination = npcCheckpoints[randomCheckpoint];
+        npcAgent.SetDestination(currentDestination.transform.position);
     }
 
     // Update is called once per frame
     void Update()
     {
-        // npcAgent.SetDestination(destination.transform.position);
+        CheckDestinationReached();
+    }
+
+
+    void CheckDestinationReached()
+    {
+        float distanceToTarget = Vector3.Distance(transform.position, currentDestination.transform.position);
+        if (distanceToTarget < 0.5f)
+        {
+            ChooseRandomDestination();
+            npcAgent.SetDestination(currentDestination.transform.position);
+        }
     }
 
     private void OnTriggerExit(Collider other)
@@ -43,22 +60,16 @@ public class NPCAINavigation : MonoBehaviour
             npcAgent.isStopped = true;
             npcAnim.SetBool("Walk", false);
         }
-
-        if (other.CompareTag("NPCCheckpoint"))
-        {
-            Debug.Log("AAAAAA");
-            npcAnim.SetBool("Walk", false);
-            StartCoroutine(GoBack());
-        }
     }
-
-    // Once the destination is reached
-    IEnumerator GoBack()
+    
+    internal void ChooseRandomDestination()
     {
-        yield return new WaitForSeconds(10f);
-        Debug.Log("lego");
-        // No funca, bsucar como resolver que setear una nueva destination no tire
-        npcAgent.destination = originalPosition;
-        
+        GameObject aux = currentDestination;
+        do
+        {
+            randomCheckpoint = random.Next(npcCheckpoints.Length);
+            currentDestination = npcCheckpoints[randomCheckpoint];
+        } while (GameObject.ReferenceEquals(aux, currentDestination));
     }
+
 }

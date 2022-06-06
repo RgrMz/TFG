@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -154,6 +155,18 @@ public class IndicatorsManager : MonoBehaviour
         }
 
         return blinkCoroutines;
+    }
+
+    internal void IncrementCALMSIndicators(float value)
+    {
+        foreach (GameObject calmsBar in CALMSBars)
+        {
+            int indexOfSeparator = calmsBar.name.IndexOf("B");
+            Indicator barIndicator = indicatorController.Indicators.Find(
+                indicator => indicator.Name.Equals(calmsBar.name.Substring(0, indexOfSeparator)));
+
+            barIndicator.Value += value;
+        }
     }
 
     private bool IsGameLost()

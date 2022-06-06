@@ -245,7 +245,6 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
     public void SolutionChoosed(string boardName)
     {
         int solutionNumber = boardName[boardName.Length - 1] - '0';
-        Debug.Log(solutionNumber);
         // Apply the effects of the solution to the generic current objective for problems
         Solution solution = CurrentProblem.Solutions[solutionNumber - 1];
         if (solution.Cost != 0 || solution.Profit != 0)
