@@ -54,14 +54,18 @@ public class NPCPickUpObjects : MonoBehaviour
 
     void CheckDestinationReached()
     {
-        float distanceToTarget = Vector3.Distance(transform.position, destination.transform.position);
-        if (distanceToTarget < 0.5f)
+        if (!ReferenceEquals(gameObject.GetComponent<NavMeshAgent>().destination, officeWaitingSpot))
         {
-            // npcAnim.SetBool("Walk", false); inicio throw => stopwalking(), final throw => resumewalking(), same para pick up
-            npcAnim.SetTrigger("Throw");
-            StartCoroutine(npcPickUpParent.transform.GetChild(0).GetComponent<InteractableItemBase>().DetachBall(npcPickUpParent));
-            gameObject.GetComponent<NavMeshAgent>().destination = officeWaitingSpot.transform.position;
-            gameObject.tag = originalNpcTag;
+            float distanceToTarget = Vector3.Distance(transform.position, destination.transform.position);
+            if (distanceToTarget < 0.5f)
+            {
+                // npcAnim.SetBool("Walk", false); inicio throw => stopwalking(), final throw => resumewalking(), same para pick up
+                npcAnim.SetTrigger("Throw");
+                if (npcPickUpParent.transform.childCount > 0)
+                    StartCoroutine(npcPickUpParent.transform.GetChild(0).GetComponent<InteractableItemBase>().DetachBall(npcPickUpParent));
+                gameObject.GetComponent<NavMeshAgent>().destination = officeWaitingSpot.transform.position;
+                gameObject.tag = originalNpcTag;
+            }
         }
     }
 

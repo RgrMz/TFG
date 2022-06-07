@@ -39,6 +39,8 @@ public class InteractableItemBase : MonoBehaviour
 
     private int numberOfInteractions;
 
+    public GameObject npcBubbleChatOrigin;
+
     private void Awake()
     {
         interactionPanel = GameObject.Find("InteractionTextPanel");
@@ -151,12 +153,21 @@ public class InteractableItemBase : MonoBehaviour
                     if (key == KeyCode.G)
                     {
                         // That's the key for interacting with NPCs => display their animation also
-                        animNPC.SetTrigger(animationParameter);
-                        StartCoroutine(SpawnBubbleCHat());
-                        numberOfInteractions++;
-                        if (isWalkingNpc && numberOfInteractions <= maximumNumberOfInteractions)
+                        if (isWalkingNpc)
                         {
-                            indicatorsManagerGO.GetComponent<IndicatorsManager>().IncrementCALMSIndicators(2);
+                            if (numberOfInteractions < maximumNumberOfInteractions)
+                            {
+                                animNPC.SetTrigger(animationParameter);
+                                StartCoroutine(SpawnBubbleCHat());
+                                numberOfInteractions++;
+                                indicatorsManagerGO.GetComponent<IndicatorsManager>().IncrementCALMSIndicators(2);
+                            }
+                        }
+                        else
+                        {
+                            animNPC.SetTrigger(animationParameter);
+                            StartCoroutine(SpawnBubbleCHat());
+                            numberOfInteractions++;
                         }
                     }
                         
@@ -176,7 +187,6 @@ public class InteractableItemBase : MonoBehaviour
             else
             {
                 anim.SetBool(animationParameter, false);
-
             }
         }
 
@@ -197,13 +207,15 @@ public class InteractableItemBase : MonoBehaviour
 
             if (other.CompareTag("Player"))
             {
-                interactionText.enabled = true;
-                interactionText.gameObject.SetActive(true);
-                interactionText.text = textToShow;
-                Image panelImage = interactionPanel.gameObject.GetComponent<Image>();
-                var tempColor = panelImage.color;
-                tempColor.a = 0.8f;
-                panelImage.color = tempColor;
+                if (!isWalkingNpc)
+                    TurnOnInteractionText();
+                else
+                {
+                    if (numberOfInteractions < maximumNumberOfInteractions)
+                    {
+                        TurnOnInteractionText();
+                    }
+                }
             }
         }
     }
@@ -238,6 +250,17 @@ public class InteractableItemBase : MonoBehaviour
         panelImage.color = tempColor;
     }
 
+    void TurnOnInteractionText()
+    {
+        interactionText.enabled = true;
+        interactionText.gameObject.SetActive(true);
+        interactionText.text = textToShow;
+        Image panelImage = interactionPanel.gameObject.GetComponent<Image>();
+        var tempColor = panelImage.color;
+        tempColor.a = 0.8f;
+        panelImage.color = tempColor;
+    }
+
     public IEnumerator DetachBall(GameObject character)
     {
         yield return new WaitForSeconds(0.5f);
@@ -264,7 +287,9 @@ public class InteractableItemBase : MonoBehaviour
         GameObject bubbleChat = 
             Instantiate(Resources.Load($"OwnPrefabs/BubbleChat"), positionToSpawnBubbleChat, transform.rotation) as GameObject;
         string dialogue = gameManagerGO.GetComponent<GameManager>().projectController.SelectedProject.CurrentObjective.pickRandomDialogue(isWalkingNpc);
-        foreach(char letter in dialogue.ToCharArray())
+        bubbleChat.transform.SetParent(npcBubbleChatOrigin.transform);
+        bubbleChat.transform.position = npcBubbleChatOrigin.transform.position;
+        foreach (char letter in dialogue.ToCharArray())
         {
             bubbleChat.transform.Find("Text").gameObject.GetComponent<TextMeshProUGUI>().text += letter;
             yield return new WaitForSeconds(0.09f);
