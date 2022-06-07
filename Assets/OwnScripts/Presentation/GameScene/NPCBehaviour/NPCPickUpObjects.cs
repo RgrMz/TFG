@@ -45,11 +45,9 @@ public class NPCPickUpObjects : MonoBehaviour
     {
         if (other.CompareTag("Pickable"))
         {
-            npcAnim.SetBool("Walk", false);
             npcAnim.SetTrigger("PickUp");
             StartCoroutine(other.gameObject.GetComponent<InteractableItemBase>().AttachBall(npcPickUpParent));
             gameObject.GetComponent<NavMeshAgent>().destination = destination.transform.position;
-            npcAnim.SetBool("Walk", true);
             gameObject.tag = "PickingObject";
         }
     }
@@ -59,10 +57,9 @@ public class NPCPickUpObjects : MonoBehaviour
         float distanceToTarget = Vector3.Distance(transform.position, destination.transform.position);
         if (distanceToTarget < 0.5f)
         {
-            npcAnim.SetBool("Walk", false);
+            // npcAnim.SetBool("Walk", false); inicio throw => stopwalking(), final throw => resumewalking(), same para pick up
             npcAnim.SetTrigger("Throw");
             StartCoroutine(npcPickUpParent.transform.GetChild(0).GetComponent<InteractableItemBase>().DetachBall(npcPickUpParent));
-            npcAnim.SetBool("Walk", true);
             gameObject.GetComponent<NavMeshAgent>().destination = officeWaitingSpot.transform.position;
             gameObject.tag = originalNpcTag;
         }
@@ -77,5 +74,16 @@ public class NPCPickUpObjects : MonoBehaviour
             isBallSpawned = true;
             yield return new WaitForSeconds(60f);
         }
+    }
+    public void StopWalking()
+    {
+        GetComponent<NavMeshAgent>().isStopped = true;
+        npcAnim.SetBool("Walk", false);
+    }
+
+    public void ResumeWalking()
+    {
+        GetComponent<NavMeshAgent>().isStopped = false;
+        npcAnim.SetBool("Walk", true);
     }
 }

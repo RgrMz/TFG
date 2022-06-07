@@ -48,8 +48,7 @@ public class NPCAINavigation : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            npcAgent.isStopped = false;
-            npcAnim.SetBool("Walk", true);
+            ResumeWalking();
         }
     }
 
@@ -57,8 +56,7 @@ public class NPCAINavigation : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            npcAgent.isStopped = true;
-            npcAnim.SetBool("Walk", false);
+            StopWalking();
         }
     }
     
@@ -72,4 +70,15 @@ public class NPCAINavigation : MonoBehaviour
         } while (GameObject.ReferenceEquals(aux, currentDestination));
     }
 
+    public void StopWalking()
+    {
+        npcAgent.isStopped = true;
+        npcAnim.SetBool("Walk", false);
+    }
+
+    public void ResumeWalking()
+    {
+        npcAgent.isStopped = false;
+        npcAnim.SetBool("Walk", true);
+    }
 }
