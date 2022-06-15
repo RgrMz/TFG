@@ -148,6 +148,7 @@ public class InteractableItemBase : MonoBehaviour
         {
             if (Input.GetKeyDown(key))
             {
+                TurnOffInteractionText();
                 if (collided)
                 {
                     if (key == KeyCode.G)
@@ -156,7 +157,7 @@ public class InteractableItemBase : MonoBehaviour
                         if (isWalkingNpc)
                         {
                             if (numberOfInteractions < maximumNumberOfInteractions)
-                            {
+                            {                                
                                 animNPC.SetTrigger(animationParameter);
                                 StartCoroutine(SpawnBubbleCHat());
                                 numberOfInteractions++;
@@ -241,13 +242,16 @@ public class InteractableItemBase : MonoBehaviour
     void TurnOffInteractionText()
     {
         // Turns the prompt back off when you're not looking at the object.
-        interactionText.text = "";
-        interactionText.enabled = false;
-        interactionText.gameObject.SetActive(false);
-        Image panelImage = interactionPanel.gameObject.GetComponent<Image>();
-        var tempColor = panelImage.color;
-        tempColor.a = 0;
-        panelImage.color = tempColor;
+        if (interactionText.enabled == true)
+        {
+            interactionText.text = "";
+            interactionText.enabled = false;
+            interactionText.gameObject.SetActive(false);
+            Image panelImage = interactionPanel.gameObject.GetComponent<Image>();
+            var tempColor = panelImage.color;
+            tempColor.a = 0;
+            panelImage.color = tempColor;
+        }
     }
 
     void TurnOnInteractionText()
@@ -265,11 +269,14 @@ public class InteractableItemBase : MonoBehaviour
     {
         yield return new WaitForSeconds(0.5f);
         gameObject.transform.parent = null;
-        gameObject.AddComponent<Rigidbody>();
-        Rigidbody rbody = gameObject.GetComponent<Rigidbody>();
-        rbody.mass = 0.05f;
-        gameObject.transform.position = character.transform.position + new Vector3(1.5f, 0.5f, 0);
-        TurnOffInteractionText();
+        if (gameObject.GetComponent<Rigidbody>() == null)
+        {
+            gameObject.AddComponent<Rigidbody>();
+            Rigidbody rbody = gameObject.GetComponent<Rigidbody>();
+            rbody.mass = 0.05f;
+            gameObject.transform.position = character.transform.position + new Vector3(1.5f, 0.5f, 0);
+            TurnOffInteractionText();
+        }
     }
 
     public IEnumerator AttachBall(GameObject pickUpparent)

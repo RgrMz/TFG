@@ -9,6 +9,7 @@ public class PauseMenu : MonoBehaviour
     [SerializeField] private GameObject quickHelpMenu;
     [SerializeField] private GameObject resumeButton;
     [SerializeField] private GameObject minimap;
+    [SerializeField] private GameObject pressF1;
 
     private void Update()
     {
@@ -26,6 +27,7 @@ public class PauseMenu : MonoBehaviour
     public void PauseGame()
     {
         minimap.SetActive(false);
+        pressF1.SetActive(false);
         Time.timeScale = 0f;
         InputSystem.settings.updateMode = InputSettings.UpdateMode.ProcessEventsInDynamicUpdate;
         Cursor.visible = true;
@@ -38,6 +40,7 @@ public class PauseMenu : MonoBehaviour
         InputSystem.settings.updateMode = InputSettings.UpdateMode.ProcessEventsInFixedUpdate;
         pauseMenu.SetActive(false);
         minimap.SetActive(true);
+        pressF1.SetActive(true);
         Cursor.visible = false;
     }
 

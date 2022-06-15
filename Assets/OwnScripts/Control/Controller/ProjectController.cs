@@ -89,13 +89,13 @@ public class ProjectController
         //{
         //    int index = random.Next(problemsCouldAppearAfter, projectObjectivesId.Count - problemsCouldAppearBefore);
         //    int randomObjectiveId = projectObjectivesId[index];
-        //    bool isAForbiddenObjectiveId = (randomObjectiveId == OBJECTIVE_WATCH_PIPELINE || randomObjectiveId == PUSH_CHANGES_DEV 
+        //    bool isAForbiddenObjectiveId = (randomObjectiveId == OBJECTIVE_WATCH_PIPELINE || randomObjectiveId == PUSH_CHANGES_DEV
         //        || randomObjectiveId == PUSH_CHANGES_OPS);
         //    if (objectivesToGenerateProblems.Contains(randomObjectiveId) || Math.Abs(randomObjectiveId - lastSelected) < 2 || isAForbiddenObjectiveId)
         //    {
         //        continue;
         //    }
-            
+
         //    lastSelected = randomObjectiveId;
         //    Debug.Log(randomObjectiveId);
         //    objectivesToGenerateProblems.Add(randomObjectiveId);

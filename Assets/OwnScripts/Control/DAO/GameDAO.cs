@@ -83,4 +83,25 @@ public class GameDAO
 
         return lastGame;
     }
+
+    public int numberOfGamesPlayed(Player player)
+    {
+        int numberOfGames = 0;
+
+        try
+        {
+            sqlQuery = $"SELECT * FROM PlayedGame WHERE UserId = {player.UserId} ORDER BY GameNumber DESC LIMIT 1;";
+            IDataReader result = db.Read(sqlQuery);
+            while (result.Read())
+            {
+                numberOfGames = Convert.ToInt32(result["GameNumber"]);
+            }
+        }
+        catch (SqliteException e)
+        {
+            Debug.LogError("[SQL - ERROR] Error while executing the following command: " + sqlQuery + "\n Reason: " + e.Message);
+        }
+
+        return numberOfGames;
+    }
 }

@@ -54,7 +54,7 @@ public class NPCPickUpObjects : MonoBehaviour
 
     void CheckDestinationReached()
     {
-        if (!ReferenceEquals(gameObject.GetComponent<NavMeshAgent>().destination, officeWaitingSpot))
+        if (!ReferenceEquals(gameObject.GetComponent<NavMeshAgent>().destination, officeWaitingSpot.transform.position))
         {
             float distanceToTarget = Vector3.Distance(transform.position, destination.transform.position);
             if (distanceToTarget < 0.5f)
@@ -67,16 +67,19 @@ public class NPCPickUpObjects : MonoBehaviour
                 gameObject.tag = originalNpcTag;
             }
         }
+        else
+        {
+            npcAnim.SetBool("Walk", false);
+        }
     }
 
     IEnumerator SpawnBall()
     {
         while (true)
         {
-            
+            yield return new WaitForSeconds(120f);
             ballToSpawn = Instantiate(Resources.Load($"OwnPrefabs/{ballType}Ball"), spawnPosition.transform.position, transform.rotation) as GameObject;
             isBallSpawned = true;
-            yield return new WaitForSeconds(60f);
         }
     }
     public void StopWalking()
