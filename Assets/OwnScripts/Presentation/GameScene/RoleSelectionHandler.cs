@@ -6,12 +6,17 @@ using UnityEngine.EventSystems;
 public class RoleSelectionHandler : MonoBehaviour
 {
     public GameObject target;
+    public GameObject pipelineManagerGO;
     public void OnTriggerEnter(Collider other)
     {
         if(other.tag.Equals("Player"))
         {
             string role = gameObject.name.Contains("Dev") ? "Dev" : "Ops";
             ExecuteEvents.Execute<IObjectiveSwitchHandler>(target, null, (x, y) => x.RoleSelected(role));
+            if (role.Equals("Ops"))
+            {
+                pipelineManagerGO.GetComponent<StagingEnvironment>().PeriodicallySpawnBuild();
+            }
         }
     }
 }

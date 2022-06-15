@@ -1,20 +1,35 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
+using UnityEngine;
 
+[Serializable]
 public class Player
 {
-    private string UserName { get; set; }
-    private string Role { get; set; }
+    [SerializeField]
+    public int _userId;
+    public int UserId { get { return _userId; } set { _userId = value; } }
 
-    public Player(string userName, string role)
+    [SerializeField]
+    public string _userName;
+    public string UserName { get { return _userName; } set { _userName = value; } }
+
+    [SerializeField]
+    public int _age;
+    public int Age { get { return _age; } set { _age = value; } }
+    public List<Badge> WonBadges { get; set; }
+
+    public Player(int userId, string userName, int age)
+    {
+        UserId = userId;
+        UserName = userName;
+        Age = age;
+        WonBadges = new List<Badge>();
+    }
+    public Player(string userName, int age)
     {
         UserName = userName;
-        Role = role;
-    }
-
-    public void addBadge()
-    {
-
+        Age = age;
+        WonBadges = new List<Badge>();
     }
 
 

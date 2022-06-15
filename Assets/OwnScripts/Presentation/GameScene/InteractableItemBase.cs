@@ -1,11 +1,9 @@
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.InputSystem;
 using TMPro;
-using System.Collections.Generic;
 using UnityEngine.EventSystems;
+using System.Collections;
 
-/* AQUI CUANDO ENTRE PARA COGER UNA SOLUCION PARPADEAR DE COLOR VERDE LAS BARRAS CON EFECTOS POSITIVOS Y ROJO LOS NEGATIVOS */
 public class InteractableItemBase : MonoBehaviour
 {
     private GameObject interactionPanel;
@@ -20,6 +18,10 @@ public class InteractableItemBase : MonoBehaviour
 
     private Animator anim;
 
+    private GameObject indicatorsManagerGO;
+
+    private GameObject gameManagerGO;
+
     // Based on player role, take the animator of the given opposite role
     private Animator animNPC;
 
@@ -30,6 +32,14 @@ public class InteractableItemBase : MonoBehaviour
     private bool picked;
 
     private GameObject pickUpParent;
+
+    public bool isWalkingNpc;
+
+    public int maximumNumberOfInteractions;
+
+    private int numberOfInteractions;
+
+    public GameObject npcBubbleChatOrigin;
 
     private void Awake()
     {
@@ -42,10 +52,11 @@ public class InteractableItemBase : MonoBehaviour
             interactionText = interactionPanel.GetComponentInChildren<TextMeshProUGUI>();
         anim = player.GetComponent<Animator>();
         collided = false;
-        if (gameObject.CompareTag("Pickable"))
-        {
-            picked = false;
-        }
+        picked = false;
+        numberOfInteractions = 0;
+
+        indicatorsManagerGO = GameObject.Find("IndicatorsManager");
+        gameManagerGO = GameObject.Find("GameManager");
     }
 
     void Start()
@@ -54,7 +65,7 @@ public class InteractableItemBase : MonoBehaviour
         {
             case "Interactable":
                 animationParameter = "StartsInteraction";
-                textToShow = "Press E to interact";
+                textToShow = "Press E to work";
                 key = KeyCode.E;
                 break;
             case "OpsNPC":
@@ -68,6 +79,12 @@ public class InteractableItemBase : MonoBehaviour
                 animationParameter = "StartsTalking1";
                 // Cuando tengamos una clase player con un atributo role => Unificar este case y el de NPC para customizar el texto en base al rol con un condicional
                 textToShow = "Press G to talk with dev team members";
+                key = KeyCode.G;
+                animNPC = GetComponent<Animator>();
+                break;
+            case "Customer":
+                animationParameter = "StartsTalking1";               
+                textToShow = "Press G to talk with the customer";
                 key = KeyCode.G;
                 animNPC = GetComponent<Animator>();
                 break;
@@ -103,32 +120,27 @@ public class InteractableItemBase : MonoBehaviour
             }
         }
 
-            if (gameObject.CompareTag("Pickable"))
+        if (gameObject.CompareTag("Pickable"))
         {
             if (Input.GetKeyDown(key))
             {
                 if (collided)
                 {
                     picked = true;
-                    Destroy(GetComponent<Rigidbody>());
-                    gameObject.transform.SetParent(pickUpParent.transform);
-                    gameObject.transform.position = pickUpParent.transform.position;
                     anim.SetTrigger(animationParameter);
+                    StartCoroutine(AttachBall(pickUpParent));
+                    player.tag = "PickingObject";
                 }
             }
 
-            if (Input.GetKeyDown(KeyCode.R))
+            if (Input.GetKeyDown(KeyCode.C))
             {
                 if (collided)
                 {
                     picked = false;
                     anim.SetTrigger("Throw");
-                    gameObject.transform.parent = null;
-                    gameObject.AddComponent<Rigidbody>();
-                    Rigidbody rbody = gameObject.GetComponent<Rigidbody>();
-                    rbody.mass = 0.05f;
-                    gameObject.transform.position = player.transform.position + new Vector3(1.5f, 0.5f, 0);
-                    TurnOffInteractionText();
+                    StartCoroutine(DetachBall(player));
+                    player.tag = "Player";
                 }
             }
         }
@@ -136,11 +148,30 @@ public class InteractableItemBase : MonoBehaviour
         {
             if (Input.GetKeyDown(key))
             {
+                TurnOffInteractionText();
                 if (collided)
                 {
                     if (key == KeyCode.G)
+                    {
                         // That's the key for interacting with NPCs => display their animation also
-                        animNPC.SetTrigger(animationParameter);
+                        if (isWalkingNpc)
+                        {
+                            if (numberOfInteractions < maximumNumberOfInteractions)
+                            {                                
+                                animNPC.SetTrigger(animationParameter);
+                                StartCoroutine(SpawnBubbleCHat());
+                                numberOfInteractions++;
+                                indicatorsManagerGO.GetComponent<IndicatorsManager>().IncrementCALMSIndicators(2);
+                            }
+                        }
+                        else
+                        {
+                            animNPC.SetTrigger(animationParameter);
+                            StartCoroutine(SpawnBubbleCHat());
+                            numberOfInteractions++;
+                        }
+                    }
+                        
                     anim.SetBool(animationParameter, true);
                     if (gameObject.CompareTag("ObjectiveHandler"))
                     {
@@ -156,10 +187,7 @@ public class InteractableItemBase : MonoBehaviour
             }
             else
             {
-                if (animationParameter != "")
-                {
-                    anim.SetBool(animationParameter, false);
-                }
+                anim.SetBool(animationParameter, false);
             }
         }
 
@@ -167,29 +195,38 @@ public class InteractableItemBase : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && !picked)
         {
             // Show the text that indicates which key to press
             collided = true;
 
+            if (gameObject.CompareTag("ObjectiveHandler"))
+            {
+                indicatorsManagerGO.GetComponent<IndicatorsManager>()
+                    .BlinkIndicatorsAffected(gameObject.name[gameObject.name.Length - 1] - '0');
+            }
+
             if (other.CompareTag("Player"))
             {
-                interactionText.enabled = true;
-                interactionText.gameObject.SetActive(true);
-                interactionText.text = textToShow;
-                Image panelImage = interactionPanel.gameObject.GetComponent<Image>();
-                var tempColor = panelImage.color;
-                tempColor.a = 0.8f;
-                panelImage.color = tempColor;
+                if (!isWalkingNpc)
+                    TurnOnInteractionText();
+                else
+                {
+                    if (numberOfInteractions < maximumNumberOfInteractions)
+                    {
+                        TurnOnInteractionText();
+                    }
+                }
             }
         }
     }
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.CompareTag("Player") && picked)
+        if (other.CompareTag("PickingObject") && picked)
         {
-            interactionText.text = "Press R to throw the work done";
+            collided = true;
+            interactionText.text = "Press C to throw the work done";
         }
     }
 
@@ -205,13 +242,67 @@ public class InteractableItemBase : MonoBehaviour
     void TurnOffInteractionText()
     {
         // Turns the prompt back off when you're not looking at the object.
-        interactionText.text = "";
-        interactionText.enabled = false;
-        interactionText.gameObject.SetActive(false);
+        if (interactionText.enabled == true)
+        {
+            interactionText.text = "";
+            interactionText.enabled = false;
+            interactionText.gameObject.SetActive(false);
+            Image panelImage = interactionPanel.gameObject.GetComponent<Image>();
+            var tempColor = panelImage.color;
+            tempColor.a = 0;
+            panelImage.color = tempColor;
+        }
+    }
+
+    void TurnOnInteractionText()
+    {
+        interactionText.enabled = true;
+        interactionText.gameObject.SetActive(true);
+        interactionText.text = textToShow;
         Image panelImage = interactionPanel.gameObject.GetComponent<Image>();
         var tempColor = panelImage.color;
-        tempColor.a = 0;
+        tempColor.a = 0.8f;
         panelImage.color = tempColor;
     }
 
+    public IEnumerator DetachBall(GameObject character)
+    {
+        yield return new WaitForSeconds(0.5f);
+        gameObject.transform.parent = null;
+        if (gameObject.GetComponent<Rigidbody>() == null)
+        {
+            gameObject.AddComponent<Rigidbody>();
+            Rigidbody rbody = gameObject.GetComponent<Rigidbody>();
+            rbody.mass = 0.05f;
+            gameObject.transform.position = character.transform.position + new Vector3(1.5f, 0.5f, 0);
+            TurnOffInteractionText();
+        }
+    }
+
+    public IEnumerator AttachBall(GameObject pickUpparent)
+    {
+        yield return new WaitForSeconds(0.5f);
+        Destroy(GetComponent<Rigidbody>());
+        gameObject.transform.SetParent(pickUpparent.transform);
+        gameObject.transform.position = pickUpparent.transform.position;
+        yield break;
+    }
+
+    IEnumerator SpawnBubbleCHat()
+    {
+        Vector3 positionToSpawnBubbleChat = new Vector3(transform.position.x, transform.position.y + 2.5f, transform.position.z);
+        GameObject bubbleChat = 
+            Instantiate(Resources.Load($"OwnPrefabs/BubbleChat"), positionToSpawnBubbleChat, transform.rotation) as GameObject;
+        string dialogue = gameManagerGO.GetComponent<GameManager>().projectController.SelectedProject.CurrentObjective.pickRandomDialogue(isWalkingNpc);
+        bubbleChat.transform.SetParent(npcBubbleChatOrigin.transform);
+        bubbleChat.transform.position = npcBubbleChatOrigin.transform.position;
+        foreach (char letter in dialogue.ToCharArray())
+        {
+            bubbleChat.transform.Find("Text").gameObject.GetComponent<TextMeshProUGUI>().text += letter;
+            yield return new WaitForSeconds(0.09f);
+        }
+        yield return new WaitForSeconds(20f);
+        Destroy(bubbleChat);
+        yield break;
+    }
 }

@@ -1925,6 +1925,7 @@ Transform:
   - {fileID: 4494418218088283728}
   - {fileID: 4977372144643668229}
   - {fileID: 3107201403744340549}
+  - {fileID: 6364045604792002029}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1978,6 +1979,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactionText: {fileID: 0}
+  isWalkingNpc: 0
+  maximumNumberOfInteractions: 0
+  npcBubbleChatOrigin: {fileID: 5931896896090661092}
 --- !u!114 &4757836856755875625
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2041,7 +2045,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.25, y: 1, z: 2.36}
+  m_Size: {x: 0.4, y: 1, z: 2.36}
   m_Center: {x: 0, y: 0.92, z: 0.71}
 --- !u!1 &3921334144448749991
 GameObject:
@@ -3867,6 +3871,36 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2892780539611831731}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5931896896090661092
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6364045604792002029}
+  m_Layer: 0
+  m_Name: BubbleChatOrigin
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6364045604792002029
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5931896896090661092}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.967, y: 2.058, z: 0.202}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 539745478100655087}
+  m_RootOrder: 26
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6036028704857767229
 GameObject:

@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class IndicatorsManager : MonoBehaviour
@@ -14,8 +16,14 @@ public class IndicatorsManager : MonoBehaviour
 
     public List<GameObject> ProjectBars;
 
-    protected IndicatorController indicatorController;
+    public Color originalCALMSIndicatorColor;
+    public Color originalBudgetIndicatorColor;
+
+    public IndicatorController indicatorController;
+    protected Problem currentProblem;
     protected bool indicatorsInitialized;
+    protected const int GENERIC_PROBLEM_OBJECTIVE_ID = 4;
+    protected int numberOfObjectives;
     protected Coroutine progressBarsCoroutine;
     void Start()
     {
@@ -27,6 +35,7 @@ public class IndicatorsManager : MonoBehaviour
     {
         indicatorController = new IndicatorController(gameManager.projectController.SelectedProject.Properties,
             gameManager.Difficulty);
+        numberOfObjectives = gameManager.projectController.SelectedProject.Objectives.Count;
         foreach (GameObject bar in CALMSBars)
         {
             Image barImage = bar.GetComponent<Image>();
@@ -70,13 +79,25 @@ public class IndicatorsManager : MonoBehaviour
                 // Show the changes in the HUD for each bar
                 Indicator barIndicator = indicatorController.Indicators.Find(
                     indicator => indicator.Name.Equals(projectBar.name));
-                if(barIndicator.Name.Equals("Budget"))
+                if (barIndicator.Name.Equals("Budget"))
                 {
                     projectBar.GetComponent<Image>().fillAmount = (barIndicator.Value) / initialBudget;
                 }
                 else if (barIndicator.Name.Equals("Duration"))
                 {
                     projectBar.GetComponent<Image>().fillAmount = (barIndicator.Value) / initialDuration;
+                }
+            }
+
+            if (IsGameLost())
+            {
+                ExecuteEvents.Execute<IObjectiveSwitchHandler>(gameManagerGO, null, (gameManager, y) => gameManager.GameEnded(false));
+            }
+            else
+            {
+                if (IsGameWon())
+                {
+                    ExecuteEvents.Execute<IObjectiveSwitchHandler>(gameManagerGO, null, (gameManager, y) => gameManager.GameEnded(true));
                 }
             }
 
@@ -103,6 +124,165 @@ public class IndicatorsManager : MonoBehaviour
 
         barIndicator.Value++;
 
-        projectBar.GetComponent<Image>().fillAmount = barIndicator.Value / (gameManager.projectController.SelectedProject.Objectives.Count - 3);
+        projectBar.GetComponent<Image>().fillAmount = barIndicator.Value / (numberOfObjectives);
+        // projectBar.GetComponent<Image>().fillAmount = 1;
+    }
+
+    public List<Coroutine> BlinkIndicatorsAffected(int solutionNumber)
+    {
+        List<Coroutine> blinkCoroutines = new List<Coroutine>();
+        currentProblem = gameManager.CurrentProblem;
+        Solution solutionWatched = currentProblem.Solutions[solutionNumber - 1];
+        foreach (Effect effect in solutionWatched.Effects)
+        {
+            if (effect.Value < 0)
+            {
+                blinkCoroutines.Add(StartCoroutine(BlinkNegative(effect.Indicator)));
+            }
+            else
+            {
+                blinkCoroutines.Add(StartCoroutine(BlinkPositive(effect.Indicator)));
+            }
+        }
+
+        if (solutionWatched.Cost > 0)
+        {
+            blinkCoroutines.Add(StartCoroutine(BlinkNegative("Budget")));
+        }
+        else
+        {
+            blinkCoroutines.Add(StartCoroutine(BlinkPositive("Budget")));
+        }
+
+        return blinkCoroutines;
+    }
+
+    internal void IncrementCALMSIndicators(float value)
+    {
+        foreach (GameObject calmsBar in CALMSBars)
+        {
+            int indexOfSeparator = calmsBar.name.IndexOf("B");
+            Indicator barIndicator = indicatorController.Indicators.Find(
+                indicator => indicator.Name.Equals(calmsBar.name.Substring(0, indexOfSeparator)));
+
+            barIndicator.Value += value;
+        }
+    }
+
+    private bool IsGameLost()
+    {
+        bool result = false;
+        foreach (GameObject projectBar in ProjectBars)
+        {
+            if (projectBar.name.Equals("Budget") || projectBar.name.Equals("Duration"))
+            {
+                if (projectBar.GetComponent<Image>().fillAmount == 0)
+                {
+                    result = true;
+                    break;
+                }
+            }
+        }
+        return result;
+    }
+
+    private bool IsGameWon()
+    {
+        bool result = false;
+        foreach (GameObject projectBar in ProjectBars)
+        {
+            if (projectBar.name.Equals("Functionality"))
+            {
+                if (projectBar.GetComponent<Image>().fillAmount == 1)
+                {
+                    result = true;
+                    break;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    IEnumerator BlinkNegative(string indicatorName)
+    {
+        Image barImage = null;
+        if (!indicatorName.Equals("Budget"))
+        {
+            foreach (GameObject bar in CALMSBars)
+            {
+                if (bar.name.Contains(indicatorName))
+                {
+                    barImage = bar.GetComponent<Image>();
+                }
+            }
+        }
+        else
+        {
+            barImage = ProjectBars[0].GetComponent<Image>();
+        }
+
+        Color negativeEffectColor = Color.red;
+        for (int times = 0; times < 10; times++)
+        {
+            switch (barImage.color.a.ToString())
+            {
+                case "0":
+                    barImage.color = negativeEffectColor;
+                    //Play sound
+                    yield return new WaitForSeconds(0.5f);
+                    break;
+                case "1":
+                    barImage.color = new Color(barImage.color.r, barImage.color.g, barImage.color.b, 0);
+                    //Play sound
+                    yield return new WaitForSeconds(0.5f);
+                    break;
+            }
+        }
+
+        barImage.color = originalCALMSIndicatorColor;
+        yield break;
+
+    }
+
+    IEnumerator BlinkPositive(string indicatorName)
+    {
+        Image barImage = null;
+        if (!indicatorName.Equals("Budget"))
+        {
+            foreach (GameObject bar in CALMSBars)
+            {
+                if (bar.name.Contains(indicatorName))
+                {
+                    barImage = bar.GetComponent<Image>();
+                }
+            }
+        }
+        else
+        {
+            barImage = ProjectBars[0].GetComponent<Image>();
+        }
+
+        Color negativeEffectColor = new Color(0.2f, 1, 0, 1);
+        for (int times = 0; times < 10; times++)
+        {
+            switch (barImage.color.a.ToString())
+            {
+                case "0":
+                    barImage.color = negativeEffectColor;
+                    //Play sound
+                    yield return new WaitForSeconds(0.5f);
+                    break;
+                case "1":
+                    barImage.color = new Color(barImage.color.r, barImage.color.g, barImage.color.b, 0);
+                    //Play sound
+                    yield return new WaitForSeconds(0.5f);
+                    break;
+            }
+        }
+
+        barImage.color = originalCALMSIndicatorColor;
+        yield break;
+
     }
 }

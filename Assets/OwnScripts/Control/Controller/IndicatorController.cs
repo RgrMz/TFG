@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,13 +21,13 @@ public class IndicatorController
         float minValue, maxValue;
         if (difficulty.Equals("Basic"))
         {
-            minValue = 40;
-            maxValue = 50;
+            minValue = 60;
+            maxValue = 70;
         }
         else
         {
-            minValue = 30;
-            maxValue = 40;
+            minValue = 50;
+            maxValue = 60;
         }
         foreach (string name in indicatorProperties)
         {
@@ -50,7 +51,7 @@ public class IndicatorController
             }
         }
         // Initialize the functionality bar independently
-        Indicators.Add(new Indicator("Functionality", 0, 0, 0, 1));
+        Indicators.Add(new Indicator("Functionality", 0, 0, 0, 0));
     }
 
     public void NotifyIndicators()

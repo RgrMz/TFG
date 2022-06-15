@@ -1,5 +1,6 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class Objective
 {
@@ -13,11 +14,14 @@ public class Objective
     public string Place { get; set; }
     public int CurrentStep { get; set; }
     public List<Effect> Effects { get; set; }
+    public List<string> NPCDialogues { get; set; }
+
+    private static readonly System.Random random = new System.Random();
     public Objective()
     {
         IsCompleted = false;
     }
-    public Objective (int id, string desc, int numberOfSteps, bool isCompleted, string type, bool triggers, int order, string place)
+    public Objective(int id, string desc, int numberOfSteps, bool isCompleted, string type, bool triggers, int order, string place)
     {
         ObjectiveId = id;
         Description = desc;
@@ -45,4 +49,16 @@ public class Objective
         CurrentStep = 1;
     }
 
+    public string pickRandomDialogue(bool isWalkingNpc)
+    {
+        if (isWalkingNpc)
+            return "Thanks for telling me how your work is going!";
+        else
+        {
+            if (NPCDialogues.Count > 0)
+                return NPCDialogues[random.Next(NPCDialogues.Count)];
+            else
+                return "Focus on your current objective!";
+        }
+    }
 }

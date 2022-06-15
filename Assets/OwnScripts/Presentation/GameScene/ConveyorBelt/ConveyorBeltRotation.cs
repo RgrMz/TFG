@@ -8,12 +8,6 @@ public class ConveyorBeltRotation : MonoBehaviour
     public Vector3 direction;
     public List<GameObject> objectsOnBelt;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
     // Update is called once per frame
     void Update()
     {
@@ -26,7 +20,6 @@ public class ConveyorBeltRotation : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         objectsOnBelt.Add(collision.gameObject);
-
     }
 
     private void OnCollisionExit(Collision collision)

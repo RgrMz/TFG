@@ -15,6 +15,12 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
 
     public TextMeshProUGUI completedObjectiveText;
 
+    public Canvas playerHUD;
+
+    public GameObject winPanel;
+
+    public GameObject lostPanel;
+
     public GameObject completedObjectiveTextBackground;
 
     protected GameObject mostRecentArrow;
@@ -22,6 +28,8 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
     protected GameObject player;
 
     protected GameObject[] objectiveHandlerList;
+
+    public List<GameObject> devopsWall;
 
     public TextMeshProUGUI[] solutionBoardsText;
 
@@ -35,11 +43,9 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
     public int objectivesCompleted;
     public bool projectSelected;
     private bool problemGenerated;
-    private bool problemSolved;
-    protected static string role;
+    public static string role;
     private const int GENERIC_PROBLEM_OBJECTIVE_ID = 4;
-    // This is for quick simulations of an started game:
-    protected Project projectForQuickSimulation = new Project(1, "This project consists of operating the new code developed by the development team based on the legacy one of the Information System of the restaurant GoodSushi.They know its Information System has quality flaws along with performance issues and mid - to - long downtimes.The software will be deployed to Amazon Web Service servers in the cloud, so it will be monitored and operated thorugh services of this platform such as Amazon CloudFormation or Amazon CloudWatch", "Dev");
+    private const int PUSH_TO_REPO_OBJECTIVE_ID = 13;
     public string Difficulty { get; set; }
     private void Awake()
     {
@@ -56,14 +62,16 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
         projectController = new ProjectController();
         Cursor.visible = false;
         objectivesCompleted = 0;
-        projectSelected = problemGenerated = problemSolved = false;
+        projectSelected = problemGenerated = false;
         player = GameObject.FindWithTag("Player");
         objectiveHandlerList = GameObject.FindGameObjectsWithTag("ObjectiveHandler");
     }
+
     private void Update()
     {
         if (projectController.SelectedProject != null)
         {
+
             if (projectController.objectivesToGenerateProblems.Contains
                 (projectController.SelectedProject.CurrentObjective.ObjectiveId) && !problemGenerated)
             {
@@ -80,25 +88,32 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
             if (projectController.SelectedProject.CurrentObjective.IsCompleted)
             {
 
-                if (projectController.SelectedProject.CurrentObjective.TriggersPipeline)
+                if (projectController.SelectedProject.CurrentObjective.Effects != null )
                 {
-                    pipelineManager.GetComponent<PipelineExecution>().StartExecution();
-                }
-
-                if (projectController.SelectedProject.CurrentObjective.Effects != null) // modificar condicion => check empty
-                {
-                    foreach (Effect effect in projectController.SelectedProject.CurrentObjective.Effects)
+                    if (projectController.SelectedProject.CurrentObjective.Effects.Count > 0)
                     {
-                        indicatorsManagerGO.GetComponent<IndicatorsManager>().ApplyEffect(effect);
+                        foreach (Effect effect in projectController.SelectedProject.CurrentObjective.Effects)
+                        {
+                            indicatorsManagerGO.GetComponent<IndicatorsManager>().ApplyEffect(effect);
+                        }
                     }
                 }
 
                 objectivesCompleted++;
+                
+                if (objectivesCompleted % 4 == 0)
+                {
+                    DeletePieceOfWall();
+                }
+
                 if (projectController.SelectedProject.CurrentObjective.ObjectiveId != GENERIC_PROBLEM_OBJECTIVE_ID)
                 {
                     indicatorsManagerGO.GetComponent<IndicatorsManager>().UpdateFunctionalityBar();
 
                     projectController.SelectedProject.CurrentObjective = projectController.SelectedProject.Objectives.Dequeue();
+
+                    Debug.Log($"Description: { projectController.SelectedProject.CurrentObjective.Description} " +
+                        $"Number of stepts: { projectController.SelectedProject.CurrentObjective.NumberOfSteps}");
 
                     ManageObjectiveChange();
 
@@ -106,16 +121,19 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
                     {
                         pipelineManager.GetComponent<PipelineExecution>().StartExecution();
                     }
+
+                    if (projectController.SelectedProject.CurrentObjective.ObjectiveId == PUSH_TO_REPO_OBJECTIVE_ID)
+                    {
+                        pipelineManager.GetComponent<PipelineExecution>().NotifyBallsNeeded(projectController.SelectedProject.CurrentObjective.NumberOfSteps);
+                    }
                 }
                 else
                 {
-                    // Restore the current objective, also today check how to apply effects correctly so that original values are restored
                     gameController.PlayedGame.restoreReplacedObjective(gameController.History.Pop());
                     ManageObjectiveChange();
                     problemGenerated = false;
                 }
             }
-
         }
     }
 
@@ -134,11 +152,30 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
     private void ManageObjectiveChange()
     {
         Destroy(mostRecentArrow);
-        objectiveText.text = projectController.SelectedProject.CurrentObjective.Description;
+        if (projectController.SelectedProject.CurrentObjective.ObjectiveId == GENERIC_PROBLEM_OBJECTIVE_ID)
+        {
+            gameObject.GetComponent<ProblemNotificationHandler>().SpawnOrDespawn(projectController.SelectedProject.CurrentObjective.Description, 1);
+            objectiveText.text = "";
+        }
+        else
+        {
+            if (projectController.SelectedProject.CurrentObjective.NumberOfSteps > 1)
+            {
+                objectiveText.text =
+                    $"{projectController.SelectedProject.CurrentObjective.Description} " +
+                    $"({projectController.SelectedProject.CurrentObjective.CurrentStep}/{projectController.SelectedProject.CurrentObjective.NumberOfSteps})";
+            }
+            else
+            {
+                objectiveText.text = projectController.SelectedProject.CurrentObjective.Description;
+            }
+        }
+
         mostRecentArrow = SpawnArrowForPlaceIndication(projectController.SelectedProject.CurrentObjective.Place);
 
         foreach (GameObject objectiveHandlerGO in objectiveHandlerList)
         {
+            // Debug.Log($"{projectController.SelectedProject.CurrentObjective.Place}");
             ExecuteEvents.Execute<ObjectiveHandler>(
                 objectiveHandlerGO, null, (handler, y) => handler.UpdateCurrentObjectivePlace(projectController.SelectedProject.CurrentObjective.Place));
         }
@@ -170,6 +207,9 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
         else
         {
             projectController.SelectedProject.CurrentObjective.CurrentStep++;
+            objectiveText.text =
+                    $"{projectController.SelectedProject.CurrentObjective.Description} " +
+                    $"({projectController.SelectedProject.CurrentObjective.CurrentStep}/{projectController.SelectedProject.CurrentObjective.NumberOfSteps})";
         }
     }
 
@@ -190,14 +230,21 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
 
     private bool IsObjectiveCompleted()
     {
-        return !(projectController.SelectedProject.CurrentObjective.NumberOfSteps > 1 &&
-            projectController.SelectedProject.CurrentObjective.CurrentStep < projectController.SelectedProject.CurrentObjective.NumberOfSteps);
+        Debug.Log($"projectController.SelectedProject.CurrentObjective.NumberOfSteps > 1 : {projectController.SelectedProject.CurrentObjective.NumberOfSteps > 1}");
+        Debug.Log($"projectController.SelectedProject.CurrentObjective.CurrentStep < projectController.SelectedProject.CurrentObjective.NumberOfSteps : " +
+            $"{projectController.SelectedProject.CurrentObjective.CurrentStep < projectController.SelectedProject.CurrentObjective.NumberOfSteps}");
+        bool objectiveHasMultipleSteps = projectController.SelectedProject.CurrentObjective.NumberOfSteps > 1;
+        bool allObjectiveStepsCompleted = 
+            projectController.SelectedProject.CurrentObjective.CurrentStep < projectController.SelectedProject.CurrentObjective.NumberOfSteps;
+        
+        bool objectiveCompleted = !(objectiveHasMultipleSteps && allObjectiveStepsCompleted);
+
+        return objectiveCompleted;
     }
 
     public void SolutionChoosed(string boardName)
     {
         int solutionNumber = boardName[boardName.Length - 1] - '0';
-        Debug.Log(solutionNumber);
         // Apply the effects of the solution to the generic current objective for problems
         Solution solution = CurrentProblem.Solutions[solutionNumber - 1];
         if (solution.Cost != 0 || solution.Profit != 0)
@@ -205,7 +252,58 @@ public class GameManager : MonoBehaviour, IObjectiveSwitchHandler
             indicatorsManagerGO.GetComponent<IndicatorsManager>().ApplyCostAndProfit(solution.Cost, solution.Profit);
         }
 
+        gameObject.GetComponent<ProblemNotificationHandler>().SpawnOrDespawn("", 0);
+
         projectController.SelectedProject.CurrentObjective.Effects = solution.Effects;
+        CurrentProblem = null;
         ObjectiveProgressed();
+    }
+
+    private void DeletePieceOfWall()
+    {
+        GameObject pieceOfWall = devopsWall[0];
+        Destroy(pieceOfWall);
+        devopsWall.RemoveAt(0);
+    }
+
+    public void GameEnded(bool win)
+    {
+        // Stop the time
+        Time.timeScale = 0f;
+        Cursor.visible = true;
+        if (win)
+        {
+            gameController.updateGameState("Win", role, Difficulty);
+            TurnOffPlayerHUD();
+            winPanel.SetActive(true);
+        }
+        else
+        {
+            gameController.updateGameState("Lose", role, Difficulty);
+            TurnOffPlayerHUD();
+            lostPanel.SetActive(true);
+        }
+        PersistDataForLastScene();
+    }
+
+    internal void TurnOffPlayerHUD()
+    {
+        foreach(Transform child in transform)
+        {
+            child.gameObject.SetActive(false);
+        }
+    }
+    
+    private void PersistDataForLastScene()
+    {
+        PlayerPrefs.SetString("difficulty", Difficulty);
+        PlayerPrefs.SetString("rolePlayed", role);
+        PlayerPrefs.SetFloat("gameTime", Time.realtimeSinceStartup);
+        foreach (Indicator indicator in indicatorsManagerGO.GetComponent<IndicatorsManager>().indicatorController.Indicators)
+        {
+            DataSaver.saveData(indicator, indicator.Name);
+        }
+
+        DataSaver.saveData(gameController.PlayedGame, "game");
     }
 }

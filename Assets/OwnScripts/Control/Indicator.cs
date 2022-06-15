@@ -1,10 +1,16 @@
 using System;
 using UnityEngine;
 
+[Serializable]
 public class Indicator : Subscriber
 {
-    public float Value { get; set; }
-    public string Name { get; set; }
+    [SerializeField]
+    public float _value;
+    public float Value { get { return _value; } set { _value = value; } }
+
+    [SerializeField]
+    public string name;
+    public string Name { get { return name; } set { name = value; } }
     public float ProgressPerSecond { get; set; }
     private float originalProgressPerSecond;
     public float[] MinMaxValueInitialization { get; set; }
