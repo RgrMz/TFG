@@ -69,7 +69,7 @@ public class NPCPickUpObjects : MonoBehaviour
         }
         else
         {
-            npcAnim.SetBool("Walk", false);
+            StopWalking();
         }
     }
 

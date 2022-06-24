@@ -242,7 +242,7 @@ public class InteractableItemBase : MonoBehaviour
     void TurnOffInteractionText()
     {
         // Turns the prompt back off when you're not looking at the object.
-        if (interactionText.enabled == true)
+        if (interactionText.IsActive())
         {
             interactionText.text = "";
             interactionText.enabled = false;

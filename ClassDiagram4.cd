@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="GameManager">
+    <Position X="2.75" Y="0.5" Width="4.5" />
+    <TypeIdentifier>
+      <HashCode>EAQEAAAAQAEIAQBQmABAEhBQNAIEAAAhIAIQgQJGEEA=</HashCode>
+      <FileName>Assets\OwnScripts\Presentation\GameScene\GameManager.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="IndicatorsManager">
+    <Position X="7.75" Y="0.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AEoAIBAAASoAAQAAAAAgBATAACIBAAAABIAAgAAEAGI=</HashCode>
+      <FileName>Assets\OwnScripts\Presentation\GameScene\IndicatorsManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LastSceneManager">
+    <Position X="11" Y="0.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAABADBQAAASgAAQABMAAAACAEAAEYAAAAAAAYk=</HashCode>
+      <FileName>Assets\OwnScripts\Presentation\GameFinishedScenes\LastSceneManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BadgesManager">
+    <Position X="14.25" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\OwnScripts\Presentation\BadgesMenu\BadgesManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

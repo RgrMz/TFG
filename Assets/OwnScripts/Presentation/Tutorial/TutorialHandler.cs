@@ -14,7 +14,7 @@ public class TutorialHandler : MonoBehaviour
     [SerializeField] private Button backButton;
     [SerializeField] private Button nextButton;
 
-    private const int NUMBER_TUTORIAL_STEPS = 20;
+    private const int NUMBER_TUTORIAL_STEPS = 22;
     private const int MINIMUM_NUMBER_TUTORIAL_STEPS = 1;
     void Start()
     {
@@ -51,7 +51,7 @@ public class TutorialHandler : MonoBehaviour
         Texture2D image = Resources.Load($"Tutorial/{tutorialStep}") as Texture2D;
         Sprite spriteFromImage = Sprite.Create(image, new Rect(0, 0, image.width, image.height), new Vector2(0.5f, 0.5f));
         tutorialImage.gameObject.GetComponent<Image>().sprite = spriteFromImage;
-        stepsText.text = $"{tutorialStep} / 20";
+        stepsText.text = $"{tutorialStep} / {NUMBER_TUTORIAL_STEPS}";
     }
 
     public void EndTutorial()
