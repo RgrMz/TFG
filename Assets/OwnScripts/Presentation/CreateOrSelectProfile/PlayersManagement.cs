@@ -12,11 +12,13 @@ public class PlayersManagement : MonoBehaviour
     [SerializeField] private InputField username;
     [SerializeField] private InputField age;
     [SerializeField] private GameObject warningPlayerExists;
+    private PlayerDAO playerDao;
     void Start()
     {
         PlayerController = new PlayerController();
         List<string> options = PlayerController.getUsernames();
         dropdownUsernames.GetComponent<Dropdown>().AddOptions(options);
+        playerDao = new PlayerDAO();
     }
 
     private void LoadPlayer()
@@ -43,6 +45,7 @@ public class PlayersManagement : MonoBehaviour
             if (PlayerController.doPlayerExists(username.text))
             {
                 PlayerController.savePlayer(p);
+                p.UserId = playerDao.getUserId(username.text, int.Parse(age.text));
                 DataSaver.saveData(p, "player");
             }
             else

@@ -3,6 +3,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
 using System;
+using System.Collections;
 
 public class LastSceneManager : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class LastSceneManager : MonoBehaviour
     protected int seconds;
     private List<Indicator> indicators;
     private GameController gameController;
+    private BadgesController badgesController;
 
     public GameObject indicatorsList;
     public List<TextMeshProUGUI> indicatorValues;
@@ -22,12 +24,14 @@ public class LastSceneManager : MonoBehaviour
     public TextMeshProUGUI numberOfGamesPlayed;
     public TextMeshProUGUI previousResult;
     public TextMeshProUGUI previousCalification;
+    public GameObject wonBadgesPopUp;
 
     // Start is called before the first frame update
     void Start()
     {
         indicators = new List<Indicator>();
         gameController = new GameController();
+        badgesController = new BadgesController();
         LoadData();
     }
 
@@ -63,7 +67,8 @@ public class LastSceneManager : MonoBehaviour
 
         Game lastGame = gameController.getLastGame(gamePlayed.GamePlayer);
         gameController.saveGame(gamePlayed);
-        
+        ShowBadgesWon(gamePlayed);
+
         if (lastGame != null)
         {
             previousResult.text = lastGame.Result;
@@ -132,5 +137,21 @@ public class LastSceneManager : MonoBehaviour
         }
 
         return scores[index];
+    }
+
+    public void ShowBadgesWon(Game game)
+    {
+        if (badgesController.userWonBadges(game))
+        {
+            StartCoroutine(PlayBadgesPopUpAnimation());
+        }
+    }
+
+    IEnumerator PlayBadgesPopUpAnimation()
+    {
+        wonBadgesPopUp.GetComponent<Animator>().Play("SlideInBadgeWarning");
+        Debug.Log(wonBadgesPopUp.GetComponent<Animator>());
+        yield return new WaitForSeconds(5f);
+        wonBadgesPopUp.GetComponent<Animator>().SetTrigger("SlideOut");
     }
 }
