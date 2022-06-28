@@ -148,11 +148,11 @@ public class InteractableItemBase : MonoBehaviour
         {
             if (Input.GetKeyDown(key))
             {
-                TurnOffInteractionText();
                 if (collided)
                 {
                     if (key == KeyCode.G)
                     {
+                        TurnOffInteractionText();
                         // That's the key for interacting with NPCs => display their animation also
                         if (isWalkingNpc)
                         {
