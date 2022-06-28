@@ -46,6 +46,7 @@ public class NPCAINavigation : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
+
         if (other.CompareTag("Player"))
         {
             ResumeWalking();

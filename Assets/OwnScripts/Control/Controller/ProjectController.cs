@@ -80,29 +80,29 @@ public class ProjectController
 
         // Get all objectives Id of the selected project
         List<int> projectObjectivesId = new List<int>();
-        //foreach (Objective o in selectedProject.Objectives)
-        //{
-        //    projectObjectivesId.Add(o.ObjectiveId);
-        //}
+        foreach (Objective o in selectedProject.Objectives)
+        {
+            projectObjectivesId.Add(o.ObjectiveId);
+        }
 
-        //while (objectivesToGenerateProblems.Count < NUMBER_OF_EVENTS)
-        //{
-        //    int index = random.Next(problemsCouldAppearAfter, projectObjectivesId.Count - problemsCouldAppearBefore);
-        //    int randomObjectiveId = projectObjectivesId[index];
-        //    bool isAForbiddenObjectiveId = (randomObjectiveId == OBJECTIVE_WATCH_PIPELINE || randomObjectiveId == PUSH_CHANGES_DEV
-        //        || randomObjectiveId == PUSH_CHANGES_OPS);
-        //    if (objectivesToGenerateProblems.Contains(randomObjectiveId) || Math.Abs(randomObjectiveId - lastSelected) < 2 || isAForbiddenObjectiveId)
-        //    {
-        //        continue;
-        //    }
+        while (objectivesToGenerateProblems.Count < NUMBER_OF_EVENTS)
+        {
+            int index = random.Next(problemsCouldAppearAfter, projectObjectivesId.Count - problemsCouldAppearBefore);
+            int randomObjectiveId = projectObjectivesId[index];
+            bool isAForbiddenObjectiveId = (randomObjectiveId == OBJECTIVE_WATCH_PIPELINE || randomObjectiveId == PUSH_CHANGES_DEV
+                || randomObjectiveId == PUSH_CHANGES_OPS);
+            if (objectivesToGenerateProblems.Contains(randomObjectiveId) || Math.Abs(randomObjectiveId - lastSelected) < 2 || isAForbiddenObjectiveId)
+            {
+                continue;
+            }
 
-        //    lastSelected = randomObjectiveId;
-        //    Debug.Log(randomObjectiveId);
-        //    objectivesToGenerateProblems.Add(randomObjectiveId);
-        //}
+            lastSelected = randomObjectiveId;
+            Debug.Log(randomObjectiveId);
+            objectivesToGenerateProblems.Add(randomObjectiveId);
+        }
 
         // For quick simulation
         /* controlar que ninguno de esos IDs sea el de watch the pipeline execution ! */
-        objectivesToGenerateProblems = new List<int>() { 7, 20, 9, 10 };
+        // objectivesToGenerateProblems = new List<int>() { 7, 20, 9, 10 };
     }
 }

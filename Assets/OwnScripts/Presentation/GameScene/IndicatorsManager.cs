@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+
 public class IndicatorsManager : MonoBehaviour
 {
     public GameObject gameManagerGO;
@@ -125,7 +126,7 @@ public class IndicatorsManager : MonoBehaviour
         barIndicator.Value++;
 
         projectBar.GetComponent<Image>().fillAmount = barIndicator.Value / (numberOfObjectives);
-        // projectBar.GetComponent<Image>().fillAmount = 1;
+         // projectBar.GetComponent<Image>().fillAmount = 1;
     }
 
     public List<Coroutine> BlinkIndicatorsAffected(int solutionNumber)

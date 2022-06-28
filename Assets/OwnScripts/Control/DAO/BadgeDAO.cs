@@ -37,7 +37,7 @@ public class BadgeDAO
         bool hasBadge = false;
         try
         {
-            sqlQuery = $"SELECT * FROM BadgesWon WHERE UserId = {player.UserId} AND BadgeId = {badgeId});";
+            sqlQuery = $"SELECT * FROM BadgesWon WHERE UserId = {player.UserId} AND BadgeId = {badgeId};";
             IDataReader result = db.Read(sqlQuery);
             while(result.Read())
             {
